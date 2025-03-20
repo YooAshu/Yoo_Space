@@ -39,6 +39,11 @@ const followUser = asyncHandler(async (req, res, next) => {
 const isFollower = asyncHandler(async (req, res) => {
     const { targetId } = req.params;
     const userId = req.userId;
+    if(targetId==userId){
+        return res.json({
+            "follows":undefined
+        })
+    }
 
     const follows = await Follow.findOne({
         followed_by: userId,
@@ -51,7 +56,7 @@ const isFollower = asyncHandler(async (req, res) => {
         });
     }
 
-    res.json({
+    return res.json({
         "follows": true
     });
 });
@@ -122,7 +127,7 @@ const followerList = asyncHandler(async (req, res) => {
         }
     ]);
 
-    if (!followers || followers.length === 0) {
+    if (!followers ) {
         throw new ApiError(404, "No followers found");
     }
 
@@ -165,7 +170,7 @@ const followingList = asyncHandler(async (req, res) => {
         ]
     )
 
-    if (!following || following.length === 0) {
+    if (!following) {
         throw new ApiError(404, "No followings found");
     }
 

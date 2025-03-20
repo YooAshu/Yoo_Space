@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,16 +19,19 @@ const Register = () => {
     try {
       const response = await axios.post("/api/users/register", data);
       console.log(response.data);
-      alert("Registration successful!");
+      toast("Registration successful!");
+      // alert("Registration successful!");
       navigate('/login');
     } catch (error) {
       console.error(error);
-      alert(error.response.data.message);
+      toast(error.response.data.message);
+      // alert(error.response.data.message);
     }
   };
 
   return (
     <div className="flex justify-center items-center w-screen h-screen">
+      <ToastContainer autoClose={1500} theme="dark"/>
       <div className="bg-zinc-800 rounded-2xl w-96 h-[500px]">
         <form
           onSubmit={handleSubmit(onSubmit)}

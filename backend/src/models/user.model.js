@@ -36,21 +36,25 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: ""
         },
-        isAdmin:{
-            type:Boolean,
-            default:false
+        bio: {
+            type: String,
+            default: ""
         },
-        no_of_post:{
-            type:Number,
-            default:0
+        isAdmin: {
+            type: Boolean,
+            default: false
         },
-        no_of_follower:{
-            type:Number,
-            default:0
+        no_of_post: {
+            type: Number,
+            default: 0
         },
-        no_of_following:{
-            type:Number,
-            default:0
+        no_of_follower: {
+            type: Number,
+            default: 0
+        },
+        no_of_following: {
+            type: Number,
+            default: 0
         },
         refreshToken: {
             type: String

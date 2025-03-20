@@ -1,10 +1,11 @@
 import axios from "axios";
-import React from "react";
+import React,{useContext} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,20 +17,24 @@ const Login = () => {
     console.log(data);
     try {
       const response = await axios.post("/api/users/login", data, {
-        withCredentials: true
-    });
-    
+        withCredentials: true,
+      });
+
       console.log(response.data);
-      alert("login successful");
-      navigate('/profile')
+      setCurrentUser(response.data.data.user._id)
+      // alert("login successful");
+      navigate("/profile");
+      toast("login successful");
     } catch (error) {
       console.error(error);
-      alert(error.response.data.message);
+      toast(error.response.data.message);
+      // alert(error.response.data.message);
     }
   };
 
   return (
     <div className="flex justify-center items-center w-screen h-screen">
+      <ToastContainer autoClose={1500} theme="dark"/>
       <div className="bg-zinc-800 rounded-2xl w-80 h-96">
         <form
           onSubmit={handleSubmit(onSubmit)}

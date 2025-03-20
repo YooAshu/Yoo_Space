@@ -4,11 +4,12 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import FollowModal from "../components/FollowModal";
-import { AppContext } from "../context/AppContext";
+import { useParams } from "react-router-dom";
 import generateGradient from "../utils/generateGradient.js";
 
-const Profile = () => {
-  const { followingNo, setFollowingNo } = useContext(AppContext);
+const UserProfile = () => {
+    const {userId} = useParams()
+//   const { followingNo, setFollowingNo } = useContext(AppContext);
   const [isFollowerModalOpen, setFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -21,13 +22,13 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const getCurrentUser = async () => {
+  const getUserDetail = async () => {
     try {
-      const response = await axios.get("/api/users/current-user");
+      const response = await axios.get(`/api/users/profile/${userId}`);
       const user = response.data.data;
       setUserData(user);
-      setFollowingNo(user.no_of_following);
-      console.log(response.data.data);
+
+      // console.log(response.data.data);
     } catch (error) {
       console.error("error fetching user data", error);
       if (error.response?.status == 401) navigate("/login");
@@ -35,7 +36,7 @@ const Profile = () => {
   };
   const getFollowers = async () => {
     try {
-      const response = await axios.get("/api/users/followers");
+      const response = await axios.get(`/api/users/followers/${userId}`);
       setfollowerList(response.data.data);
     } catch (error) {
       console.error("error fetching followers data", error);
@@ -43,22 +44,20 @@ const Profile = () => {
   };
   const getFollowings = async () => {
     try {
-      setfollowingList(null);
-      const response = await axios.get("/api/users/followings");
+      const response = await axios.get(`/api/users/followings/${userId}`);
       setfollowingList(response.data.data);
-      // console.log(response.data.data);
     } catch (error) {
       console.error("error fetching followings data", error);
     }
   };
   useEffect(() => {
-    getCurrentUser();
+    closeFollowerModal();
+    closeFollowingModal();
+    getUserDetail();
     getFollowers();
-  }, []);
+    getFollowings();
+  }, [String(userId)]);
 
-  useEffect(() => {
-    if (isFollowingModalOpen) getFollowings();
-  }, [isFollowingModalOpen]);
 
   if (!userData) {
     return <div className="relative w-screen min-h-screen">Loading...</div>;
@@ -117,7 +116,7 @@ const Profile = () => {
             className="flex flex-col gap-2 cursor-pointer"
             onClick={openFollowingModal}
           >
-            <span className="text-3xl">{followingNo}</span>
+            <span className="text-3xl">{userData.no_of_following}</span>
             <span>Following</span>
           </div>
         </div>
@@ -140,4 +139,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserProfile;

@@ -1,5 +1,7 @@
 const zodValidate = (schema) => async (req, res, next) => {
     try {
+        // console.log(req.body);
+        
         const parseBody = await schema.parseAsync(req.body)
         req.body = parseBody
         next()

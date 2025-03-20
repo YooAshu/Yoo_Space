@@ -24,7 +24,9 @@ const FollowModal = ({ isOpen, onClose, list }) => {
           >
             {list &&
               list.map((user, index) => {
-                return <UserCard key={index} user={user} showButton={false} />;
+                console.log(user);
+                
+                return <UserCard key={user._id} user={user} showButton={false} />;
               })}
           </motion.div>
         </div>
