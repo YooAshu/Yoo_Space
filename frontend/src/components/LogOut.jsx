@@ -11,6 +11,7 @@ const LogOut = () => {
         });
         
       if (response.status == 200) {
+        localStorage.removeItem("userId")
         navigate("/login");
       }
     } catch (error) {

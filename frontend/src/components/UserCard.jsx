@@ -10,7 +10,7 @@ const UserCard = ({ user }) => {
 
   const checkIsFollower = async (id) => {
     const response = await axios.get(`/api/users/is-follower/${id}`);
-    console.log(response.data?.follows);
+    // console.log(response.data?.follows);
     setIsFollower(response.data?.follows);
   };
 
@@ -51,7 +51,7 @@ const UserCard = ({ user }) => {
         <span>{user.fullName}</span>
         <span>@{user.userName}</span>
       </div>
-      <div>
+      <div className="w-1/5">
         {isFollower != undefined && (
           <button
             type="button"
@@ -59,7 +59,7 @@ const UserCard = ({ user }) => {
               event.stopPropagation(); // Prevents event from propagating to parent elements
               handleFollow(user._id);
             }}
-            className="bg-white px-5 py-2 rounded-2xl"
+            className="bg-white px-5 py-2 rounded-2xl w-full"
           >
             {isFollower ? "Following" : "Follow"}
           </button>

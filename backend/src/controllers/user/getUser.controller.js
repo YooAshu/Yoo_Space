@@ -97,14 +97,6 @@ const getFollowings = asyncHandler(async (req, res) => {
 
     
 
-    // const following = await Follow.aggregate([
-    //     {
-    //         $match: { followed_by: new ObjectId(userId) } // Convert to ObjectId
-    //     }
-    // ]);
-
-    // const following = await Follow.find({followed_by:userId})
-
     if (!following) {
         throw new ApiError(404, "No followings found");
     }

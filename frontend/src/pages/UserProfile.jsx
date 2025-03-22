@@ -6,10 +6,11 @@ import NavBar from "../components/NavBar";
 import FollowModal from "../components/FollowModal";
 import { useParams } from "react-router-dom";
 import generateGradient from "../utils/generateGradient.js";
+import Post from "../components/Post.jsx";
 
 const UserProfile = () => {
-    const {userId} = useParams()
-//   const { followingNo, setFollowingNo } = useContext(AppContext);
+  const { userId } = useParams();
+  //   const { followingNo, setFollowingNo } = useContext(AppContext);
   const [isFollowerModalOpen, setFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -19,6 +20,7 @@ const UserProfile = () => {
   const closeFollowerModal = () => setFollowerModalOpen(false);
   const openFollowingModal = () => setFollowingModalOpen(true);
   const closeFollowingModal = () => setFollowingModalOpen(false);
+  const [posts, setPosts] = useState([]);
 
   const navigate = useNavigate();
 
@@ -27,10 +29,20 @@ const UserProfile = () => {
       const response = await axios.get(`/api/users/profile/${userId}`);
       const user = response.data.data;
       setUserData(user);
-
-      // console.log(response.data.data);
     } catch (error) {
       console.error("error fetching user data", error);
+      if (error.response?.status == 401) navigate("/login");
+    }
+  };
+
+  const getPosts = async () => {
+    try {
+      const postsResponse = await axios.get(`/api/posts/user/${userId}`);
+      const userPosts = postsResponse.data.data;
+      setPosts(userPosts);
+      // console.log(response.data.data);
+    } catch (error) {
+      console.error("error fetching user posts", error);
       if (error.response?.status == 401) navigate("/login");
     }
   };
@@ -56,6 +68,7 @@ const UserProfile = () => {
     getUserDetail();
     getFollowers();
     getFollowings();
+    getPosts();
   }, [String(userId)]);
 
 
@@ -64,7 +77,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="relative w-screen min-h-screen">
+    <div className="relative w-auto min-h-screen">
       <NavBar />
       {/* cover image */}
       <div
@@ -135,6 +148,16 @@ const UserProfile = () => {
         onClose={closeFollowingModal}
         list={followingList}
       />
+
+      {posts.length > 0 && (
+        <div className="flex justify-center mt-36 w-full h-fit">
+          <div className="bg-neutral-900 w-1/2">
+            {posts.map((post, index) => {
+              return <Post key={index} post={post} />;
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

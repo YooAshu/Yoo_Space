@@ -21,8 +21,8 @@ const Login = () => {
       });
 
       console.log(response.data);
-      setCurrentUser(response.data.data.user._id)
       // alert("login successful");
+      localStorage.setItem("userId", response.data.data.user._id);
       navigate("/profile");
       toast("login successful");
     } catch (error) {

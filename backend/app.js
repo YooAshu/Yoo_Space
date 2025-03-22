@@ -21,10 +21,12 @@ app.use(cookieParser())
 // routes
 
 import userRouter from './src/routes/user.route.js'
+import postRouter from './src/routes/post.route.js'
 
 
 // routes declaration
 app.use('/api/users',userRouter)
+app.use('/api/posts',postRouter)
 
 app.use((err, req, res, next) => {
     res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);
