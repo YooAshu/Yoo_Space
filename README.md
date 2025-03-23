@@ -88,3 +88,4 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
 # any kind of contribution is welcomed
+
