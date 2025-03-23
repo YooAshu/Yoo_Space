@@ -6,16 +6,11 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import mongoose from "mongoose";
 
 const likePost = asyncHandler(async (req, res) => {
-    console.log(1);
     
     const userId = req.userId
-    console.log(userId);
-    
 
     const { postId } = req.params
-    console.log(postId);
     
-
     const like = await Like.create({
         liked_by: userId,
         liked_on: postId
@@ -47,7 +42,7 @@ const unLikePost = asyncHandler(async (req, res) => {
         liked_on: postId
     })
 
-    if (!like) throw new ApiError(500, "failed to like post")
+    if (!like) throw new ApiError(500, "failed to unlike post")
 
     await Post.findByIdAndUpdate(
         postId,
@@ -59,7 +54,7 @@ const unLikePost = asyncHandler(async (req, res) => {
     )
 
     return res.status(200).json(
-        new ApiResponse(200, like, "liked post successfully")
+        new ApiResponse(200, like, "unliked post successfully")
     )
 
 })
@@ -85,4 +80,41 @@ const isLiked = asyncHandler(async (req, res) => {
     });
 });
 
-export { likePost, unLikePost, isLiked }
+const getWhoLiked = asyncHandler(async(req,res)=>{
+    const {postId} = req.params;
+
+    const likedBy = await Like.aggregate([
+        {
+            $match:{
+                liked_on: new mongoose.Types.ObjectId(String(postId))
+            }
+        },
+        { $sort: { createdAt: -1 } },
+        {
+            $lookup:{
+                from:"users",
+                foreignField:"_id",
+                localField:"liked_by",
+                as:"usersLiked"
+            }
+        },
+        {
+            $unwind:"$usersLiked"
+        },
+        {
+            $project:{
+                "usersLiked._id":1,
+                "usersLiked.userName":1,
+                "usersLiked.profile_image":1,
+            }
+        }
+        
+    ])
+
+    if(!likedBy) throw new ApiError(500,"failed to fetch user who liked this post")
+
+    return res.status(200).json(
+        new ApiResponse(200,likedBy,"fetched user who liked this post successfully")
+    )
+})
+export { likePost, unLikePost, isLiked ,getWhoLiked}

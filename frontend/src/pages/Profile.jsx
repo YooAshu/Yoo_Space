@@ -26,6 +26,9 @@ const Profile = () => {
   const closeAddPostModal = () => setAddPostModalOpen(false);
 
   const [posts, setPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+
+  const [option, setOption] = useState(1);
 
   const navigate = useNavigate();
 
@@ -54,6 +57,19 @@ const Profile = () => {
     }
   };
 
+  const getLikedPosts = async () => {
+    try {
+      const postsResponse = await axios.get(`/api/posts/user-likes`);
+      const likedPosts = postsResponse.data.data;
+      // console.log(postsResponse.data.data);
+      setLikedPosts(likedPosts);
+      // console.log(response.data.data);
+    } catch (error) {
+      console.error("error fetching user liked posts", error);
+      if (error.response?.status == 401) navigate("/login");
+    }
+  };
+
   const getFollowers = async () => {
     try {
       const response = await axios.get("/api/users/followers");
@@ -75,6 +91,7 @@ const Profile = () => {
   useEffect(() => {
     getCurrentUser();
     getFollowers();
+    getLikedPosts();
   }, []);
 
   useEffect(() => {
@@ -168,12 +185,42 @@ const Profile = () => {
         onClose={closeAddPostModal}
         user={{ userName: userData.userName, img: userData.profile_image }}
       />
+      <div className="flex justify-evenly mt-20 w-full text-white text-2xl">
+        <span
+          onClick={() => {
+            setOption(1);
+          }}
+          style={{
+            borderBottom:
+              option == 1 ? "2px solid #ffffff" : ".5px solid #ffffff63",
+          }}
+          className="pb-4 w-[30%] text-center cursor-pointer"
+        >
+          My Posts
+        </span>
+        <span
+          onClick={() => {
+            setOption(2);
+          }}
+          style={{
+            borderBottom:
+              option == 2 ? "2px solid #ffffff" : ".5px solid #ffffff63",
+          }}
+          className="w-[30%] text-center cursor-pointer"
+        >
+          Liked Posts
+        </span>
+      </div>
       {posts.length > 0 && (
         <div className="flex justify-center mt-36 w-full h-fit">
           <div className="bg-neutral-900 mb-36 w-1/2">
-            {posts.map((post, index) => {
-              return <Post key={index} post={post} />;
-            })}
+            {option == 1
+              ? posts.map((post, index) => {
+                  return <Post key={index} post={post} />;
+                })
+              : likedPosts.map((post, index) => {
+                  return <Post key={index} post={post} />;
+                })}
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -33,8 +33,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <ToastContainer autoClose={1500} theme="dark"/>
+    <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
+      <ToastContainer autoClose={1500} theme="dark" />
       <div className="bg-zinc-800 rounded-2xl w-80 h-96">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -53,9 +53,15 @@ const Login = () => {
           />
           <input
             type="submit"
-            className="bg-white px-4 py-2 rounded-full text-black"
+            className="bg-white mt-5 px-4 py-2 rounded-full text-black"
           />
         </form>
+      </div>
+      <div
+        onClick={() => navigate("/register")}
+        className="font-bold text-white cursor-pointer"
+      >
+        Create Account
       </div>
     </div>
   );

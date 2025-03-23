@@ -21,7 +21,7 @@ const Register = () => {
       console.log(response.data);
       toast("Registration successful!");
       // alert("Registration successful!");
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
       console.error(error);
       toast(error.response.data.message);
@@ -30,8 +30,8 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <ToastContainer autoClose={1500} theme="dark"/>
+    <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
+      <ToastContainer autoClose={1500} theme="dark" />
       <div className="bg-zinc-800 rounded-2xl w-96 h-[500px]">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -63,6 +63,13 @@ const Register = () => {
             className="bg-white px-4 py-2 rounded-full text-black"
           />
         </form>
+      </div>
+
+      <div
+        onClick={() => navigate("/login")}
+        className="font-bold text-white cursor-pointer"
+      >
+        Login
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import UserCard from "../components/UserCard";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const DiscoverPeople = () => {
   const navigate = useNavigate();
@@ -28,8 +29,9 @@ const DiscoverPeople = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-screen min-h-screen">
-      <div className="flex flex-col gap-5 bg-neutral-800 p-5 rounded-md w-[600px] min-h-[700px]">
+    <div className="flex flex-col justify-center items-center w-full min-h-screen">
+      <NavBar />
+      <div className="flex flex-col gap-5 bg-neutral-800 my-14 p-5 rounded-md w-[600px] min-h-[700px]">
         {users &&
           users.map((user, index) => {
             return <UserCard key={index} user={user} />;

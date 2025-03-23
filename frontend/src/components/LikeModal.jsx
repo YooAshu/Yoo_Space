@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 
 import React from "react";
-import UserCard from "./UserCard";
+import UserCardV2 from "./UserCardv2";
 
-const FollowModal = ({ isOpen, onClose, list }) => {
+const LikeModal = ({ isOpen, onClose, list }) => {
   const handleBackgroundClick = (e) => {
     if (e.target == e.currentTarget) {
       onClose();
@@ -31,7 +31,7 @@ const FollowModal = ({ isOpen, onClose, list }) => {
                 console.log(user);
 
                 return (
-                  <UserCard key={user._id} user={user} />
+                  <UserCardV2 key={user.usersLiked._id} user={user.usersLiked} />
                 );
               })}
           </motion.div>
@@ -41,4 +41,4 @@ const FollowModal = ({ isOpen, onClose, list }) => {
   );
 };
 
-export default FollowModal;
+export default LikeModal;

@@ -8,6 +8,7 @@ import DiscoverPeople from "./pages/DiscoverPeople";
 import UpdateProfile from "./pages/UpdateProfile"
 import UserProfile from "./pages/UserProfile";
 import Home from "./pages/Home";
+import PostPage from "./pages/PostPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ function App() {
     {
       path: "/",
       element: <Home/>,
+    },
+    {
+      path: "/post/:postId",
+      element: <PostPage/>,
     },
   ]);
 

@@ -21,6 +21,7 @@ const UserProfile = () => {
   const openFollowingModal = () => setFollowingModalOpen(true);
   const closeFollowingModal = () => setFollowingModalOpen(false);
   const [posts, setPosts] = useState([]);
+  const [isFollower, setIsFollower] = useState(false);
 
   const navigate = useNavigate();
 
@@ -62,6 +63,23 @@ const UserProfile = () => {
       console.error("error fetching followings data", error);
     }
   };
+
+  const checkIsFollower = async (id) => {
+    const response = await axios.get(`/api/users/is-follower/${id}`);
+    // console.log(response.data?.follows);
+    setIsFollower(response.data?.follows);
+  };
+
+  const handleFollow = async (id) => {
+    if (!isFollower) {
+      await axios.patch(`/api/users/follow/${id}`);
+      setIsFollower(true);
+    } else {
+      await axios.patch(`/api/users/unfollow/${id}`);
+      setIsFollower(false);
+    }
+  };
+
   useEffect(() => {
     closeFollowerModal();
     closeFollowingModal();
@@ -69,8 +87,8 @@ const UserProfile = () => {
     getFollowers();
     getFollowings();
     getPosts();
+    checkIsFollower(userId);
   }, [String(userId)]);
-
 
   if (!userData) {
     return <div className="relative w-screen min-h-screen">Loading...</div>;
@@ -133,6 +151,17 @@ const UserProfile = () => {
             <span>Following</span>
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation(); // Prevents event from propagating to parent elements
+            handleFollow(userData._id);
+          }}
+          className="bg-white px-5 py-2 rounded-2xl w-[10%] text-black"
+        >
+          {isFollower ? "Following" : "Follow"}
+        </button>
       </div>
 
       {/* follower modal */}
