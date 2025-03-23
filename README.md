@@ -10,11 +10,32 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 ---
 
+## see your liked posts and your posts
+
+![Screenshot 2025-03-24 015559](https://github.com/user-attachments/assets/7e371a46-d3fb-429e-9a05-e3fbfde39a09)
+
+---
+
+
 ### Upload Post
 
 ![Upload Post Screenshot](https://github.com/user-attachments/assets/09f48a6a-7ce7-4f1a-bd9e-50399e683455)
 
 ---
+
+
+### add comment to a post and like comments
+
+![Screenshot 2025-03-24 015634](https://github.com/user-attachments/assets/dda3c0f2-7d1e-48ca-96e6-50641a68acb1)
+
+---
+
+##see who liked a post
+
+![Screenshot 2025-03-24 015649](https://github.com/user-attachments/assets/dd9f8201-1c18-45ad-ad60-e7c5c9d95819)
+
+---
+
 
 ### Discover People
 
