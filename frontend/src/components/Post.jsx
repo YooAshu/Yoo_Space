@@ -76,7 +76,10 @@ const Post = ({ post, modalOpen = undefined }) => {
                 <button
                   disabled={imageIndex == 0}
                   type="button"
-                  onClick={() => setImageIndex((prevIndex) => prevIndex - 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setImageIndex((prevIndex) => prevIndex - 1);
+                  }}
                   className={`top-2/4 z-[1] absolute  ${
                     imageIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
                   }`}
@@ -86,7 +89,10 @@ const Post = ({ post, modalOpen = undefined }) => {
                 <button
                   disabled={imageIndex == post.media.length - 1}
                   type="button"
-                  onClick={() => setImageIndex((prevIndex) => prevIndex + 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setImageIndex((prevIndex) => prevIndex + 1);
+                  }}
                   className={`top-2/4 right-0 z-[1] absolute 
                 ${
                   imageIndex === post.media.length - 1
@@ -104,7 +110,7 @@ const Post = ({ post, modalOpen = undefined }) => {
 
                 {/* indicators */}
 
-                <div className="bottom-[-5%] left-1/2 z-[1] absolute -translate-x-1/2 transform">
+                <div className="bottom-[-5%] left-1/2 z-[1] absolute text-white -translate-x-1/2 transform">
                   {Array(post.media.length)
                     .fill(null)
                     .map((_, index) => {

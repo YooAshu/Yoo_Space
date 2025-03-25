@@ -184,6 +184,7 @@ const Profile = () => {
         isOpen={isAddPostModalOpen}
         onClose={closeAddPostModal}
         user={{ userName: userData.userName, img: userData.profile_image }}
+        setUserData = {setUserData}
       />
       <div className="flex justify-evenly mt-20 w-full text-white text-2xl">
         <span
@@ -216,10 +217,10 @@ const Profile = () => {
           <div className="bg-neutral-900 mb-36 w-1/2">
             {option == 1
               ? posts.map((post, index) => {
-                  return <Post key={index} post={post} />;
+                  return <Post key={post._id} post={post} />;
                 })
               : likedPosts.map((post, index) => {
-                  return <Post key={index} post={post} />;
+                  return <Post key={post._id} post={post} />;
                 })}
           </div>
         </div>

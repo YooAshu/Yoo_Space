@@ -1,11 +1,15 @@
 import React from "react";
 import LogOut from "./LogOut";
 import { useNavigate } from "react-router-dom";
+import YooHub from "../assets/yoohub.png";
 
 const NavBar = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex justify-end bg-black w-full h-16">
+    <div className="relative flex justify-end bg-black w-full h-16">
+      <div className="left-4 absolute flex items-center w-[10%] h-full">
+        <img src={YooHub} alt="yoohub" />
+      </div>
       <button
         type="button"
         onClick={() => navigate("/")}

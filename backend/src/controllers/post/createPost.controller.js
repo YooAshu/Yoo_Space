@@ -1,5 +1,6 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { Post } from "../../models/post.model.js";
+import { User } from "../../models/user.model.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
@@ -41,6 +42,15 @@ const createPost = asyncHandler(async (req, res) => {
     if (!createdPost) {
         throw new ApiError(500, "Failed to create post");
     }
+
+    await User.findByIdAndUpdate(
+        userId,
+        {
+            $inc:{
+                no_of_post:1
+            }
+        }
+    )
 
     return res.status(200).json(new ApiResponse(200, createdPost, "Post created successfully"));
 });

@@ -7,7 +7,7 @@ import Arrow from "../assets/arrow.svg";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
-const AddPostModal = ({ isOpen, onClose, user }) => {
+const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
   const [isSubmitting, setisSubmitting] = useState(false);
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -91,7 +91,12 @@ const AddPostModal = ({ isOpen, onClose, user }) => {
         autoClose: 500, // Closes automatically in 3s
       });
       //   navigate("/profile");
+      setUserData((prev) => ({
+        ...prev,
+        no_of_post: (prev?.no_of_post || 0) + 1,
+      }));
       onClose();
+
       // setData({ images: [], content: "" }); // Reset state
       setValue("images", []); // ✅ Clear images after upload
       setValue("content", ""); // ✅ Clear text input
@@ -123,7 +128,7 @@ const AddPostModal = ({ isOpen, onClose, user }) => {
           initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
           animate={{ opacity: 1, backdropFilter: "blur(5px)" }}
           exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50"
+          className="z-30 fixed inset-0 flex justify-center items-center bg-black bg-opacity-50"
           onClick={handleBackgroundClick}
         >
           <motion.div
