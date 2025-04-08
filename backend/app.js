@@ -1,6 +1,7 @@
 import express from "express";
 import cors from 'cors'
 import cookieParser from "cookie-parser"
+import { refreshAccessToken } from "./src/controllers/user/refreshTokens.js";
 // import errorHandler from "./src/middleware/errorHandler.js";
 const app = express();
 
@@ -22,11 +23,14 @@ app.use(cookieParser())
 
 import userRouter from './src/routes/user.route.js'
 import postRouter from './src/routes/post.route.js'
+import messageRouter from './src/routes/message.route.js'
 
 
 // routes declaration
 app.use('/api/users',userRouter)
 app.use('/api/posts',postRouter)
+app.post("/refreshToken", refreshAccessToken); // Define the route
+app.use('/api/messages', messageRouter)
 
 app.use((err, req, res, next) => {
     res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);

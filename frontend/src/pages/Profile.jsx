@@ -9,6 +9,7 @@ import generateGradient from "../utils/generateGradient.js";
 import AddPostButton from "../components/AddPostButton.jsx";
 import AddPostModal from "../components/AddPostModal.jsx";
 import Post from "../components/Post.jsx";
+import api from "../utils/axios-api.js";
 
 const Profile = () => {
   const { followingNo, setFollowingNo } = useContext(AppContext);
@@ -46,27 +47,25 @@ const Profile = () => {
 
   const getPosts = async () => {
     try {
-      const postsResponse = await axios.get(`/api/posts/currentUser`);
+      const postsResponse = await api.get(`/api/posts/currentUser`);
       const userPosts = postsResponse.data.data;
       // console.log(postsResponse.data.data);
       setPosts(userPosts);
       // console.log(response.data.data);
     } catch (error) {
       console.error("error fetching user posts", error);
-      if (error.response?.status == 401) navigate("/login");
     }
   };
 
   const getLikedPosts = async () => {
     try {
-      const postsResponse = await axios.get(`/api/posts/user-likes`);
+      const postsResponse = await api.get(`/api/posts/user-likes`);
       const likedPosts = postsResponse.data.data;
       // console.log(postsResponse.data.data);
       setLikedPosts(likedPosts);
       // console.log(response.data.data);
     } catch (error) {
       console.error("error fetching user liked posts", error);
-      if (error.response?.status == 401) navigate("/login");
     }
   };
 
@@ -110,7 +109,7 @@ const Profile = () => {
     <div className="relative w-auto min-h-screen">
       <NavBar />
       {/* cover image */}
-      <div className="relative">
+      <div className="">
         <div
           className="w-full h-56"
           style={{ background: generateGradient(userData.userName) }}

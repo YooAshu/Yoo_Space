@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import generateGradient from "../utils/generateGradient.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import api from "../utils/axios-api.js";
 
 const UpdateProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -20,12 +21,11 @@ const UpdateProfile = () => {
 
   const getCurrentUser = async () => {
     try {
-      const response = await axios.get("/api/users/current-user");
+      const response = await api.get("/api/users/current-user");
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
       console.error("error fetching user data", error);
-      if (error.response?.status == 401) navigate("/login");
     }
   };
 
@@ -101,7 +101,7 @@ const UpdateProfile = () => {
   return (
     <div className="relative flex justify-center items-center w-screen min-h-screen">
       <ToastContainer autoClose={1500} theme="dark" />
-      <div className="relative flex flex-col gap-5 bg-zinc-950 rounded-lg w-[600px] min-h-[700px] overflow-hidden">
+      <div className="relative flex flex-col gap-5 bg-[rgb(16,16,16)] rounded-lg w-[600px] min-h-[700px] overflow-hidden">
         {/* cover image */}
         <div
           className="relative w-full h-32"

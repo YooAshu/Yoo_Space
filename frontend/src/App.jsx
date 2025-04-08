@@ -9,6 +9,8 @@ import UpdateProfile from "./pages/UpdateProfile"
 import UserProfile from "./pages/UserProfile";
 import Home from "./pages/Home";
 import PostPage from "./pages/PostPage";
+import DirectMessage from "./pages/directMessage";
+import AllChats from "./pages/AllChats";
 function App() {
   const router = createBrowserRouter([
     {
@@ -43,6 +45,14 @@ function App() {
       path: "/post/:postId",
       element: <PostPage/>,
     },
+    {
+      path: "/direct/:targetId",
+      element: <DirectMessage/>,
+    },
+    {
+      path:"/all-chats",
+      element:<AllChats/>
+    }
   ]);
 
   return <RouterProvider router={router}/>;

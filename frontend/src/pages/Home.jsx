@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Post from "../components/Post";
 import NavBar from "../components/NavBar";
+import api from '../utils/axios-api.js'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,12 +11,13 @@ const Home = () => {
 
   const getPosts = async () => {
     try {
-      const response = await axios.get("/api/posts/feed");
+      // const response = await axios.get("/api/posts/feed");
+      const response = await api.get("/api/posts/feed");
       setPosts(response.data.data);
       console.log(response.data.data);
     } catch (error) {
       console.error("error fetching user data", error);
-      if (error.response?.status == 401) navigate("/login");
+      // if (error.response?.status == 401) navigate("/login");
     }
   };
 

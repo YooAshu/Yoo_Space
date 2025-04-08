@@ -7,6 +7,7 @@ import FollowModal from "../components/FollowModal";
 import { useParams } from "react-router-dom";
 import generateGradient from "../utils/generateGradient.js";
 import Post from "../components/Post.jsx";
+import api from "../utils/axios-api.js";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -27,12 +28,11 @@ const UserProfile = () => {
 
   const getUserDetail = async () => {
     try {
-      const response = await axios.get(`/api/users/profile/${userId}`);
+      const response = await api.get(`/api/users/profile/${userId}`);
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
       console.error("error fetching user data", error);
-      if (error.response?.status == 401) navigate("/login");
     }
   };
 
@@ -122,46 +122,60 @@ const UserProfile = () => {
       </div>
 
       {/* user details */}
-      <div className="left-[20%] absolute flex items-center gap-32 p-5 w-4/5 text-white">
-        <div className="flex flex-col gap-5 w-2/5">
-          <div className="flex gap-5">
-            <span>{userData?.fullName || "full name"}</span>
-            <span>@{userData?.userName || "username"}</span>
+      <div className="flex flex-col justify-between items-center gap-10 p-5 w-full text-white">
+        <div className="flex justify-between items-center w-[60%]">
+          <div className="flex flex-col gap-5 w-2/5">
+            <div className="flex gap-5">
+              <span>{userData?.fullName || "full name"}</span>
+              <span>@{userData?.userName || "username"}</span>
+            </div>
+            <div>{userData.bio || ""}</div>
           </div>
-          <div>{userData.bio || ""}</div>
+
+          <div className="flex gap-12 text-center">
+            <div className="flex flex-col gap-2">
+              <span className="text-3xl">{userData.no_of_post}</span>
+              <span>Posts</span>
+            </div>
+            <div
+              className="flex flex-col gap-2 cursor-pointer"
+              onClick={openFollowerModal}
+            >
+              <span className="text-3xl">{userData.no_of_follower}</span>
+              <span>Follower</span>
+            </div>
+            <div
+              className="flex flex-col gap-2 cursor-pointer"
+              onClick={openFollowingModal}
+            >
+              <span className="text-3xl">{userData.no_of_following}</span>
+              <span>Following</span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex gap-12 text-center">
-          <div className="flex flex-col gap-2">
-            <span className="text-3xl">{userData.no_of_post}</span>
-            <span>Posts</span>
-          </div>
-          <div
-            className="flex flex-col gap-2 cursor-pointer"
-            onClick={openFollowerModal}
+        <div className="flex justify-center gap-[15%] pb-10 border-gray-400/50 border-b w-2/4">
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation(); // Prevents event from propagating to parent elements
+              handleFollow(userData._id);
+            }}
+            className="bg-white px-5 py-2 rounded-2xl w-[20%] text-black"
           >
-            <span className="text-3xl">{userData.no_of_follower}</span>
-            <span>Follower</span>
-          </div>
-          <div
-            className="flex flex-col gap-2 cursor-pointer"
-            onClick={openFollowingModal}
+            {isFollower ? "Following" : "Follow"}
+          </button>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation(); // Prevents event from propagating to parent elements
+              navigate(`/direct/${userData._id}`)
+            }}
+            className="bg-white px-5 py-2 rounded-2xl w-[20%] text-black"
           >
-            <span className="text-3xl">{userData.no_of_following}</span>
-            <span>Following</span>
-          </div>
+            Message
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={(event) => {
-            event.stopPropagation(); // Prevents event from propagating to parent elements
-            handleFollow(userData._id);
-          }}
-          className="bg-white px-5 py-2 rounded-2xl w-[10%] text-black"
-        >
-          {isFollower ? "Following" : "Follow"}
-        </button>
       </div>
 
       {/* follower modal */}
@@ -179,7 +193,7 @@ const UserProfile = () => {
       />
 
       {posts.length > 0 && (
-        <div className="flex justify-center mt-36 w-full h-fit">
+        <div className="flex justify-center mt-20 w-full h-fit">
           <div className="bg-neutral-900 w-1/2">
             {posts.map((post, index) => {
               return <Post key={index} post={post} />;

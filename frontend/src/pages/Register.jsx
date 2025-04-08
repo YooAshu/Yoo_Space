@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import YooHub from "../assets/yoohub.png"
+import YooSpace from "../assets/yoospace.png"
 
 const Register = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Register = () => {
     <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
       <ToastContainer autoClose={1500} theme="dark" />
       <div className="w-1/4">
-              <img src={YooHub} alt="yoohub" />
+              <img src={YooSpace} alt="yoohub" />
             </div>
       <div className="bg-zinc-800 rounded-2xl w-96 h-[500px]">
         <form

@@ -4,6 +4,7 @@ import axios from "axios";
 import UserCard from "../components/UserCard";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import api from "../utils/axios-api.js";
 
 const DiscoverPeople = () => {
   const navigate = useNavigate();
@@ -11,13 +12,11 @@ const DiscoverPeople = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axios.get("/api/users/discover");
+      const response = await api.get("/api/users/discover");
       setUsers(response.data.data.users);
       // console.log(response.data.data.users);
     } catch (error) {
       console.error("error fetching users", error);
-
-      if (error.response?.status == 401) navigate("/login");
     }
   };
   useEffect(() => {

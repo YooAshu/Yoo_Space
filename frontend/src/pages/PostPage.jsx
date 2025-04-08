@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import Comment from "../components/Comment";
 import LikeModal from "../components/LikeModal";
 import NavBar from "../components/NavBar";
+import api from "../utils/axios-api.js";
 
 const PostPage = () => {
   const [post, setPost] = useState(null);
@@ -27,7 +28,7 @@ const PostPage = () => {
 
   const getPost = async () => {
     try {
-      const postResponse = await axios.get(`/api/posts/post/${postId}`);
+      const postResponse = await api.get(`/api/posts/post/${postId}`);
       console.log(postResponse.data.data[0]);
 
       setPost(postResponse.data.data[0]);
@@ -72,7 +73,7 @@ const PostPage = () => {
           withCredentials: true,
         }
       );
-      console.log("check", response.data.data);
+      // console.log("check", response.data.data);
       setComments((prev) => [response.data.data, ...prev]);
       setPost((prevPost) => ({
         ...prevPost,
