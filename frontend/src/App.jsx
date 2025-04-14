@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import PostPage from "./pages/PostPage";
 import DirectMessage from "./pages/directMessage";
 import AllChats from "./pages/AllChats";
+import GroupMessage from "./pages/GroupMessage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -48,6 +49,10 @@ function App() {
     {
       path: "/direct/:targetId",
       element: <DirectMessage/>,
+    },
+    {
+      path: "/group/:conversationId",
+      element: <GroupMessage/>,
     },
     {
       path:"/all-chats",

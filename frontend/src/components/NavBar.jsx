@@ -10,7 +10,7 @@ const NavBar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="relative flex justify-end bg-black w-full h-[50px]">
+    <div className="relative flex justify-end bg-black pr-3 w-full h-[50px]">
       <div className="left-4 absolute flex items-center w-[10%] h-full">
         <img src={YooSpace} alt="yoohub" />
       </div>

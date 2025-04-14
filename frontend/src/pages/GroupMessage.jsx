@@ -7,11 +7,14 @@ import { useParams } from "react-router-dom";
 import { ReceiverMsgBox, SendMsgBox } from "../components/MessageBox.jsx";
 import { useNavigate } from "react-router-dom";
 
+import Group from "../assets/group.png";
+const loggedInUserId = localStorage.getItem("userId");
+
 const DirectMessage = () => {
   const [messages, setMessages] = useState([]);
 
   const { socket } = useSocket();
-  const { targetId } = useParams();
+  const { conversationId } = useParams();
   const [conversation, setConversation] = useState(null);
   const chatRef = useRef(null);
   const navigate = useNavigate();
@@ -34,8 +37,8 @@ const DirectMessage = () => {
   }, [socket, conversation?._id]);
 
   useEffect(() => {
-    getConversation(targetId, setConversation);
-  }, [targetId]);
+    getConversation(conversationId, setConversation);
+  }, [conversationId]);
 
   useEffect(() => {
     getAllMessages(conversation?._id, setMessages);
@@ -58,7 +61,10 @@ const DirectMessage = () => {
         `/api/messages/send/${conversation?._id}`,
         {
           text: data.message,
-          receiver: [targetId],
+          //   receiver is array of all participant id except logged in user id
+          receiver: conversation?.participants
+            .filter((participant) => participant._id !== loggedInUserId),
+          //   receiver: [targetId],
         }
       );
       console.log(response.data);
@@ -82,9 +88,9 @@ const DirectMessage = () => {
     el.style.height = el.scrollHeight + "px";
   };
 
-  const sender = conversation?.participants.find(
-    (participant) => participant._id == targetId
-  );
+  //   const sender = conversation?.participants.find(
+  //     (participant) => participant._id == targetId
+  //   );
 
   return (
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
@@ -92,26 +98,23 @@ const DirectMessage = () => {
       <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-2/4 h-[95%]">
         <div
           className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
-          onClick={() => navigate(`/user/${targetId}`)}
+          //   onClick={() => navigate(`/user/${targetId}`)}
         >
           <img
             className="rounded-full w-12 h-12 object-cover"
-            src={
-              sender?.profile_image ||
-              `https://api.dicebear.com/9.x/big-smile/svg?seed=${sender?.userName}&backgroundColor=c0aede`
-            }
+            src={conversation?.avatar || Group}
           />
-          <span className="text-white text-xl">@{sender?.userName}</span>
+          <span className="text-white text-xl">{conversation?.groupName}</span>
         </div>
         <div
           className="flex flex-col-reverse gap-4 mt-auto p-2.5 w-full overflow-y-auto your-container"
           ref={chatRef}
         >
           {messages.map((message, index) => {
-            if (message.sender._id === targetId) {
-              return <ReceiverMsgBox key={message._id} message={message} />;
+            if (message.sender._id === loggedInUserId) {
+              return <SendMsgBox key={message._id} message={message} />;
             }
-            return <SendMsgBox key={message._id} message={message} />;
+            return <ReceiverMsgBox key={message._id} message={message} />;
           })}
         </div>
         <form
@@ -148,9 +151,11 @@ const DirectMessage = () => {
   );
 };
 
-const getConversation = async (targetId, setConversation) => {
+const getConversation = async (conversationId, setConversation) => {
   try {
-    const response = await api.get(`/api/messages/conversation/${targetId}`);
+    const response = await api.get(
+      `/api/messages/conversation-id/${conversationId}`
+    );
     console.log(response.data.data);
     setConversation(response.data.data);
   } catch (error) {
@@ -178,6 +183,6 @@ const setMessagesAsRead = async (messageId) => {
   } catch (error) {
     console.error("Error setting messages as read", error);
   }
-}
+};
 
 export default DirectMessage;

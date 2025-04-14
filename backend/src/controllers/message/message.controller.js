@@ -48,6 +48,11 @@ const sendMessage = asyncHandler(async (req, res) => {
 
 const getAllMessages = asyncHandler(async (req, res) => {
     const { conversationId } = req.params;
+    const conversation = await Conversation.findById(conversationId)
+    if (!conversation) {
+        throw new ApiError(404, "conversation not found")
+    }
+    const userId = req.userId;
     const messages = await Message.find({ conversationId: conversationId })
         .populate("sender", "_id userName profile_image")
         .populate("receiver", "_id userName profile_image")
@@ -57,9 +62,41 @@ const getAllMessages = asyncHandler(async (req, res) => {
         throw new ApiError(404, "no messages found")
     }
 
+    await Message.updateMany(
+        {
+            conversationId: conversationId,
+            seenBy: { $ne: userId }
+        },
+        {
+            $addToSet: { seenBy: userId }, // Add userId to the seenBy array 
+        }
+    )
+
+
     res.status(200).json(
         new ApiResponse(200, messages, "messages fetched successfully")
     )
 })
 
-export { sendMessage, getAllMessages }
+
+const setMessagesAsRead = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+    const userId = req.userId;
+    await Message.updateOne(
+        {
+            _id: messageId,
+            seenBy: { $ne: userId }
+        },
+        {
+            $addToSet: { seenBy: userId }, // Add userId to the seenBy array 
+        }
+    )
+    res.status(200).json(
+        new ApiResponse(200, null, "messages marked as read")
+    )
+})
+
+
+
+
+export { sendMessage, getAllMessages, setMessagesAsRead }
