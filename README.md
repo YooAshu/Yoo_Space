@@ -10,6 +10,18 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 ---
 
+### chat with friends
+
+![image](https://github.com/user-attachments/assets/d8a5d896-7d23-4755-9239-35f527fc8214)
+
+---
+
+### list of all groups and charts
+
+![Screenshot 2025-04-08 220650](https://github.com/user-attachments/assets/45cc9ca0-79e1-4468-8a26-9053e90261fe)
+
+---
+
 ## see your liked posts and your posts
 
 ![Screenshot 2025-03-24 015559](https://github.com/user-attachments/assets/7e371a46-d3fb-429e-9a05-e3fbfde39a09)
@@ -30,7 +42,7 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 ---
 
-##see who liked a post
+### see who liked a post
 
 ![Screenshot 2025-03-24 015649](https://github.com/user-attachments/assets/dd9f8201-1c18-45ad-ad60-e7c5c9d95819)
 
