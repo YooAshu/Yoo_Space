@@ -16,9 +16,9 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 ---
 
-### list of all groups and charts
+### list of all groups and chats , create group and join group
+![image](https://github.com/user-attachments/assets/6946d7e8-2911-4c8b-a6e4-13954d9dcfcb)
 
-![Screenshot 2025-04-08 220650](https://github.com/user-attachments/assets/45cc9ca0-79e1-4468-8a26-9053e90261fe)
 
 ---
 
