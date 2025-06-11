@@ -4,7 +4,7 @@ import Group from "../assets/group.png";
 import { useSocket } from "../context/SoketContext.jsx";
 import { AppContext } from "../context/AppContext.jsx";
 
-const GroupInvites = () => {
+const GroupInvites = ({ setConvoList }) => {
   const [groupInvites, setGroupInvites] = useState([]);
   const { showToast } = useContext(AppContext);
   useEffect(() => {
@@ -31,6 +31,9 @@ const GroupInvites = () => {
                 src={invite.avatar || Group}
               />
               <div>
+                <p>
+                  {/* {invite.} */}
+                </p>
                 <h1 className="overflow-hidden text-white whitespace-nowrap">
                   {invite.groupName}
                 </h1>
@@ -38,7 +41,13 @@ const GroupInvites = () => {
               <button
                 className="bg-gradient-to-r from-purple-600 to-indigo-700 ml-auto px-3 py-1 rounded-full text-white"
                 onClick={() => {
-                  AcceptGroupInvite(invite._id, invite, showToast);
+                  AcceptGroupInvite(
+                    invite._id,
+                    invite,
+                    showToast,
+                    setGroupInvites,
+                    setConvoList
+                  );
                 }}
               >
                 Accept
@@ -56,13 +65,20 @@ const getGroupInvites = async (setGroupInvites) => {
     const response = await api.get("/api/messages/group-invites");
     if (response.status === 200) {
       setGroupInvites(response.data.data);
+      console.log("Group invites fetched successfully:", response.data.data);
     }
   } catch (error) {
     console.error("Error fetching group invites:", error);
   }
 };
 
-const AcceptGroupInvite = async (inviteId, invite, showToast) => {
+const AcceptGroupInvite = async (
+  inviteId,
+  invite,
+  showToast,
+  setGroupInvites,
+  setConvoList
+) => {
   try {
     const response = await api.patch(
       `/api/messages/group-invite-accept/${inviteId}`
@@ -72,15 +88,22 @@ const AcceptGroupInvite = async (inviteId, invite, showToast) => {
       showToast({
         message: "Group invite accepted successfully!",
         type: "success",
-        id:"group-invite"
+        id: "group-invite",
+      });
+      setGroupInvites((prevInvites) => {
+        return prevInvites.filter((invite) => invite._id !== inviteId);
+      });
+      setConvoList((prevConvoList) => {
+        // Add the new group conversation to the list
+        return [invite, ...prevConvoList];
       });
     }
   } catch (error) {
     console.error("Error accepting group invite:", error);
     showToast({
-      message: error.response.data.message,
+      message: "failed to accept group invite",
       type: "error",
-      id:"group-invite"
+      id: "group-invite",
     });
   }
 };

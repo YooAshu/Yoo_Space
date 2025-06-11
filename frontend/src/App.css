@@ -1,24 +1,36 @@
 .your-container {
-    overflow-y: scroll;
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: gray transparent; /* For Firefox */
-  }
-  
-  /* For Webkit-based browsers (Chrome, Edge, Safari) */
-  .your-container::-webkit-scrollbar {
-    width: 6px; /* Slim scrollbar */
-  }
-  
-  .your-container::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 10px;
-  }
-  
-  .your-container::-webkit-scrollbar-thumb {
-    background: gray;
-    border-radius: 10px; /* Rounded ends */
-  }
-  
-  .your-container::-webkit-scrollbar-thumb:hover {
-    background: darkgray;
-  }
+  overflow-y: scroll;
+  scrollbar-width: none; /* For Firefox */
+  scrollbar-color: gray transparent; /* For Firefox */
+}
+
+/* For Webkit-based browsers (Chrome, Edge, Safari) */
+.your-container::-webkit-scrollbar {
+  width: 6px; /* Slim scrollbar */
+}
+
+.your-container::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.your-container::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 10px; /* Rounded ends */
+}
+
+.your-container::-webkit-scrollbar-thumb:hover {
+  background: darkgray;
+}
+
+
+
+/* Remove up/down arrow buttons */
+.your-container::-webkit-scrollbar-button {
+  display: none;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+

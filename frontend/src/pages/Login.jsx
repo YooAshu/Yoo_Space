@@ -18,7 +18,8 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const { showToast, showLoadingToast, updateToast } = useContext(AppContext);
+  const { showToast, showLoadingToast, updateToast, fetchUserByToken } =
+    useContext(AppContext);
 
   const onSubmit = async (data) => {
     setSubmitting(true);
@@ -35,13 +36,15 @@ const Login = () => {
 
       console.log(response.data);
       // alert("login successful");
-      localStorage.setItem("userId", response.data.data.user._id);
+      // localStorage.setItem("userId", response.data.data.user._id);
+      // setLoggedInUser_Id(response.data.data.user._id);
       if (socket) {
         socket.connect(); // Safe to call now
         console.log("🔁 Reconnecting...");
       }
       navigate("/profile");
       // showToast({ message: "Login successful", type: "success", id: "login" });
+      fetchUserByToken();
       updateToast({
         id: "login",
         message: "Login successful",
@@ -56,6 +59,9 @@ const Login = () => {
         type: "error",
       });
       // alert(error.response.data.message);
+    }
+    finally{
+      setSubmitting(false);
     }
   };
 
@@ -83,6 +89,8 @@ const Login = () => {
           />
           <input
             type="submit"
+            value={submitting ? "Logging in..." : "Login"}
+            disabled={submitting}
             className="bg-white mt-5 px-4 py-2 rounded-full text-black"
           />
         </form>

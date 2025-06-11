@@ -1,9 +1,11 @@
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SoketContext.jsx";
+import { AppContext } from "../context/AppContext.jsx";
 
 const LogOut = () => {
+  const { setCurrentUserByToken } = useContext(AppContext);
   const navigate = useNavigate();
   const { socket, setSocket } = useSocket();
   const handleOnclick = async () => {
@@ -17,8 +19,9 @@ const LogOut = () => {
       );
 
       if (response.status == 200) {
-        localStorage.removeItem("userId");
+        // localStorage.removeItem("userId");
         navigate("/login");
+        setCurrentUserByToken(null);
       }
       if (socket) {
         socket.disconnect();

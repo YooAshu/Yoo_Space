@@ -6,7 +6,7 @@ import { registrationSchema } from "../validators/registration.schema.js";
 import { loginSchema } from "../validators/login.schema.js";
 import { profileUpdateSchema } from "../validators/profileUpdate.schema.js";
 import verifyJWT from "../middleware/auth.middleware.js";
-import currentUser from "../controllers/user/currentUser.controller.js";
+import currentUser, { getCurrentUserBytoken } from "../controllers/user/currentUser.controller.js";
 import logout from "../controllers/user/logout.controller.js";
 import discoverUsers from "../controllers/user/discoverUsers.js";
 import { followUser, isFollower, unfollowUser, followerList, followingList } from "../controllers/user/follow.controller.js";
@@ -22,6 +22,7 @@ router.route('/login').post(zodValidate(loginSchema), loginUser)
 
 // protected route
 router.route('/current-user').get(verifyJWT, currentUser)
+router.route('/current-user-by-token').get(verifyJWT, getCurrentUserBytoken)
 router.route('/logout').post(verifyJWT, logout)
 router.route('/discover').get(verifyJWT, discoverUsers)
 router.route('/follow/:targetId').patch(verifyJWT, followUser)

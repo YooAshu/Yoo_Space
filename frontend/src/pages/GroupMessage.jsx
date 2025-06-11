@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import NavBar from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { useSocket } from "../context/SoketContext";
@@ -6,13 +6,18 @@ import api from "../utils/axios-api.js";
 import { useParams } from "react-router-dom";
 import { ReceiverMsgBox, SendMsgBox } from "../components/MessageBox.jsx";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext.jsx";
 
 import Group from "../assets/group.png";
-const loggedInUserId = localStorage.getItem("userId");
+import { GroupMembers } from "../components/GroupComponents.jsx";
+let loggedInUserId;
+// const loggedInUserId = localStorage.getItem("userId");
 
 const DirectMessage = () => {
   const [messages, setMessages] = useState([]);
 
+  const { currentUserByToken } = useContext(AppContext);
+  loggedInUserId = currentUserByToken?.userId;
   const { socket } = useSocket();
   const { conversationId } = useParams();
   const [conversation, setConversation] = useState(null);
@@ -62,8 +67,9 @@ const DirectMessage = () => {
         {
           text: data.message,
           //   receiver is array of all participant id except logged in user id
-          receiver: conversation?.participants
-            .filter((participant) => participant._id !== loggedInUserId),
+          receiver: conversation?.participants.filter(
+            (participant) => participant._id !== loggedInUserId
+          ),
           //   receiver: [targetId],
         }
       );
@@ -95,57 +101,70 @@ const DirectMessage = () => {
   return (
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
       <NavBar />
-      <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-2/4 h-[95%]">
-        <div
-          className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
-          //   onClick={() => navigate(`/user/${targetId}`)}
-        >
-          <img
-            className="rounded-full w-12 h-12 object-cover"
-            src={conversation?.avatar || Group}
-          />
-          <span className="text-white text-xl">{conversation?.groupName}</span>
+      {/* main div */}
+      <div className="flex justify-start gap-3 w-full h-[95%]">
+        {/* Left side: Group members */}
+        <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 rounded-lg w-[25%] h-[500px]">
+          {conversation && conversation.members.length > 0 && (
+            <GroupMembers members={conversation?.members} />
+          )}
         </div>
-        <div
-          className="flex flex-col-reverse gap-4 mt-auto p-2.5 w-full overflow-y-auto your-container"
-          ref={chatRef}
-        >
-          {messages.map((message, index) => {
-            if (message.sender._id === loggedInUserId) {
-              return <SendMsgBox key={message._id} message={message} />;
-            }
-            return <ReceiverMsgBox key={message._id} message={message} />;
-          })}
-        </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex justify-center items-end gap-1 w-full h-max"
-        >
-          <textarea
-            placeholder="write message..."
-            {...register("message", { required: true })}
-            // ref={textareaRef}
-            ref={(e) => {
-              register("message").ref(e);
-              textareaRef.current = e;
-            }}
-            rows={1}
-            onInput={handleInput}
-            className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] w-[90%]
+        <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-2/4 h-[95%]">
+          <div
+            className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
+            //   onClick={() => navigate(`/user/${targetId}`)}
+          >
+            <img
+              className="rounded-full w-12 h-12 object-cover"
+              src={conversation?.avatar || Group}
+            />
+            <span className="text-white text-xl">
+              {conversation?.groupName}
+            </span>
+          </div>
+          <div
+            className="flex flex-col-reverse gap-4 mt-auto p-2.5 w-full overflow-y-auto your-container"
+            ref={chatRef}
+          >
+            {messages.map((message, index) => {
+              console.log(message.sender._id, loggedInUserId);
+
+              if (message.sender._id === loggedInUserId) {
+                return <SendMsgBox key={message._id} message={message} />;
+              }
+              return <ReceiverMsgBox key={message._id} message={message} />;
+            })}
+          </div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex justify-center items-end gap-1 w-full h-max"
+          >
+            <textarea
+              placeholder="write message..."
+              {...register("message", { required: true })}
+              // ref={textareaRef}
+              ref={(e) => {
+                register("message").ref(e);
+                textareaRef.current = e;
+              }}
+              rows={1}
+              onInput={handleInput}
+              className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] w-[90%]
              min-h-[45px] overflow-hidden text-white leading-6 resize-none
              `}
-            style={{
-              scrollbarWidth: "none", // Firefox
-              msOverflowStyle: "none", // IE 10+
-            }}
-          />
+              style={{
+                scrollbarWidth: "none", // Firefox
+                msOverflowStyle: "none", // IE 10+
+              }}
+            />
 
-          <input
-            type="submit"
-            value="send"
-            className="bg-white px-4 py-2 rounded-full w-[10%] text-black"
-          />
-        </form>
+            <input
+              type="submit"
+              value="send"
+              className="bg-white px-4 py-2 rounded-full w-[10%] text-black"
+            />
+          </form>
+        </div>
       </div>
     </div>
   );

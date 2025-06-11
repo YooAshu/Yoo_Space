@@ -1,11 +1,30 @@
-import { createContext, useState } from "react";
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 export const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
   const [followingNo, setFollowingNo] = useState(0);
-  
+  const [currentUserByToken, setCurrentUserByToken] = useState(null);
+
+  const fetchUserByToken = async () => {
+    try {
+      const response = await axios.get("/api/users/current-user-by-token", {
+        withCredentials: true,
+      });
+      const data = await response.data;
+      console.log("Current User by Token:", data);
+      setCurrentUserByToken(data.data);
+    } catch (error) {
+      console.error("Error fetching current user by token:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserByToken();
+  }, []);
+
   const showToast = ({ message, type = "success", id = null }) => {
     toast(message, {
       type,
@@ -37,6 +56,9 @@ const AppProvider = ({ children }) => {
       value={{
         followingNo,
         setFollowingNo,
+        currentUserByToken,
+        setCurrentUserByToken,
+        fetchUserByToken,
         showToast,
         showLoadingToast,
         updateToast,
@@ -48,4 +70,5 @@ const AppProvider = ({ children }) => {
   );
 };
 
-export default AppProvider; // Default export for AppProvider
+export default AppProvider;
+// Default export for AppProvider

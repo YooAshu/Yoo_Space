@@ -100,7 +100,7 @@ const getAllConversations = asyncHandler(async (req, res) => {
         },
         {
             $sort: {
-                "lastMessage.createdAt": -1,// Sort by lastMessage.createdAt in descending order
+                // "lastMessage.createdAt": -1,// Sort by lastMessage.createdAt in descending order
                 "updatedAt": -1, // fallback for those without lastMessage
             },
         },
@@ -154,11 +154,14 @@ const createGroup = asyncHandler(async (req, res) => {
                 user: userId,
                 isAdmin: true,
                 status: "joined",
+                owner: true,
             },
             ...parsedInvitedTo.map((member) => ({
                 user: member,
                 isAdmin: false,
                 status: "invited",
+                owner: false,
+                invited_by: userId, // Optional: track who invited them
             })),
         ],
         groupName,
@@ -186,6 +189,7 @@ const getGroupInvites = asyncHandler(async (req, res) => {
             },
         },
     })
+
 
     if (!groupInvites) {
         throw new ApiError(404, "No group invites found");
@@ -222,5 +226,7 @@ const AcceptGroupInvite = asyncHandler(async (req, res) => {
     );
 }
 );
+
+
 
 export { getConversation, getAllConversations, createGroup, getConversationById, getGroupInvites, AcceptGroupInvite };

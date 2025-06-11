@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RedHeart from "../assets/red-heart.png";
 import WhiteHeart from "../assets/white-heart.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../assets/arrow.svg";
+import { AppContext } from "../context/AppContext";
 const Post = ({ post, modalOpen = undefined }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,6 +41,9 @@ const Post = ({ post, modalOpen = undefined }) => {
     }
   };
 
+  const { currentUserByToken } = useContext(AppContext);
+  const loggedInUserId = currentUserByToken?.userId;
+
   return (
     <div
       className="flex flex-col gap-6 bg-black m-5 p-3 rounded-3xl w-auto min-h-52"
@@ -51,7 +55,7 @@ const Post = ({ post, modalOpen = undefined }) => {
         className="flex items-center gap-2"
         onClick={(event) => {
           event.stopPropagation();
-          if (localStorage.getItem("userId") == post.creator._id) {
+          if (loggedInUserId == post.creator._id) {
             navigate("/profile");
           } else {
             navigate(`/user/${post.creator._id}`);

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RedHeart from "../assets/red-heart.png";
 import WhiteHeart from "../assets/white-heart.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const Comment = ({ comment }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -31,6 +32,9 @@ const Comment = ({ comment }) => {
     }
   };
 
+  const { currentUserByToken } = useContext(AppContext);
+  const loggedInUserId = currentUserByToken?.userId;
+
   return (
     <div className="flex flex-col gap-3 bg-neutral-800 p-3 rounded-2xl w-full text-white">
       <div className="flex justify-between items-center">
@@ -38,7 +42,7 @@ const Comment = ({ comment }) => {
           className="flex items-center gap-2 cursor-pointer"
           onClick={(event) => {
             event.stopPropagation();
-            if (localStorage.getItem("userId") == comment.user._id) {
+            if (loggedInUserId == comment.user._id) {
               navigate("/profile");
             } else {
               navigate(`/user/${post.creator._id}`);
