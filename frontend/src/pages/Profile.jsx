@@ -38,6 +38,8 @@ const Profile = () => {
       const response = await axios.get("/api/users/current-user");
       const user = response.data.data;
       setUserData(user);
+      console.log(user);
+      
       setFollowingNo(user.no_of_following);
     } catch (error) {
       console.error("error fetching user data", error);
@@ -163,6 +165,12 @@ const Profile = () => {
               <span>Following</span>
             </div>
           </div>
+          <div
+            className="p-[6px] border border-white rounded-[100%_30px] font-medium text-[20px] cursor-pointer"
+            onClick={() => navigate("/profile/update")}
+          >
+            Update Profile
+          </div>
         </div>
       </div>
       <AddPostButton openAddPostModal={openAddPostModal} />
@@ -183,7 +191,7 @@ const Profile = () => {
         isOpen={isAddPostModalOpen}
         onClose={closeAddPostModal}
         user={{ userName: userData.userName, img: userData.profile_image }}
-        setUserData = {setUserData}
+        setUserData={setUserData}
       />
       <div className="flex justify-evenly mt-20 w-full text-white text-2xl">
         <span

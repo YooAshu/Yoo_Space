@@ -24,11 +24,11 @@ const DiscoverPeople = () => {
   }, []);
 
   if (!users) {
-    return <div className="relative w-screen min-h-screen">Loading...</div>;
+    return <div className="relative mt-[70px] w-screen min-h-screen">Loading...</div>;
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full min-h-screen">
+    <div className="flex flex-col justify-center items-center mt-[70px] w-full min-h-screen">
       <NavBar />
       <div className="flex flex-col gap-5 bg-neutral-800 my-14 p-5 rounded-md w-[600px] min-h-[700px]">
         {users &&

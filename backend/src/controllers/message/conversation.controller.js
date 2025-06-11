@@ -4,6 +4,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { User } from "../../models/user.model.js";
+import { GroupMember } from "../../models/groupMember.model.js";
 
 const getConversation = asyncHandler(async (req, res) => {
     const { targetId } = req.params;
@@ -37,12 +38,37 @@ const getConversation = asyncHandler(async (req, res) => {
 
 const getConversationById = asyncHandler(async (req, res) => {
     const { conversationId } = req.params;
+    const userId = req.userId;
+    if (!conversationId) {
+        throw new ApiError(400, "Conversation ID is required");
+    }
+
     const conversation = await Conversation.findById(conversationId)
         .populate("participants", "_id userName fullName profile_image")
-        .populate("members.user", "_id userName fullName profile_image")
+    // .populate("members.user", "_id userName fullName profile_image")
     if (!conversation) {
         throw new ApiError(404, "Conversation not found");
     }
+    if (conversation.isGroup) {
+        const groupMember = await GroupMember.findOne({
+            group: conversationId,
+            member: userId,
+            status: "joined",
+        });
+        if (!groupMember) {
+            throw new ApiError(403, "either group not exsit or You are not a member of this group");
+        }
+
+        const allMembers = await GroupMember.find({
+            group: conversationId
+        }).populate("member", "_id userName fullName profile_image")
+
+        return res.status(200).json(
+            new ApiResponse(200, { conversation, members: allMembers }, "fetched conversation successfully")
+        );
+    }
+
+
     res.status(200).json(
         new ApiResponse(200, conversation, "fetched conversation successfully")
     );
@@ -53,6 +79,13 @@ const getConversationById = asyncHandler(async (req, res) => {
 
 const getAllConversations = asyncHandler(async (req, res) => {
     const userId = req.userId;
+
+    // First, get all group IDs where user is a member with "joined" status
+    const userGroups = await GroupMember.find({
+        member: userId,
+        status: "joined"
+    }).distinct("group")
+
     const conversations = await Conversation.aggregate([
         {
             $match: {
@@ -66,14 +99,11 @@ const getAllConversations = asyncHandler(async (req, res) => {
                     },
                     {
                         $and: [
-                            { members: { $elemMatch: { user: userId, status: 'joined' } } },
+                            { _id: { $in: userGroups } },
                             { isGroup: true },
                         ],
                     }
                 ],
-                // participants: { $in: [userId] },
-                // lastMessage: { $exists: true },
-                // lastMessage:{$and:[{$ne:null},{ $exists: true }]}
             },
         },
         {
@@ -91,6 +121,35 @@ const getAllConversations = asyncHandler(async (req, res) => {
                 foreignField: "_id",
                 as: "lastMessage",
             },
+        },
+        {
+            $lookup: {
+                from: "messages",
+                let: { convId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$conversationId", "$$convId"] },
+                                    { $not: { $in: [userId, "$seenBy"] } }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "unseenMessages"
+            }
+        },
+        {
+            $addFields: {
+                unseenCount: { $size: "$unseenMessages" }
+            }
+        },
+        {
+            $project: {
+                unseenMessages: 0
+            }
         },
         {
             $unwind: {
@@ -149,21 +208,6 @@ const createGroup = asyncHandler(async (req, res) => {
 
     const newConversation = await Conversation.create({
         participants: [userId],
-        members: [
-            {
-                user: userId,
-                isAdmin: true,
-                status: "joined",
-                owner: true,
-            },
-            ...parsedInvitedTo.map((member) => ({
-                user: member,
-                isAdmin: false,
-                status: "invited",
-                owner: false,
-                invited_by: userId, // Optional: track who invited them
-            })),
-        ],
         groupName,
         isGroup: true,
         avatar: avatarUpload ? avatarUpload.secure_url : "",
@@ -171,6 +215,32 @@ const createGroup = asyncHandler(async (req, res) => {
 
     if (!newConversation) {
         throw new ApiError(500, "Failed to create group conversation");
+    }
+
+    // Add the creator as a member with status 'joined'
+    await GroupMember.create({
+        group: newConversation._id,
+        member: userId,
+        invited_by: userId,
+        status: "joined",
+        role: "owner",
+    });
+    // Add invited members to the group
+    const invitedMembers = parsedInvitedTo.map((memberId) => ({
+        group: newConversation._id,
+        member: memberId,
+        invited_by: userId,
+        status: "invited",
+        role: "member",
+    }));
+    if (invitedMembers.length > 0) {
+        await GroupMember.insertMany(invitedMembers, { ordered: false })
+            .then(() => {
+                console.log("Invited members added successfully");
+            })
+            .catch((error) => {
+                console.error("Error adding invited members:", error);
+            });
     }
 
     res.status(201).json(
@@ -181,14 +251,10 @@ const createGroup = asyncHandler(async (req, res) => {
 
 const getGroupInvites = asyncHandler(async (req, res) => {
     const userId = req.userId;
-    const groupInvites = await Conversation.find({
-        members: {
-            $elemMatch: {
-                user: userId,
-                status: "invited",
-            },
-        },
-    })
+    const groupInvites = await GroupMember.find({
+        member: userId,
+        status: "invited",
+    }).populate("group").populate("invited_by", "_id userName profile_image")
 
 
     if (!groupInvites) {
@@ -210,22 +276,25 @@ const AcceptGroupInvite = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Conversation not found");
     }
 
+    const member = await GroupMember.findOne({
+        group: conversationId,
+        member: userId,
+        status: "invited"
+    })
 
-    const member = conversation.members.find((member) => {
-        return member.user.toString() === userId.toString()
-    });
-    if (!member || member.status !== "invited") {
+    if (!member) {
         throw new ApiError(400, "You are not invited to this group");
     }
 
     member.status = "joined";
-    await conversation.save();
+    await member.save();
 
     res.status(200).json(
         new ApiResponse(200, conversation, "Accepted group invite successfully")
     );
 }
 );
+
 
 
 

@@ -1,12 +1,15 @@
 .your-container {
   overflow-y: scroll;
-  scrollbar-width: none; /* For Firefox */
-  scrollbar-color: gray transparent; /* For Firefox */
+  scrollbar-width: none;
+  /* For Firefox */
+  scrollbar-color: gray transparent;
+  /* For Firefox */
 }
 
 /* For Webkit-based browsers (Chrome, Edge, Safari) */
 .your-container::-webkit-scrollbar {
-  width: 6px; /* Slim scrollbar */
+  width: 6px;
+  /* Slim scrollbar */
 }
 
 .your-container::-webkit-scrollbar-track {
@@ -16,7 +19,8 @@
 
 .your-container::-webkit-scrollbar-thumb {
   background: gray;
-  border-radius: 10px; /* Rounded ends */
+  border-radius: 10px;
+  /* Rounded ends */
 }
 
 .your-container::-webkit-scrollbar-thumb:hover {
@@ -34,3 +38,17 @@
 }
 
 
+.navbar-glass {
+  width: 50%;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  border-radius: 29px;
+  top: 10px;
+  background: rgba(255, 255, 255, 0.21);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9.1px);
+  -webkit-backdrop-filter: blur(9.1px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

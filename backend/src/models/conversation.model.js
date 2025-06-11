@@ -28,23 +28,6 @@ const conversationSchema = new mongoose.Schema(
             type: String,
             default: ''
         },
-        members: [
-            {
-                user: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                },
-                isAdmin: {
-                    type: Boolean,
-                    default: false,
-                },
-                status: {
-                    type: String,
-                    enum: ['invited', 'joined', 'left'],
-                    default: 'invited',
-                },
-            },
-        ],
 
     },
     {

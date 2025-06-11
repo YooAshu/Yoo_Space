@@ -1,3 +1,4 @@
+import { Post } from "../../models/post.model.js";
 import { User } from "../../models/user.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
@@ -14,6 +15,8 @@ const currentUser = asyncHandler(async (req, res) => {
             )
         )
 })
+
+
 
 const getCurrentUserBytoken = asyncHandler(async (req, res) => {
     const userId = req.userId

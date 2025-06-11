@@ -23,8 +23,8 @@ const AllChats = () => {
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
       <NavBar />
       {/* main div */}
-      <div className="flex justify-center gap-3 w-full h-[95%]">
-        <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 w-[25%] h-[500px]">
+      <div className="flex justify-center gap-3 mt-[70px] w-full h-[90%]">
+        <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 w-[25%] h-max max-h-[500px]">
           <GroupInvites setConvoList={setConvoList} />
         </div>
         <div className="flex flex-col bg-[rgb(16,16,16)] px-2 py-5 rounded-lg w-2/4 h-full overflow-y-auto your-container">
@@ -52,7 +52,7 @@ const AllChats = () => {
                       `https://api.dicebear.com/9.x/big-smile/svg?seed=${otherParticipant.userName}&backgroundColor=c0aede`
                     }
                   />
-                  <div className="flex flex-col justify-start h-full">
+                  <div className="flex flex-col justify-start w-[90%] h-full">
                     <h1 className="text-white">{otherParticipant.userName}</h1>
                     <p
                       className={`${
@@ -64,7 +64,11 @@ const AllChats = () => {
                       {convo.lastMessage.text}
                     </p>
                   </div>
-                  {/* <span className="text-gray-500">{convo.timestamp}</span> */}
+                  {convo.unseenCount != 0 && (
+                    <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
+                      {convo.unseenCount}
+                    </span>
+                  )}
                 </div>
               );
             }
@@ -81,7 +85,7 @@ const AllChats = () => {
                   className="rounded-full h-full object-cover aspect-square"
                   src={convo.avatar || Group}
                 />
-                <div className="flex flex-col justify-start h-full">
+                <div className="flex flex-col justify-start w-[90%] h-full">
                   <h1 className="text-white">{convo.groupName}</h1>
                   <p
                     className={`${
@@ -91,7 +95,11 @@ const AllChats = () => {
                     {convo.lastMessage?.text}
                   </p>
                 </div>
-                {/* <span className="text-gray-500">{convo.timestamp}</span> */}
+                {convo.unseenCount != 0 && (
+                  <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
+                    {convo.unseenCount}
+                  </span>
+                )}
               </div>
             );
           })}

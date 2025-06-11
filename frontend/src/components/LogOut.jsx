@@ -37,7 +37,7 @@ const LogOut = () => {
     <button
       type="button"
       onClick={() => handleOnclick()}
-      className="flex justify-center items-center bg-white my-2 px-5 rounded-full font-bold text-black"
+      className="flex justify-center items-center bg-white my-2 ml-2 px-5 rounded-full font-bold text-black"
     >
       Logout
     </button>

@@ -10,8 +10,8 @@ const NavBar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="relative flex justify-end bg-black pr-3 w-full h-[50px]">
-      <div className="left-4 absolute flex items-center w-[10%] h-full">
+    <div className="flex justify-end bg-black pr-3 h-[50px] navbar-glass">
+      <div className="left-4 absolute flex items-center w-[20%] h-full">
         <img src={YooSpace} alt="yoohub" />
       </div>
       <button
@@ -53,7 +53,7 @@ const NavBar = () => {
         Chats
       </button>
 
-      <button
+      {/* <button
         type="button"
         onClick={() => navigate("/profile/update")}
         className={`flex justify-center items-center my-2 px-5 rounded-full font-bold ${
@@ -61,7 +61,7 @@ const NavBar = () => {
         }`}
       >
         Update Profile
-      </button>
+      </button> */}
       <LogOut />
     </div>
   );

@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <div className="flex justify-center mt-5 w-full h-fit text-white">
+      <div className="flex justify-center mt-[70px] w-full h-fit text-white">
         <div className="bg-neutral-900 mb-36 w-1/2">
           {posts.map((post, index) => {
             return <Post key={post._id} post={post}/>;

@@ -21,6 +21,7 @@ const DirectMessage = () => {
   const { socket } = useSocket();
   const { conversationId } = useParams();
   const [conversation, setConversation] = useState(null);
+  const [members, setMembers] = useState([]);
   const chatRef = useRef(null);
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ const DirectMessage = () => {
   }, [socket, conversation?._id]);
 
   useEffect(() => {
-    getConversation(conversationId, setConversation);
+    getConversation(conversationId, setConversation, setMembers);
   }, [conversationId]);
 
   useEffect(() => {
@@ -105,9 +106,7 @@ const DirectMessage = () => {
       <div className="flex justify-start gap-3 w-full h-[95%]">
         {/* Left side: Group members */}
         <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 rounded-lg w-[25%] h-[500px]">
-          {conversation && conversation.members.length > 0 && (
-            <GroupMembers members={conversation?.members} />
-          )}
+          {members && members.length > 0 && <GroupMembers members={members} />}
         </div>
         <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-2/4 h-[95%]">
           <div
@@ -170,13 +169,14 @@ const DirectMessage = () => {
   );
 };
 
-const getConversation = async (conversationId, setConversation) => {
+const getConversation = async (conversationId, setConversation, setMembers) => {
   try {
     const response = await api.get(
       `/api/messages/conversation-id/${conversationId}`
     );
     console.log(response.data.data);
-    setConversation(response.data.data);
+    setConversation(response.data.data.conversation);
+    setMembers(response.data.data.members)
   } catch (error) {
     console.error("Error fetching conversation data", error);
   }
