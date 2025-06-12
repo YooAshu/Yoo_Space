@@ -103,7 +103,7 @@ const DirectMessage = () => {
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
       <NavBar />
       {/* main div */}
-      <div className="flex justify-start gap-3 w-full h-[95%]">
+      <div className="flex justify-start gap-3 mt-[70px] w-full h-[95%]">
         {/* Left side: Group members */}
         <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 rounded-lg w-[25%] h-[500px]">
           {members && members.length > 0 && <GroupMembers members={members} />}

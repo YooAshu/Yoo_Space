@@ -4,9 +4,22 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
 import mongoose from "mongoose";
 import { Like } from "../../models/like.model.js";
+import { Follow } from "../../models/follow.model.js";
 
 const getFeedPost = asyncHandler(async (req, res) => {
+    const getFollowings = await Follow.find({
+        followed_by: req.userId
+    })
+    // Extract the user IDs that the current user is following
+    const followingIds = getFollowings.map(follow => follow.followed_to);
+    const ids = [req.userId, ...followingIds]
+
     const posts = await Post.aggregate([
+        {
+            $match: {
+                createdBy: { $in: ids }
+            }
+        },
         { $sort: { createdAt: -1 } },
         {
             $lookup: {
@@ -42,12 +55,13 @@ const getFeedPost = asyncHandler(async (req, res) => {
 
 const getCurrentUserPost = asyncHandler(async (req, res) => {
     const posts = await Post.aggregate([
-        { $sort: { createdAt: -1 } },
+
         {
             $match: {
                 createdBy: new mongoose.Types.ObjectId(String(req.userId))
             }
         },
+        { $sort: { createdAt: -1 } },
         {
             $lookup: {
                 from: "users",

@@ -13,7 +13,7 @@ const GroupInvites = ({ setConvoList }) => {
   const { socket } = useSocket();
   return (
     <>
-      <h2 className="font-bold text-white text-xl text-center">
+      <h2 className="bg-white py-3 rounded-xl font-bold text-black text-xl text-center">
         Group Invites
       </h2>
       <div className="flex flex-col flex-1 gap-5 mb-2 rounded-xl w-full h-full overflow-y-auto your-container">
