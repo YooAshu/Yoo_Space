@@ -16,8 +16,6 @@ const currentUser = asyncHandler(async (req, res) => {
         )
 })
 
-
-
 const getCurrentUserBytoken = asyncHandler(async (req, res) => {
     const userId = req.userId
     return res
