@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../utils/axios-api";
+import axios from "axios";
 
 export const AppContext = createContext();
 
@@ -10,7 +11,7 @@ const AppProvider = ({ children }) => {
 
   const fetchUserByToken = async () => {
     try {
-      const response = await api.get("/users/current-user-by-token", {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/current-user-by-token`, {
         withCredentials: true,
       });
       const data = await response.data;
