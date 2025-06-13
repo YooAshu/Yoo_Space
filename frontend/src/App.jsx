@@ -10,6 +10,7 @@ import UserProfile from "./pages/UserProfile";
 import Home from "./pages/Home";
 import PostPage from "./pages/PostPage";
 import DirectMessage from "./pages/DirectMessage";
+
 import AllChats from "./pages/AllChats";
 import GroupMessage from "./pages/GroupMessage";
 function App() {
