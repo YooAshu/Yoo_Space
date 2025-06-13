@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import api from "../utils/axios-api.js";
 import Group from "../assets/group.png";
 import { useSocket } from "../context/SoketContext.jsx";
@@ -64,13 +64,13 @@ const GroupInvites = ({ setConvoList }) => {
 
 const getGroupInvites = async (setGroupInvites) => {
   try {
-    const response = await api.get("/api/messages/group-invites");
+    const response = await api.get("/messages/group-invites");
     if (response.status === 200) {
       setGroupInvites(response.data.data);
-      console.log("Group invites fetched successfully:", response.data.data);
+      //console.log("Group invites fetched successfully:", response.data.data);
     }
   } catch (error) {
-    console.error("Error fetching group invites:", error);
+    //console.error("Error fetching group invites:", error);
   }
 };
 
@@ -83,7 +83,7 @@ const AcceptGroupInvite = async (
 ) => {
   try {
     const response = await api.patch(
-      `/api/messages/group-invite-accept/${groupId}`
+      `/messages/group-invite-accept/${groupId}`
     );
     if (response.status === 200) {
       // alert("Group invite accepted successfully!");
@@ -102,7 +102,7 @@ const AcceptGroupInvite = async (
       });
     }
   } catch (error) {
-    console.error("Error accepting group invite:", error);
+    //console.error("Error accepting group invite:", error);
     showToast({
       message: "failed to accept group invite",
       type: "error",

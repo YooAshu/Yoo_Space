@@ -34,7 +34,7 @@ const loginUser = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true
     }
-    // console.log(accessToken, refreshToken);
+    // //console.log(accessToken, refreshToken);
 
     return res
         .status(200)

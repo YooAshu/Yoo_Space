@@ -176,7 +176,7 @@ const getAllConversations = asyncHandler(async (req, res) => {
 );
 
 const createGroup = asyncHandler(async (req, res) => {
-    console.log(req.body, req.files);
+    //console.log(req.body, req.files);
 
     const { groupName, invitedTo } = req.body;
     const userId = req.userId;
@@ -202,7 +202,7 @@ const createGroup = asyncHandler(async (req, res) => {
         if (!avatarUpload) {
             throw new ApiError(500, "Failed to upload avatar");
         }
-        console.log("Avatar Upload:", avatarUpload.secure_url);
+        //console.log("Avatar Upload:", avatarUpload.secure_url);
 
     }
 
@@ -236,10 +236,10 @@ const createGroup = asyncHandler(async (req, res) => {
     if (invitedMembers.length > 0) {
         await GroupMember.insertMany(invitedMembers, { ordered: false })
             .then(() => {
-                console.log("Invited members added successfully");
+                //console.log("Invited members added successfully");
             })
             .catch((error) => {
-                console.error("Error adding invited members:", error);
+                //console.error("Error adding invited members:", error);
             });
     }
 

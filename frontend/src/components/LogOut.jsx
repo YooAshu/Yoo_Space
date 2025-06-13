@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SoketContext.jsx";
 import { AppContext } from "../context/AppContext.jsx";
+import api from "../utils/axios-api.js";
 
 const LogOut = () => {
   const { setCurrentUserByToken } = useContext(AppContext);
@@ -10,8 +10,8 @@ const LogOut = () => {
   const { socket, setSocket } = useSocket();
   const handleOnclick = async () => {
     try {
-      const response = await axios.post(
-        "/api/users/logout",
+      const response = await api.post(
+        "/users/logout",
         {},
         {
           withCredentials: true,
@@ -25,11 +25,11 @@ const LogOut = () => {
       }
       if (socket) {
         socket.disconnect();
-        console.log("🔌 Socket manually disconnected");
+        //console.log("🔌 Socket manually disconnected");
         // setSocket(null);
       }
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   };
 

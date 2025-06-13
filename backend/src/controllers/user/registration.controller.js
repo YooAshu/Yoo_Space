@@ -4,7 +4,7 @@ import { asyncHandler } from '../../utils/asyncHandler.js'
 import { ApiResponse } from '../../utils/ApiResponse.js'
 
 const registerUser = asyncHandler(async (req, res) => {
-    // console.log(req.body); 
+    // //console.log(req.body); 
     
     const { userName, fullName, email, password } = req.body
 

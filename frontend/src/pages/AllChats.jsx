@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import api from "../utils/axios-api.js";
 import { useNavigate } from "react-router-dom";
@@ -112,11 +112,11 @@ const AllChats = () => {
 
 const getAllConversations = async (setConvoList) => {
   try {
-    const response = await api.get("/api/messages/all-conversation");
+    const response = await api.get("/messages/all-conversation");
     setConvoList(response.data.data);
-    console.log("Conversations:", response.data.data);
+    //console.log("Conversations:", response.data.data);
   } catch (error) {
-    console.error("Error fetching conversations:", error);
+    //console.error("Error fetching conversations:", error);
   }
 };
 

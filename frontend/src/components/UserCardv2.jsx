@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext.jsx";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/axios-api.js";
 
 const UserCardV2 = ({ user }) => {
   const navigate = useNavigate();
@@ -9,8 +9,8 @@ const UserCardV2 = ({ user }) => {
   const [isFollower, setIsFollower] = useState(false);
 
   const checkIsFollower = async (id) => {
-    const response = await axios.get(`/api/users/is-follower/${id}`);
-    // console.log(response.data?.follows);
+    const response = await api.get(`/users/is-follower/${id}`);
+    // //console.log(response.data?.follows);
     setIsFollower(response.data?.follows);
   };
 
@@ -20,11 +20,11 @@ const UserCardV2 = ({ user }) => {
 
   const handleFollow = async (id) => {
     if (!isFollower) {
-      await axios.patch(`/api/users/follow/${id}`);
+      await api.patch(`/users/follow/${id}`);
       setIsFollower(true);
       setFollowingNo(followingNo + 1);
     } else {
-      await axios.patch(`/api/users/unfollow/${id}`);
+      await api.patch(`/users/unfollow/${id}`);
       setIsFollower(false);
       setFollowingNo(followingNo - 1);
     }

@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-import React from "react";
 import UserCardV2 from "./UserCardv2";
 
 const LikeModal = ({ isOpen, onClose, list }) => {
@@ -28,7 +27,7 @@ const LikeModal = ({ isOpen, onClose, list }) => {
           >
             {list &&
               list.map((user, index) => {
-                console.log(user);
+                //console.log(user);
 
                 return (
                   <UserCardV2 key={user.usersLiked._id} user={user.usersLiked} />

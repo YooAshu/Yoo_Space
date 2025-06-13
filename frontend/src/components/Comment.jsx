@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import RedHeart from "../assets/red-heart.png";
 import WhiteHeart from "../assets/white-heart.png";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import api from "../utils/axios-api";
 
 const Comment = ({ comment }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -11,22 +11,22 @@ const Comment = ({ comment }) => {
 
   const navigate = useNavigate();
 
-  const checkIsLiked = async (id) => {
-    const response = await axios.get(`/api/posts/comment/is-liked/${id}`);
-    setIsLiked(response.data?.liked);
-  };
-
   useEffect(() => {
     checkIsLiked(comment._id);
   }, []);
 
+  const checkIsLiked = async (id) => {
+    const response = await api.get(`/posts/comment/is-liked/${id}`);
+    setIsLiked(response.data?.liked);
+  };
+
   const handleLike = async (id) => {
     if (!isLiked) {
-      await axios.patch(`/api/posts/comment/like/${id}`);
+      await api.patch(`/posts/comment/like/${id}`);
       setIsLiked(true);
       setLikeNo((prev) => prev + 1);
     } else {
-      await axios.patch(`/api/posts/comment/unlike/${id}`);
+      await api.patch(`/posts/comment/unlike/${id}`);
       setIsLiked(false);
       setLikeNo((prev) => prev - 1);
     }

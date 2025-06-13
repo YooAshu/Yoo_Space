@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../components/Post";
 import { useForm } from "react-hook-form";
@@ -28,32 +27,32 @@ const PostPage = () => {
 
   const getPost = async () => {
     try {
-      const postResponse = await api.get(`/api/posts/post/${postId}`);
-      console.log(postResponse.data.data[0]);
+      const postResponse = await api.get(`/posts/post/${postId}`);
+      //console.log(postResponse.data.data[0]);
 
       setPost(postResponse.data.data[0]);
     } catch (error) {
-      console.error("error", error);
+      //console.error("error", error);
     }
   };
 
   const getWhoLiked = async () => {
     try {
-      const response = await axios.get(`/api/posts/likes-on/${postId}`);
+      const response = await api.get(`/posts/likes-on/${postId}`);
       setlikesList(response.data.data);
-      console.log(response.data.data);
+      //console.log(response.data.data);
     } catch (error) {
-      console.error("error", error);
+      //console.error("error", error);
     }
   };
 
   const getComments = async () => {
     try {
-      const response = await axios.get(`/api/posts/comments/${postId}`);
-      console.log(response.data.data);
+      const response = await api.get(`/posts/comments/${postId}`);
+      //console.log(response.data.data);
       setComments(response.data.data);
     } catch (error) {
-      console.error("erroe", error);
+      //console.error("erroe", error);
     }
   };
 
@@ -64,16 +63,16 @@ const PostPage = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    //console.log(data);
     try {
-      const response = await axios.post(
-        `/api/posts/comment-on/${postId}`,
+      const response = await api.post(
+        `/posts/comment-on/${postId}`,
         data,
         {
           withCredentials: true,
         }
       );
-      // console.log("check", response.data.data);
+      // //console.log("check", response.data.data);
       setComments((prev) => [response.data.data, ...prev]);
       setPost((prevPost) => ({
         ...prevPost,
@@ -82,7 +81,7 @@ const PostPage = () => {
 
       reset();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   };
 

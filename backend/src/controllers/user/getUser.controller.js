@@ -11,7 +11,7 @@ const getUser = asyncHandler(async (req, res) => {
     const { userId } = req.params
 
 
-    // console.log(userId);
+    // //console.log(userId);
 
     const user = await User.findById(userId).select("-password -refreshToken")
 
@@ -65,7 +65,7 @@ const getFollowers = asyncHandler(async (req, res) => {
 
 const getFollowings = asyncHandler(async (req, res) => {
     const { userId } = req.params;
-    // console.log(userId);
+    // //console.log(userId);
 
     const following = await Follow.aggregate(
         [
@@ -100,7 +100,7 @@ const getFollowings = asyncHandler(async (req, res) => {
     if (!following) {
         throw new ApiError(404, "No followings found");
     }
-    // console.log(following);
+    // //console.log(following);
 
 
     return res.status(200).json(

@@ -1,10 +1,10 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import RedHeart from "../assets/red-heart.png";
 import WhiteHeart from "../assets/white-heart.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../assets/arrow.svg";
 import { AppContext } from "../context/AppContext";
+import api from "../utils/axios-api";
 const Post = ({ post, modalOpen = undefined }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,7 +14,7 @@ const Post = ({ post, modalOpen = undefined }) => {
   const [imageIndex, setImageIndex] = useState(0);
 
   const checkIsLiked = async (id) => {
-    const response = await axios.get(`/api/posts/is-liked/${id}`);
+    const response = await api.get(`/posts/is-liked/${id}`);
     setIsLiked(response.data?.liked);
   };
 
@@ -24,11 +24,11 @@ const Post = ({ post, modalOpen = undefined }) => {
 
   const handleLike = async (id) => {
     if (!isLiked) {
-      await axios.patch(`/api/posts/like/${id}`);
+      await api.patch(`/posts/like/${id}`);
       setIsLiked(true);
       setLikeNo((prev) => prev + 1);
     } else {
-      await axios.patch(`/api/posts/unlike/${id}`);
+      await api.patch(`/posts/unlike/${id}`);
       setIsLiked(false);
       setLikeNo((prev) => prev - 1);
     }

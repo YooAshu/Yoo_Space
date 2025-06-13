@@ -1,5 +1,3 @@
-import axios from "axios";
-import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -28,54 +26,54 @@ const UserProfile = () => {
 
   const getUserDetail = async () => {
     try {
-      const response = await api.get(`/api/users/profile/${userId}`);
+      const response = await api.get(`/users/profile/${userId}`);
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
-      console.error("error fetching user data", error);
+      //console.error("error fetching user data", error);
     }
   };
 
   const getPosts = async () => {
     try {
-      const postsResponse = await axios.get(`/api/posts/user/${userId}`);
+      const postsResponse = await api.get(`/posts/user/${userId}`);
       const userPosts = postsResponse.data.data;
       setPosts(userPosts);
-      // console.log(response.data.data);
+      // //console.log(response.data.data);
     } catch (error) {
-      console.error("error fetching user posts", error);
+      //console.error("error fetching user posts", error);
       if (error.response?.status == 401) navigate("/login");
     }
   };
   const getFollowers = async () => {
     try {
-      const response = await axios.get(`/api/users/followers/${userId}`);
+      const response = await api.get(`/users/followers/${userId}`);
       setfollowerList(response.data.data);
     } catch (error) {
-      console.error("error fetching followers data", error);
+      //console.error("error fetching followers data", error);
     }
   };
   const getFollowings = async () => {
     try {
-      const response = await axios.get(`/api/users/followings/${userId}`);
+      const response = await api.get(`/users/followings/${userId}`);
       setfollowingList(response.data.data);
     } catch (error) {
-      console.error("error fetching followings data", error);
+      //console.error("error fetching followings data", error);
     }
   };
 
   const checkIsFollower = async (id) => {
-    const response = await axios.get(`/api/users/is-follower/${id}`);
-    // console.log(response.data?.follows);
+    const response = await api.get(`/users/is-follower/${id}`);
+    // //console.log(response.data?.follows);
     setIsFollower(response.data?.follows);
   };
 
   const handleFollow = async (id) => {
     if (!isFollower) {
-      await axios.patch(`/api/users/follow/${id}`);
+      await api.patch(`/users/follow/${id}`);
       setIsFollower(true);
     } else {
-      await axios.patch(`/api/users/unfollow/${id}`);
+      await api.patch(`/users/unfollow/${id}`);
       setIsFollower(false);
     }
   };

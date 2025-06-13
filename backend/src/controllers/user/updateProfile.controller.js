@@ -7,8 +7,8 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../../utils/cloudinary
 const updateProfile = asyncHandler(async (req, res) => {
     const { userName, fullName, bio } = req.body;
 
-    // console.log("Files Received:", req.files);
-    // console.log("Form Data Received:", req.body);
+    // //console.log("Files Received:", req.files);
+    // //console.log("Form Data Received:", req.body);
 
     // Ensure userId exists
     if (!req.userId) {
@@ -65,7 +65,7 @@ const updateProfile = asyncHandler(async (req, res) => {
         try {
             await deleteFromCloudinary(publicId)
         } catch (error) {
-            console.log("error deleting old cover image")
+            //console.log("error deleting old cover image")
         }
     }
 
@@ -74,7 +74,7 @@ const updateProfile = asyncHandler(async (req, res) => {
         try {
             await deleteFromCloudinary(publicId)
         } catch (error) {
-            console.log("error deleting old cover image")
+            //console.log("error deleting old cover image")
         }
     }
 

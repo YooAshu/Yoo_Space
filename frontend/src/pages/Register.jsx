@@ -1,10 +1,8 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import YooHub from "../assets/yoohub.png"
 import YooSpace from "../assets/yoospace.png"
+import api from "../utils/axios-api";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,16 +14,16 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    //console.log(data);
 
     try {
-      const response = await axios.post("/api/users/register", data);
-      console.log(response.data);
+      const response = await api.post("/users/register", data);
+      //console.log(response.data);
       toast("Registration successful!");
       // alert("Registration successful!");
       navigate("/login");
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       toast(error.response.data.message);
       // alert(error.response.data.message);
     }

@@ -47,7 +47,7 @@ const discoverUsers = asyncHandler(async (req, res) => {
 
 const searchUser = asyncHandler(async (req, res) => {
     const { inputValue } = req.body
-    console.log("inputValue", inputValue);
+    //console.log("inputValue", inputValue);
     if (!inputValue || inputValue.trim() === "") {
         throw new ApiError(400, "Input value is required");
     }

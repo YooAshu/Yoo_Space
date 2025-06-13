@@ -1,5 +1,3 @@
-import axios from "axios";
-import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -35,58 +33,58 @@ const Profile = () => {
 
   const getCurrentUser = async () => {
     try {
-      const response = await axios.get("/api/users/current-user");
+      const response = await api.get("/users/current-user");
       const user = response.data.data;
       setUserData(user);
-      console.log(user);
+      //console.log(user);
       
       setFollowingNo(user.no_of_following);
     } catch (error) {
-      console.error("error fetching user data", error);
+      //console.error("error fetching user data", error);
       if (error.response?.status == 401) navigate("/login");
     }
   };
 
   const getPosts = async () => {
     try {
-      const postsResponse = await api.get(`/api/posts/currentUser`);
+      const postsResponse = await api.get(`/posts/currentUser`);
       const userPosts = postsResponse.data.data;
-      // console.log(postsResponse.data.data);
+      // //console.log(postsResponse.data.data);
       setPosts(userPosts);
-      // console.log(response.data.data);
+      // //console.log(response.data.data);
     } catch (error) {
-      console.error("error fetching user posts", error);
+      //console.error("error fetching user posts", error);
     }
   };
 
   const getLikedPosts = async () => {
     try {
-      const postsResponse = await api.get(`/api/posts/user-likes`);
+      const postsResponse = await api.get(`/posts/user-likes`);
       const likedPosts = postsResponse.data.data;
-      // console.log(postsResponse.data.data);
+      // //console.log(postsResponse.data.data);
       setLikedPosts(likedPosts);
-      // console.log(response.data.data);
+      // //console.log(response.data.data);
     } catch (error) {
-      console.error("error fetching user liked posts", error);
+      //console.error("error fetching user liked posts", error);
     }
   };
 
   const getFollowers = async () => {
     try {
-      const response = await axios.get("/api/users/followers");
+      const response = await api.get("/users/followers");
       setfollowerList(response.data.data);
     } catch (error) {
-      console.error("error fetching followers data", error);
+      //console.error("error fetching followers data", error);
     }
   };
   const getFollowings = async () => {
     try {
       setfollowingList(null);
-      const response = await axios.get("/api/users/followings");
+      const response = await api.get("/users/followings");
       setfollowingList(response.data.data);
-      // console.log(response.data.data);
+      // //console.log(response.data.data);
     } catch (error) {
-      console.error("error fetching followings data", error);
+      //console.error("error fetching followings data", error);
     }
   };
   useEffect(() => {

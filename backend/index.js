@@ -18,7 +18,7 @@ setupSocket(server);
 connectDB()
     .then(() => {
         server.listen(port, () => {
-            console.log(` Server is running on port ${port}`);
+            //console.log(` Server is running on port ${port}`);
         });
 
         // Start cron only after DB is ready
@@ -31,14 +31,14 @@ connectDB()
                     createdAt: { $lt: new Date(Date.now() -  1000 * 60 * 60) },
                 });
 
-                console.log(`Deleted ${deleted.deletedCount} empty conversations`);
+                //console.log(`Deleted ${deleted.deletedCount} empty conversations`);
             } catch (err) {
-                console.error('Cleanup failed:', err);
+                //console.error('Cleanup failed:', err);
             }
         });
     })
     .catch((error) => {
-        console.log(" Connection to database failed", error);
+        //console.log(" Connection to database failed", error);
     });
 
 

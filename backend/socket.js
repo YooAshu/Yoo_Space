@@ -26,24 +26,24 @@ const setupSocket = (httpServer) => {
       socket.user = decoded;
       next();
     } catch (err) {
-      console.error(err);
+      //console.error(err);
       next(new Error('Authentication failed'));
     }
   });
 
   io.on('connection', (socket) => {
-    console.log('Socket connected:', socket.id, '| User ID:', socket.user._id);
+    //console.log('Socket connected:', socket.id, '| User ID:', socket.user._id);
 
     // join a conversation
     socket.on('join_conversation', (conversationId) => {
       socket.join(conversationId);
-      console.log(`Socket ${socket.id} joined room ${conversationId}`);
+      //console.log(`Socket ${socket.id} joined room ${conversationId}`);
     });
 
     // leave a conversation
     socket.on("leave_conversation", (conversationId) => {
       socket.leave(conversationId);
-      console.log(`User ${socket.user._id} left room ${conversationId}`);
+      //console.log(`User ${socket.user._id} left room ${conversationId}`);
     });
 
     socket.on('send_message', ({ conversationId, message }) => {
@@ -59,7 +59,7 @@ const setupSocket = (httpServer) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected:', socket.id);
+      //console.log('Socket disconnected:', socket.id);
     });
   });
 };

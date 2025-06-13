@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { useSocket } from "../context/SoketContext";
@@ -52,16 +52,16 @@ const DirectMessage = () => {
   const textareaRef = useRef(null);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    //console.log(data);
     try {
       const response = await api.post(
-        `/api/messages/send/${conversation?._id}`,
+        `/messages/send/${conversation?._id}`,
         {
           text: data.message,
           receiver: [targetId],
         }
       );
-      console.log(response.data);
+      //console.log(response.data);
 
       reset();
       // Reset height
@@ -71,7 +71,7 @@ const DirectMessage = () => {
       }
       // Scroll to bottom after DOM updates
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   };
 
@@ -150,11 +150,11 @@ const DirectMessage = () => {
 
 const getConversation = async (targetId, setConversation) => {
   try {
-    const response = await api.get(`/api/messages/conversation/${targetId}`);
-    console.log(response.data.data);
+    const response = await api.get(`/messages/conversation/${targetId}`);
+    //console.log(response.data.data);
     setConversation(response.data.data);
   } catch (error) {
-    console.error("Error fetching conversation data", error);
+    //console.error("Error fetching conversation data", error);
   }
 };
 
@@ -162,21 +162,21 @@ const getAllMessages = async (conversationId, setMessages) => {
   if (!conversationId) return;
   try {
     const response = await api.get(
-      `/api/messages/all-messages/${conversationId}`
+      `/messages/all-messages/${conversationId}`
     );
-    console.log(response.data.data);
+    //console.log(response.data.data);
     setMessages(response.data.data);
   } catch (error) {
-    console.error("Error fetching messages", error);
+    //console.error("Error fetching messages", error);
   }
 };
 
 const setMessagesAsRead = async (messageId) => {
   try {
-    const response = await api.patch(`/api/messages/set-read/${messageId}`);
-    console.log(response.data.data);
+    const response = await api.patch(`/messages/set-read/${messageId}`);
+    //console.log(response.data.data);
   } catch (error) {
-    console.error("Error setting messages as read", error);
+    //console.error("Error setting messages as read", error);
   }
 }
 

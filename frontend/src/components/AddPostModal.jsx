@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import Upload from "../assets/upload.png";
 import Arrow from "../assets/arrow.svg";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import api from "../utils/axios-api";
 
 const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
   const [isSubmitting, setisSubmitting] = useState(false);
@@ -55,21 +55,18 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
 
   // api call
   const onSubmit = async (data) => {
-    // console.log("Form Data:", data);
+    // //console.log("Form Data:", data);
     setisSubmitting(true);
     const toastId = toast.loading("Uploading Post...");
     const formData = new FormData();
     if (data.content != "") formData.append("content", data.content);
     if (data.images && data.images.length > 0) {
-      // console.log("Profile image found:", data.images);
+      // //console.log("Profile image found:", data.images);
       data.images.forEach((image) => {
         formData.append("media", image); // Same key for all images
       });
     }
-    // Logging FormData
-    // for (const [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
+  
     if (data.content == "" && data.images.length == 0) {
       toast.update(toastId, {
         render: "post fields are empty",
@@ -81,7 +78,7 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
       return;
     }
     try {
-      await axios.post("/api/posts/create", formData, {
+      await api.post("/posts/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.update(toastId, {
@@ -101,7 +98,7 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
       setValue("images", []); // ✅ Clear images after upload
       setValue("content", ""); // ✅ Clear text input
     } catch (error) {
-      console.error("Error updating profile", error);
+      //console.error("Error updating profile", error);
       toast.update(toastId, {
         render: error.response.data.message,
         type: "error",

@@ -12,6 +12,6 @@ const generateGradient = (userName)=> {
 
 // Example usage
 // const userGradient = generateGradient("YooAzad");
-// console.log(userGradient); // linear-gradient(...)
+// //console.log(userGradient); // linear-gradient(...)
 
 export default generateGradient

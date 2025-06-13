@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import generateGradient from "../utils/generateGradient.js";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../utils/axios-api.js";
 import NavBar from "../components/NavBar.jsx";
@@ -22,11 +21,11 @@ const UpdateProfile = () => {
 
   const getCurrentUser = async () => {
     try {
-      const response = await api.get("/api/users/current-user");
+      const response = await api.get("/users/current-user");
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
-      console.error("error fetching user data", error);
+      //console.error("error fetching user data", error);
     }
   };
 
@@ -37,8 +36,8 @@ const UpdateProfile = () => {
   const onSubmit = async (data) => {
     setisSubmitting(true);
     const toastId = toast.loading("Updating profile...");
-    console.log("Form data:", data);
-    console.log("userdata",userData);
+    //console.log("Form data:", data);
+    //console.log("userdata",userData);
     const formData = new FormData();
     if (data.userName != userData.userName) {
       formData.append("userName", data.userName);
@@ -49,20 +48,20 @@ const UpdateProfile = () => {
 
     // Check if files exist before appending
     if (data.profileImage && data.profileImage.length > 0) {
-      console.log("Profile image found:", data.profileImage[0]);
+      //console.log("Profile image found:", data.profileImage[0]);
       formData.append("profileImage", data.profileImage[0]);
     }
 
     if (data.coverImage && data.coverImage.length > 0) {
-      console.log("Cover image found:", data.coverImage[0]);
+      //console.log("Cover image found:", data.coverImage[0]);
       formData.append("coverImage", data.coverImage[0]);
     }
     for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]); // Prints key-value pairs
+      //console.log(pair[0], pair[1]); // Prints key-value pairs
     }
 
     try {
-      await axios.patch("/api/users/update-profile", formData, {
+      await api.patch("/users/update-profile", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.update(toastId, {
@@ -73,7 +72,7 @@ const UpdateProfile = () => {
       });
       navigate("/profile");
     } catch (error) {
-      console.error("Error updating profile", error);
+      //console.error("Error updating profile", error);
       toast.update(toastId, {
         render: error.response.data.message,
         type: "error",

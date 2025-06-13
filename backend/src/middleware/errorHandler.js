@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-    console.log("🔥🔥 ERROR IN BACKEND", err); // Check this
+    //console.log("🔥🔥 ERROR IN BACKEND", err); // Check this
     const statusCode = err.statusCode || 500;
   
     return res.status(statusCode).json({

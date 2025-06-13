@@ -16,21 +16,21 @@ const uploadOnCloudinary = async (localFilePath) => {
 
         // Ensure path uses correct separators
         const normalizedPath = path.resolve(localFilePath);
-        // console.log("Uploading:", normalizedPath);
+        // //console.log("Uploading:", normalizedPath);
 
         // Upload the file to Cloudinary
         const response = await cloudinary.uploader.upload(normalizedPath, {
             resource_type: "auto"
         });
 
-        // console.log("File uploaded on Cloudinary:", response.secure_url);
+        // //console.log("File uploaded on Cloudinary:", response.secure_url);
 
         // Remove local file after successful upload
         fs.unlinkSync(normalizedPath);
         return response;
 
     } catch (error) {
-        console.error("Cloudinary Upload Error:", error);
+        //console.error("Cloudinary Upload Error:", error);
 
         // Remove the file only if it exists
         if (fs.existsSync(localFilePath)) {

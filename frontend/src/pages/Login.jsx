@@ -1,11 +1,10 @@
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import YooSpace from "../assets/yoospace.png";
 import { useSocket } from "../context/SoketContext.jsx";
 import { AppContext } from "../context/AppContext.jsx";
+import api from "../utils/axios-api.js";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,19 +27,19 @@ const Login = () => {
       type: "success",
       id: "login",
     });
-    console.log(data);
+    //console.log(data);
     try {
-      const response = await axios.post("/api/users/login", data, {
+      const response = await api.post("/users/login", data, {
         withCredentials: true,
       });
 
-      console.log(response.data);
+      //console.log(response.data);
       // alert("login successful");
       // localStorage.setItem("userId", response.data.data.user._id);
       // setLoggedInUser_Id(response.data.data.user._id);
       if (socket) {
         socket.connect(); // Safe to call now
-        console.log("🔁 Reconnecting...");
+        //console.log("🔁 Reconnecting...");
       }
       navigate("/profile");
       // showToast({ message: "Login successful", type: "success", id: "login" });
@@ -51,7 +50,7 @@ const Login = () => {
         type: "success",
       });
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       // toast(error.response.data.message);
       updateToast({
         id: "login",

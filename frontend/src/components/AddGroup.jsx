@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Group from "../assets/group.png";
 import api from "../utils/axios-api.js";
 import { AppContext } from "../context/AppContext.jsx";
-const getFollowers = async (setFollowers) => {
-  try {
-    const response = await api.get("/api/users/followers");
-    setFollowers(response.data.data);
-  } catch (error) {
-    console.error("error fetching followers data", error);
-  }
-};
+
 const AddGroup = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(null);
@@ -61,23 +54,16 @@ const AddGroup = () => {
     formData.append("groupName", data.groupName);
     formData.append("invitedTo", JSON.stringify(selected));
     if (data.avatar && data.avatar.length > 0) {
-      console.log("avatar found:", data.avatar[0]);
       formData.append("avatar", data.avatar[0]);
     }
-    // log formData pair
-    // for (const pair of formData.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
-
-    // send to API
     api
-      .post("/api/messages/create-group", formData, {
+      .post("/messages/create-group", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
-        console.log("Group created successfully", res.data);
+        //console.log("Group created successfully", res.data);
         setCreatingGroup(false);
         setFormOpen(false);
         setAvatarPreview(null);
@@ -92,7 +78,7 @@ const AddGroup = () => {
         });
       })
       .catch((err) => {
-        console.error("Error creating group:", err);
+        //console.error("Error creating group:", err);
         updateToast({
           id: "creating-group",
           message: err.response.data.message,
@@ -211,6 +197,15 @@ const AddGroup = () => {
       </div>
     </div>
   );
+};
+
+const getFollowers = async (setFollowers) => {
+  try {
+    const response = await api.get("/users/followers"); // ✅ no /api prefix
+    setFollowers(response.data.data);
+  } catch (error) {
+    //console.error("error fetching followers data", error);
+  }
 };
 
 export default AddGroup;

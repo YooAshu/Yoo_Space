@@ -1,6 +1,4 @@
-import React from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import UserCard from "../components/UserCard";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -20,14 +18,14 @@ const DiscoverPeople = () => {
 
   const handleSearchClick = async () => {
     const response = await api.post(
-      "/api/users/search",
+      "/users/search",
       { inputValue },
       {
         withCredentials: true,
       }
     );
 
-    console.log(response.data.data);
+    //console.log(response.data.data);
     if (response.data.data.users.length === 0) {
       showToast({
         message: "404 no user found",
@@ -39,11 +37,11 @@ const DiscoverPeople = () => {
   };
   const getUsers = async () => {
     try {
-      const response = await api.get("/api/users/discover");
+      const response = await api.get("/users/discover");
       setUsers(response.data.data.users);
-      // console.log(response.data.data.users);
+      // //console.log(response.data.data.users);
     } catch (error) {
-      console.error("error fetching users", error);
+      //console.error("error fetching users", error);
     }
   };
   useEffect(() => {

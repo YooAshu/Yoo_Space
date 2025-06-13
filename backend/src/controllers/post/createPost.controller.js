@@ -8,8 +8,8 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 const createPost = asyncHandler(async (req, res) => {
     const { content } = req.body;
     const mediaFiles = req.files?.media;
-    console.log("body",req.body);
-    console.log("files",req.files);
+    //console.log("body",req.body);
+    //console.log("files",req.files);
 
 
     if (!content && !mediaFiles) {

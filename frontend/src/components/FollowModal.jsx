@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-import React from "react";
 import UserCard from "./UserCard";
 
 const FollowModal = ({ isOpen, onClose, list }) => {
@@ -28,7 +27,7 @@ const FollowModal = ({ isOpen, onClose, list }) => {
           >
             {list &&
               list.map((user, index) => {
-                console.log(user);
+                //console.log(user);
 
                 return (
                   <UserCard key={user._id} user={user} />
