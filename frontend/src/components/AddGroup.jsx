@@ -78,7 +78,7 @@ const AddGroup = () => {
         });
       })
       .catch((err) => {
-        //console.error("Error creating group:", err);
+        console.error("Error creating group:", err);
         updateToast({
           id: "creating-group",
           message: err.response.data.message,
@@ -204,7 +204,7 @@ const getFollowers = async (setFollowers) => {
     const response = await api.get("/users/followers"); // ✅ no /api prefix
     setFollowers(response.data.data);
   } catch (error) {
-    //console.error("error fetching followers data", error);
+    console.error("error fetching followers data", error);
   }
 };
 

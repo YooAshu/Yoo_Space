@@ -239,7 +239,7 @@ const createGroup = asyncHandler(async (req, res) => {
                 //console.log("Invited members added successfully");
             })
             .catch((error) => {
-                //console.error("Error adding invited members:", error);
+                console.error("Error adding invited members:", error);
             });
     }
 

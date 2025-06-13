@@ -70,7 +70,7 @@ const getGroupInvites = async (setGroupInvites) => {
       //console.log("Group invites fetched successfully:", response.data.data);
     }
   } catch (error) {
-    //console.error("Error fetching group invites:", error);
+    console.error("Error fetching group invites:", error);
   }
 };
 
@@ -102,7 +102,7 @@ const AcceptGroupInvite = async (
       });
     }
   } catch (error) {
-    //console.error("Error accepting group invite:", error);
+    console.error("Error accepting group invite:", error);
     showToast({
       message: "failed to accept group invite",
       type: "error",

@@ -15,7 +15,7 @@ const Home = () => {
       setPosts(response.data.data);
       // //console.log(response.data.data);
     } catch (error) {
-      // //console.error("error fetching user data", error);
+      // console.error("error fetching user data", error);
       // if (error.response?.status == 401) navigate("/login");
     }
   };

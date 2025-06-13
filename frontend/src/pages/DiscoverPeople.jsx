@@ -41,7 +41,7 @@ const DiscoverPeople = () => {
       setUsers(response.data.data.users);
       // //console.log(response.data.data.users);
     } catch (error) {
-      //console.error("error fetching users", error);
+      console.error("error fetching users", error);
     }
   };
   useEffect(() => {

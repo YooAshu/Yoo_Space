@@ -30,7 +30,7 @@ const UserProfile = () => {
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
-      //console.error("error fetching user data", error);
+      console.error("error fetching user data", error);
     }
   };
 
@@ -41,7 +41,7 @@ const UserProfile = () => {
       setPosts(userPosts);
       // //console.log(response.data.data);
     } catch (error) {
-      //console.error("error fetching user posts", error);
+      console.error("error fetching user posts", error);
       if (error.response?.status == 401) navigate("/login");
     }
   };
@@ -50,7 +50,7 @@ const UserProfile = () => {
       const response = await api.get(`/users/followers/${userId}`);
       setfollowerList(response.data.data);
     } catch (error) {
-      //console.error("error fetching followers data", error);
+      console.error("error fetching followers data", error);
     }
   };
   const getFollowings = async () => {
@@ -58,7 +58,7 @@ const UserProfile = () => {
       const response = await api.get(`/users/followings/${userId}`);
       setfollowingList(response.data.data);
     } catch (error) {
-      //console.error("error fetching followings data", error);
+      console.error("error fetching followings data", error);
     }
   };
 

@@ -32,7 +32,7 @@ const PostPage = () => {
 
       setPost(postResponse.data.data[0]);
     } catch (error) {
-      //console.error("error", error);
+      console.error("error", error);
     }
   };
 
@@ -42,7 +42,7 @@ const PostPage = () => {
       setlikesList(response.data.data);
       //console.log(response.data.data);
     } catch (error) {
-      //console.error("error", error);
+      console.error("error", error);
     }
   };
 
@@ -52,7 +52,7 @@ const PostPage = () => {
       //console.log(response.data.data);
       setComments(response.data.data);
     } catch (error) {
-      //console.error("erroe", error);
+      console.error("erroe", error);
     }
   };
 
@@ -81,7 +81,7 @@ const PostPage = () => {
 
       reset();
     } catch (error) {
-      //console.error(error);
+      console.error(error);
     }
   };
 

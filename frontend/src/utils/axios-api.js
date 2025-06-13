@@ -25,7 +25,7 @@ api.interceptors.response.use(
                 return api(error.config);
             } catch (refreshError) {
                 //console.log("Token expired. Attempting to refresh...2");
-                //console.error("Session expired. Redirecting to login...");
+                console.error("Session expired. Redirecting to login...");
                 window.location.href = "/login"; // Redirect to login
             }
         }

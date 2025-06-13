@@ -23,7 +23,7 @@ const Register = () => {
       // alert("Registration successful!");
       navigate("/login");
     } catch (error) {
-      //console.error(error);
+      console.error(error);
       toast(error.response.data.message);
       // alert(error.response.data.message);
     }

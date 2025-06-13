@@ -26,7 +26,7 @@ const setupSocket = (httpServer) => {
       socket.user = decoded;
       next();
     } catch (err) {
-      //console.error(err);
+      console.error(err);
       next(new Error('Authentication failed'));
     }
   });

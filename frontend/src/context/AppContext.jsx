@@ -18,7 +18,7 @@ const AppProvider = ({ children }) => {
       //console.log("Current User by Token:", data);
       setCurrentUserByToken(data.data);
     } catch (error) {
-      //console.error("Error fetching current user by token:", error);
+      console.error("Error fetching current user by token:", error);
     }
   };
 

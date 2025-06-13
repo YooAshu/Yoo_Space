@@ -33,7 +33,7 @@ connectDB()
 
                 //console.log(`Deleted ${deleted.deletedCount} empty conversations`);
             } catch (err) {
-                //console.error('Cleanup failed:', err);
+                console.error('Cleanup failed:', err);
             }
         });
     })

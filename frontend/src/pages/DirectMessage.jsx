@@ -71,7 +71,7 @@ const DirectMessage = () => {
       }
       // Scroll to bottom after DOM updates
     } catch (error) {
-      //console.error(error);
+      console.error(error);
     }
   };
 
@@ -154,7 +154,7 @@ const getConversation = async (targetId, setConversation) => {
     //console.log(response.data.data);
     setConversation(response.data.data);
   } catch (error) {
-    //console.error("Error fetching conversation data", error);
+    console.error("Error fetching conversation data", error);
   }
 };
 
@@ -167,7 +167,7 @@ const getAllMessages = async (conversationId, setMessages) => {
     //console.log(response.data.data);
     setMessages(response.data.data);
   } catch (error) {
-    //console.error("Error fetching messages", error);
+    console.error("Error fetching messages", error);
   }
 };
 
@@ -176,7 +176,7 @@ const setMessagesAsRead = async (messageId) => {
     const response = await api.patch(`/messages/set-read/${messageId}`);
     //console.log(response.data.data);
   } catch (error) {
-    //console.error("Error setting messages as read", error);
+    console.error("Error setting messages as read", error);
   }
 }
 

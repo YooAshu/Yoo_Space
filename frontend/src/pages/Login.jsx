@@ -50,7 +50,7 @@ const Login = () => {
         type: "success",
       });
     } catch (error) {
-      //console.error(error);
+      console.error(error);
       // toast(error.response.data.message);
       updateToast({
         id: "login",

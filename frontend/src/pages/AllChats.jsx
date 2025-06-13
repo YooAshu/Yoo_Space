@@ -116,7 +116,7 @@ const getAllConversations = async (setConvoList) => {
     setConvoList(response.data.data);
     //console.log("Conversations:", response.data.data);
   } catch (error) {
-    //console.error("Error fetching conversations:", error);
+    console.error("Error fetching conversations:", error);
   }
 };
 

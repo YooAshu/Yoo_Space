@@ -98,7 +98,7 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
       setValue("images", []); // ✅ Clear images after upload
       setValue("content", ""); // ✅ Clear text input
     } catch (error) {
-      //console.error("Error updating profile", error);
+      console.error("Error updating profile", error);
       toast.update(toastId, {
         render: error.response.data.message,
         type: "error",

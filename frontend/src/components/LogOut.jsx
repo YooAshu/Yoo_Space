@@ -29,7 +29,7 @@ const LogOut = () => {
         // setSocket(null);
       }
     } catch (error) {
-      //console.error(error);
+      console.error(error);
     }
   };
 

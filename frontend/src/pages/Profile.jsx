@@ -40,7 +40,7 @@ const Profile = () => {
       
       setFollowingNo(user.no_of_following);
     } catch (error) {
-      //console.error("error fetching user data", error);
+      console.error("error fetching user data", error);
       if (error.response?.status == 401) navigate("/login");
     }
   };
@@ -53,7 +53,7 @@ const Profile = () => {
       setPosts(userPosts);
       // //console.log(response.data.data);
     } catch (error) {
-      //console.error("error fetching user posts", error);
+      console.error("error fetching user posts", error);
     }
   };
 
@@ -65,7 +65,7 @@ const Profile = () => {
       setLikedPosts(likedPosts);
       // //console.log(response.data.data);
     } catch (error) {
-      //console.error("error fetching user liked posts", error);
+      console.error("error fetching user liked posts", error);
     }
   };
 
@@ -74,7 +74,7 @@ const Profile = () => {
       const response = await api.get("/users/followers");
       setfollowerList(response.data.data);
     } catch (error) {
-      //console.error("error fetching followers data", error);
+      console.error("error fetching followers data", error);
     }
   };
   const getFollowings = async () => {
@@ -84,7 +84,7 @@ const Profile = () => {
       setfollowingList(response.data.data);
       // //console.log(response.data.data);
     } catch (error) {
-      //console.error("error fetching followings data", error);
+      console.error("error fetching followings data", error);
     }
   };
   useEffect(() => {

@@ -25,7 +25,7 @@ const UpdateProfile = () => {
       const user = response.data.data;
       setUserData(user);
     } catch (error) {
-      //console.error("error fetching user data", error);
+      console.error("error fetching user data", error);
     }
   };
 
@@ -72,7 +72,7 @@ const UpdateProfile = () => {
       });
       navigate("/profile");
     } catch (error) {
-      //console.error("Error updating profile", error);
+      console.error("Error updating profile", error);
       toast.update(toastId, {
         render: error.response.data.message,
         type: "error",
