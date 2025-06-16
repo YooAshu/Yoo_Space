@@ -56,7 +56,7 @@ const AllChats = () => {
           >
             Create Group
             <Modal isOpen={isAddGroupModalOpen} onClose={handleAddGroupModal}>
-              {<AddGroup handleModal={handleAddGroupModal}/>}
+              {<AddGroup handleModal={handleAddGroupModal} setConvoList={setConvoList}/>}
             </Modal>
           </div>
         </div>

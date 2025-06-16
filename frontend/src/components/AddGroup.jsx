@@ -83,7 +83,7 @@ const AddGroup = ({ handleModal = null, setConvoList }) => {
         console.error("Error creating group:", err);
         updateToast({
           id: "creating-group",
-          message: err.response.data.message,
+          message: "error creating group",
           type: "error",
         });
       })
