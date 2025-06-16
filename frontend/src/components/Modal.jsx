@@ -1,8 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-import UserCardV2 from "./UserCardv2";
-
-const LikeModal = ({ isOpen, onClose, list }) => {
+const Modal = ({ isOpen, onClose, children }) => {
   const handleBackgroundClick = (e) => {
     if (e.target == e.currentTarget) {
       onClose();
@@ -24,15 +22,9 @@ const LikeModal = ({ isOpen, onClose, list }) => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.05, ease: "easeInOut" }}
             className="flex flex-col gap-1 bg-[rgb(32,32,32)] p-2 md:p-5 rounded-md w-[95%] md:w-[600px] h-[70%] md:h-[700px] overflow-y-scroll your-container"
+            onClick={(e) => e.stopPropagation()}
           >
-            {list &&
-              list.map((user, index) => {
-                //console.log(user);
-
-                return (
-                  <UserCardV2 key={user.usersLiked._id} user={user.usersLiked} />
-                );
-              })}
+            {children}
           </motion.div>
         </motion.div>
       )}
@@ -40,4 +32,4 @@ const LikeModal = ({ isOpen, onClose, list }) => {
   );
 };
 
-export default LikeModal;
+export default Modal;

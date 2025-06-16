@@ -4,7 +4,7 @@ import Post from "../components/Post";
 import { useForm } from "react-hook-form";
 import Comment from "../components/Comment";
 import LikeModal from "../components/LikeModal";
-import NavBar from "../components/NavBar";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import api from "../utils/axios-api.js";
 
 const PostPage = () => {
@@ -65,13 +65,9 @@ const PostPage = () => {
   const onSubmit = async (data) => {
     //console.log(data);
     try {
-      const response = await api.post(
-        `/posts/comment-on/${postId}`,
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.post(`/posts/comment-on/${postId}`, data, {
+        withCredentials: true,
+      });
       // //console.log("check", response.data.data);
       setComments((prev) => [response.data.data, ...prev]);
       setPost((prevPost) => ({
@@ -88,15 +84,17 @@ const PostPage = () => {
   if (!post) return <div className="w-full h-screen text-white">HOME PAGE</div>;
   else {
     return (
-      <div className="flex flex-col justify-start items-center w-full h-max min-h-screen">
+      <div className="flex flex-col justify-start items-center mt-[50px] md:mt-[70px] w-full h-max min-h-screen">
         <NavBar />
-        <div className="w-1/2">
+        <MobileNavBar />
+        <MobileLogoTop />
+        <div className="w-full md:w-1/2">
           <Post post={post} modalOpen={openLikeModal} />
         </div>
 
         {/* comment */}
 
-        <div className="w-1/2">
+        <div className="w-[90%] md:w-1/2">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex justify-center items-center gap-10 w-full h-full"
@@ -115,7 +113,7 @@ const PostPage = () => {
           </form>
         </div>
 
-        <div className="flex flex-col gap-4 my-9 w-1/2">
+        <div className="flex flex-col gap-4 my-9 w-[90%] md:w-1/2">
           {comments.length > 0 &&
             comments.map((comment, index) => {
               return <Comment key={comment._id} comment={comment} />;

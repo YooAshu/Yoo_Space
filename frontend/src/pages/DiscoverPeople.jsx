@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UserCard from "../components/UserCard";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import api from "../utils/axios-api.js";
 import { Search } from "lucide-react";
 import { useContext } from "react";
@@ -57,19 +57,21 @@ const DiscoverPeople = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen">
       <NavBar />
+      <MobileNavBar />
+      <MobileLogoTop />
 
-      <div className="flex flex-col gap-2 bg-neutral-800 mt-[70px] p-5 rounded-md w-[600px] min-h-[700px]">
-        <div className="flex justify-between items-center w-full">
+      <div className="flex flex-col gap-1 md:gap-2 bg-[rgb(16,16,16)] mt-[50px] md:mt-[70px] mb-[5px] p-2 md:p-5 rounded-md w-[97%] md:w-[600px] h-full md:min-h-[700px]">
+        <div className="flex justify-between items-center mb-5 w-full">
           <input
             value={inputValue}
             placeholder="Search people"
             onChange={handleInput}
             type="text"
-            className="bg-transparent px-5 border border-white border-solid rounded-full w-[90%] h-[50px] text-white"
+            className="bg-transparent px-5 border border-white border-solid rounded-full w-[90%] h-[40px] md:h-[50px] text-white"
           />
           <Search
             color="white"
-            size={32}
+            size={window.innerWidth>=768 ? 32 : 24}
             onClick={() => handleSearchClick()}
             className="cursor-pointer"
           />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import NavBar from "../components/NavBar";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { useSocket } from "../context/SoketContext";
 import api from "../utils/axios-api.js";
@@ -87,9 +87,11 @@ const DirectMessage = () => {
   );
 
   return (
-    <div className="box-border relative flex flex-col items-center w-auto h-screen">
+    <div className="box-border relative flex flex-col items-center bg-[rgb(16,16,16)] md:bg-transparent w-auto h-screen">
       <NavBar />
-      <div className="flex flex-col items-end bg-[rgb(16,16,16)] mt-[70px] p-2 rounded-lg w-2/4 h-[95%]">
+      <MobileNavBar />
+      <MobileLogoTop />
+      <div className="flex flex-col items-end bg-[rgb(16,16,16)] mt-[50px] md:mt-[70px] p-2 rounded-lg w-full md:w-2/4 h-[85%] md:h-[95%]">
         <div
           className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
           onClick={() => navigate(`/user/${targetId}`)}
@@ -128,7 +130,7 @@ const DirectMessage = () => {
             }}
             rows={1}
             onInput={handleInput}
-            className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] w-[90%]
+            className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] w-[80%] md:w-[90%]
              min-h-[45px] overflow-hidden text-white leading-6 resize-none
              `}
             style={{
@@ -140,7 +142,7 @@ const DirectMessage = () => {
           <input
             type="submit"
             value="send"
-            className="bg-white px-4 py-2 rounded-full w-[10%] text-black"
+            className="bg-white px-4 py-2 rounded-full w-[20%] md:w-[10%] text-black"
           />
         </form>
       </div>

@@ -32,7 +32,7 @@ const UserCardV2 = ({ user }) => {
 
   return (
     <div
-      className="flex items-center gap-[9%] bg-neutral-900 p-3 rounded-3xl w-full"
+      className="flex items-center gap-[9%] bg-neutral-900 p-2 md:p-3 rounded-3xl w-full"
       onClick={() => {
         if (isFollower == undefined) navigate("/profile");
         else navigate(`/user/${user._id}`);
@@ -40,14 +40,14 @@ const UserCardV2 = ({ user }) => {
     >
       <div className="w-16">
         <img
-          className="rounded-full aspect-square"
+          className="rounded-full object-cover aspect-square"
           src={
             user.profile_image ||
             `https://api.dicebear.com/9.x/big-smile/svg?seed=${user.userName}&backgroundColor=c0aede`
           }
         ></img>
       </div>
-      <div className="flex justify-center gap-5 w-2/4 overflow-hidden text-white text-xl">
+      <div className="flex md:flex-row flex-col justify-center gap-1 md:gap-5 w-2/4 overflow-hidden text-white text-sm md:text-xl">
         <span>{user.fullName}</span>
         <span>@{user.userName}</span>
       </div>

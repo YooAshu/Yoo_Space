@@ -31,7 +31,7 @@ import messageRouter from './src/routes/message.route.js'
 // routes declaration
 app.use('/api/users',userRouter)
 app.use('/api/posts',postRouter)
-app.post("/refreshToken", refreshAccessToken); // Define the route
+app.post("/api/refreshToken", refreshAccessToken); // Define the route
 app.use('/api/messages', messageRouter)
 
 app.use((err, req, res, next) => {

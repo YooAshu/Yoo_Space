@@ -39,13 +39,11 @@
 
 
 .navbar-glass {
-  width: 50%;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
   border-radius: 29px;
-  top: 10px;
   background: rgba(255, 255, 255, 0.21);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(9.1px);

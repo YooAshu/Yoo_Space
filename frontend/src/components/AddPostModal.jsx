@@ -133,14 +133,14 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.05, ease: "easeInOut" }}
-            className="flex flex-col bg-neutral-800 rounded-md w-[950px] h-[600px] overflow-hidden"
+            className="flex flex-col bg-neutral-800 rounded-md w-[80%] md:w-[950px] h-[70%] md:h-[600px] overflow-hidden"
           >
             <ToastContainer autoClose={1500} theme="dark" />
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="flex space-y-4 rounded-md w-full h-full"
+              className="flex md:flex-row flex-col space-y-4 rounded-md w-full h-full"
             >
-              <div className="relative bg-neutral-900 w-[600px] h-[600px]">
+              <div className="relative bg-neutral-900 w-full md:w-[600px] h-fit md:h-[600px] aspect-square">
                 {/* Image Previews */}
                 {images.length > 0 && (
                   <div
@@ -192,11 +192,11 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
                   <input {...getInputProps()} />
                   {/* <div className="flex flex-col justify-center items-center"> */}
                   {images.length == 0 && (
-                    <img src={Upload} alt="upload" className="w-[200px]" />
+                    <img src={Upload} alt="upload" className="w-[100px] md:w-[200px]" />
                   )}
 
                   <p
-                    className={`text-white ${images.length == 0 ? "" : glass}`}
+                    className={`text-white md:text-base text-sm ${images.length == 0 ? "" : glass}`}
                   >
                     Drag & drop images here , or click to select
                   </p>
@@ -204,7 +204,7 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
                 </div>
               </div>
               {/* Caption Input */}
-              <div className="relative w-[350px]">
+              <div className="relative w-full md:w-[350px] h-full md:h-unset">
                 <div className="flex items-center gap-2 p-2">
                   <img
                     className="rounded-full w-10 object-cover aspect-square"

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useRef, useState } from "react";
 import RedHeart from "../assets/red-heart.png";
 import WhiteHeart from "../assets/white-heart.png";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -44,6 +44,30 @@ const Post = ({ post, modalOpen = undefined }) => {
   const { currentUserByToken } = useContext(AppContext);
   const loggedInUserId = currentUserByToken?.userId;
 
+  const carouselRef = useRef(null);
+  const firstImageRef = useRef(null);
+
+  // Set container height to first image height
+  useEffect(() => {
+    const img = firstImageRef?.current;
+    const carousel = carouselRef?.current;
+
+    const setHeight = () => {
+      if (img && carousel) {
+        carousel.style.height = `${img.offsetHeight}px`;
+      }
+    };
+
+    if (img && img.complete) {
+      setHeight();
+    } else if(img) {
+      img.onload = setHeight;
+    }
+
+    window.addEventListener("resize", setHeight);
+    return () => window.removeEventListener("resize", setHeight);
+  }, []);
+
   return (
     <div
       className="flex flex-col gap-6 bg-black m-5 p-3 rounded-3xl w-auto min-h-52"
@@ -71,8 +95,8 @@ const Post = ({ post, modalOpen = undefined }) => {
         />
         <p className="text-white">@{post.creator.userName}</p>
       </div>
-      <div className="text-white text-xl">{post.content}</div>
-      <div className="relative flex">
+      <div className="text-white text-sm md:text-xl">{post.content}</div>
+      <div className="relative flex" ref={carouselRef} >
         {post.media.length > 0 && (
           <>
             {post.media.length > 1 && (
@@ -133,11 +157,12 @@ const Post = ({ post, modalOpen = undefined }) => {
               </>
             )}
 
-            <div className="relative h-full">
+            <div className="relative w-full h-full">
               <img
                 src={post.media[imageIndex]}
                 alt={`preview`}
                 className="rounded-md w-full h-full object-cover"
+                ref={imageIndex === 0 ? firstImageRef : null}
               />
             </div>
           </>
@@ -157,12 +182,15 @@ const Post = ({ post, modalOpen = undefined }) => {
               event.stopPropagation(); // Prevents event from propagating to parent elements
               handleLike(post._id);
             }}
-            className="px-5 py-2 rounded-2xl text-white"
+            className="px-3 md:px-5 py-2 rounded-2xl text-white"
           >
-            <img src={!isLiked ? WhiteHeart : RedHeart} className="w-10" />
+            <img
+              src={!isLiked ? WhiteHeart : RedHeart}
+              className="w-6 md:w-10"
+            />
           </button>
           <p
-            className="text-white text-2xl cursor-pointer"
+            className="text-white text-base md:text-2xl cursor-pointer"
             onClick={() => {
               if (modalOpen != undefined) {
                 modalOpen();
@@ -172,7 +200,9 @@ const Post = ({ post, modalOpen = undefined }) => {
             {likeNo} Likes
           </p>
         </div>
-        <div className="text-white text-2xl">{post.no_of_comment} Comments</div>
+        <div className="text-white text-base md:text-2xl">
+          {post.no_of_comment} Comments
+        </div>
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import Group from "../assets/group.png";
 import api from "../utils/axios-api.js";
 import { AppContext } from "../context/AppContext.jsx";
 
-const AddGroup = () => {
-  const [formOpen, setFormOpen] = useState(false);
+const AddGroup = ({ handleModal = null, setConvoList }) => {
+  const [formOpen, setFormOpen] = useState(window.innerWidth < 768);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [followers, setFollowers] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -63,9 +63,11 @@ const AddGroup = () => {
         },
       })
       .then((res) => {
-        //console.log("Group created successfully", res.data);
+        // console.log("Group created successfully", res.data);
         setCreatingGroup(false);
         setFormOpen(false);
+        handleModal?.();
+        setConvoList((prev) => [res.data.data, ...prev]); // ✅ Add new group to conversation list
         setAvatarPreview(null);
         setSelected([]);
         setValue("avatar", []); // ✅ Clear images after upload
@@ -91,9 +93,9 @@ const AddGroup = () => {
   };
 
   return (
-    <div className="bg-[rgb(16,16,16)] p-2 rounded-xl w-full h-auto">
+    <div className="bg-transparent md:bg-[rgb(16,16,16)] p-0 md:p-2 rounded-xl w-full h-auto">
       <button
-        disabled={creatingGroup}
+        disabled={window.innerWidth < 768 || creatingGroup}
         type="button"
         onClick={() => setFormOpen(!formOpen)}
         className={`flex justify-center items-center px-5 w-full min-h-12 rounded-xl font-bold bg-white text-black text-2xl`}
@@ -102,7 +104,7 @@ const AddGroup = () => {
       </button>
 
       <div
-        className={`overflow-hidden bg-neutral-800 rounded-xl transition-all duration-300 ${
+        className={`overflow-hidden md:bg-neutral-800 bg-transparent rounded-xl transition-all duration-300 ${
           formOpen ? "h-[500px] mt-5" : "h-0"
         }`}
       >
@@ -161,7 +163,7 @@ const AddGroup = () => {
               {followers.map((follower) => (
                 <div
                   key={follower._id}
-                  className={`flex items-center gap-2 p-2 border border-[#717171] rounded-full cursor-pointer ${
+                  className={`flex items-center gap-2 p-1 md:p-2 border border-[#717171] rounded-full cursor-pointer ${
                     selected.includes(follower._id) ? "bg-gray-600" : ""
                   }`}
                   onClick={() => {
@@ -189,7 +191,7 @@ const AddGroup = () => {
           <button
             disabled={creatingGroup}
             type="submit"
-            className="bg-white px-5 py-2 rounded-full w-max"
+            className="bg-white px-5 py-2 rounded-full w-max text-black"
           >
             Create
           </button>

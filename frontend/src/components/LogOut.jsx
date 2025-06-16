@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SoketContext.jsx";
 import { AppContext } from "../context/AppContext.jsx";
+import { LogOut as LogOutIcon } from "lucide-react";
 import api from "../utils/axios-api.js";
 
 const LogOut = () => {
@@ -37,9 +38,9 @@ const LogOut = () => {
     <button
       type="button"
       onClick={() => handleOnclick()}
-      className="flex justify-center items-center bg-white my-2 ml-2 px-5 rounded-full font-bold text-black"
+      className="flex justify-center items-center bg-white my-2 ml-2 px-2 md:px-5 rounded-full h-9 md:h-auto font-bold text-black"
     >
-      Logout
+      {window.innerWidth>=768 ? 'Logout' : <LogOutIcon />}
     </button>
   );
 };

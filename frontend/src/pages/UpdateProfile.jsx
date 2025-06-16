@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import generateGradient from "../utils/generateGradient.js";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../utils/axios-api.js";
-import NavBar from "../components/NavBar.jsx";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar.jsx";
 
 const UpdateProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -100,7 +100,9 @@ const UpdateProfile = () => {
 
   return (
     <div className="relative flex justify-center items-center w-screen min-h-screen">
-      <NavBar/>
+      <NavBar />
+      <MobileNavBar />
+      <MobileLogoTop />
       <ToastContainer autoClose={1500} theme="dark" />
       <div className="relative flex flex-col gap-5 bg-[rgb(16,16,16)] rounded-lg w-[600px] min-h-[700px] overflow-hidden">
         {/* cover image */}

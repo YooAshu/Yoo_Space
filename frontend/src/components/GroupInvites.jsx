@@ -13,10 +13,10 @@ const GroupInvites = ({ setConvoList }) => {
   const { socket } = useSocket();
   return (
     <>
-      <h2 className="bg-white py-3 rounded-xl font-bold text-black text-xl text-center">
+      <h2 className="bg-white mb-3 py-3 rounded-xl font-bold text-black text-xl text-center">
         Group Invites
       </h2>
-      <div className="flex flex-col flex-1 gap-5 mb-2 rounded-xl w-full h-full overflow-y-auto your-container">
+      <div className="flex flex-col flex-1 gap-2 mb-2 rounded-xl w-full h-full overflow-y-auto your-container">
         {groupInvites.length == 0 && <div className="mt-8 w-full text-white text-center">You have 0 invites</div>}
         {/* Map through the group invites and display them */}
 
@@ -25,7 +25,7 @@ const GroupInvites = ({ setConvoList }) => {
           groupInvites.map((invite) => {
             return (
               <div
-                className="flex justify-start items-center gap-5 bg-neutral-800 px-2 py-1 rounded-lg w-[97%] h-[15%] overflow-hidden cursor-pointer"
+                className="flex justify-start items-center gap-5 bg-neutral-800 px-2 py-1 rounded-lg w-full h-[15%] overflow-hidden cursor-pointer"
                 key={invite._id}
               >
                 <img
@@ -36,7 +36,7 @@ const GroupInvites = ({ setConvoList }) => {
                   <p className="opacity-65 text-white text-xs">
                     {invite.invited_by.userName} invited you to the group
                   </p>
-                  <h1 className="overflow-hidden text-white whitespace-nowrap">
+                  <h1 className="overflow-hidden text-white text-sm md:text-base whitespace-nowrap">
                     {invite.group.groupName}
                   </h1>
                 </div>

@@ -10,11 +10,11 @@ const GroupMembers = ({ members }) => {
         if (member.status == "joined")
           return (
             <div
-              className="flex justify-start items-center gap-5 bg-neutral-800 p-2 rounded-lg w-[97%] h-[15%] overflow-hidden cursor-pointer"
+              className="flex justify-start items-center gap-5 bg-neutral-800 p-2 rounded-lg w-full h-[10%] md:h-[15%] overflow-hidden cursor-pointer"
               key={member.member._id}
             >
               <img
-                className="rounded-full w-12 h-12 object-cover"
+                className="rounded-full w-12 h-12 object-cover aspect-square"
                 src={
                   member.member.profile_image ||
                   `https://api.dicebear.com/9.x/big-smile/svg?seed=${member.member.userName}&backgroundColor=c0aede`

@@ -36,7 +36,7 @@ const Comment = ({ comment }) => {
   const loggedInUserId = currentUserByToken?.userId;
 
   return (
-    <div className="flex flex-col gap-3 bg-neutral-800 p-3 rounded-2xl w-full text-white">
+    <div className="flex flex-col gap-3 bg-neutral-800 p-3 pt-1 md:pt-3 rounded-2xl w-full text-[12px] text-white md:text-[16px]">
       <div className="flex justify-between items-center">
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -50,7 +50,7 @@ const Comment = ({ comment }) => {
           }}
         >
           <img
-            className="rounded-full w-8 object-cover aspect-square"
+            className="rounded-full w-6 md:w-8 object-cover aspect-square"
             src={
               comment.user.profile_image ||
               `https://api.dicebear.com/9.x/big-smile/svg?seed=${comment.user.userName}&backgroundColor=c0aede`
@@ -67,13 +67,13 @@ const Comment = ({ comment }) => {
             }}
             className="px-5 py-2 text-white"
           >
-            <img src={!isLiked ? WhiteHeart : RedHeart} className="w-10" />
+            <img src={!isLiked ? WhiteHeart : RedHeart} className="w-6 md:w-10" />
           </button>
-          <p className="text-white text-2xl">{likeNo} Likes</p>
+          <p className="text-[12px] text-white md:text-2xl">{likeNo} Likes</p>
         </div>
         {/* <p className="mr-5">{comment.no_of_like}</p> */}
       </div>
-      <div className="ml-8">{comment.content}</div>
+      <div className="md:ml-8">{comment.content}</div>
     </div>
   );
 };

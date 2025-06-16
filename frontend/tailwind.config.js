@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontSize: {
+        'fluid': 'clamp(1rem, 5vw, 2rem)',
+      }
+    },
   },
   plugins: [],
 }

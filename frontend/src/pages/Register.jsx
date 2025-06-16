@@ -32,10 +32,10 @@ const Register = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
       <ToastContainer autoClose={1500} theme="dark" />
-      <div className="w-1/4">
+      <div className="w-1/2 md:w-1/4">
               <img src={YooSpace} alt="yoohub" />
             </div>
-      <div className="bg-zinc-800 rounded-2xl w-96 h-[500px]">
+      <div className="bg-zinc-800 rounded-2xl w-[80%] md:w-96 h-[60%] md:h-[500px]">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-center items-center gap-10 w-full h-full"

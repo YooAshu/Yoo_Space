@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import NavBar from "../components/NavBar";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { useSocket } from "../context/SoketContext";
 import api from "../utils/axios-api.js";
@@ -10,12 +10,13 @@ import { AppContext } from "../context/AppContext.jsx";
 
 import Group from "../assets/group.png";
 import { GroupMembers } from "../components/GroupComponents.jsx";
+import Modal from "../components/Modal.jsx";
 let loggedInUserId;
 // const loggedInUserId = localStorage.getItem("userId");
 
 const DirectMessage = () => {
   const [messages, setMessages] = useState([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { currentUserByToken } = useContext(AppContext);
   loggedInUserId = currentUserByToken?.userId;
   const { socket } = useSocket();
@@ -63,17 +64,14 @@ const DirectMessage = () => {
   const onSubmit = async (data) => {
     //console.log(data);
     try {
-      const response = await api.post(
-        `/messages/send/${conversation?._id}`,
-        {
-          text: data.message,
-          //   receiver is array of all participant id except logged in user id
-          receiver: conversation?.participants.filter(
-            (participant) => participant._id !== loggedInUserId
-          ),
-          //   receiver: [targetId],
-        }
-      );
+      const response = await api.post(`/messages/send/${conversation?._id}`, {
+        text: data.message,
+        //   receiver is array of all participant id except logged in user id
+        receiver: conversation?.participants.filter(
+          (participant) => participant._id !== loggedInUserId
+        ),
+        //   receiver: [targetId],
+      });
       //console.log(response.data);
 
       reset();
@@ -95,6 +93,9 @@ const DirectMessage = () => {
     el.style.height = el.scrollHeight + "px";
   };
 
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   //   const sender = conversation?.participants.find(
   //     (participant) => participant._id == targetId
   //   );
@@ -102,16 +103,22 @@ const DirectMessage = () => {
   return (
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
       <NavBar />
+      <MobileNavBar />
+      <MobileLogoTop />
       {/* main div */}
-      <div className="flex justify-start gap-3 mt-[70px] w-full h-[95%]">
+      <div className="flex md:flex-row flex-col justify-start gap-3 mt-[50px] md:mt-[70px] w-full h-[95%]">
         {/* Left side: Group members */}
-        <div className="flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 rounded-lg w-[25%] h-[500px]">
+        <div className="hidden md:flex flex-col gap-1 bg-[rgb(16,16,16)] p-2 rounded-lg w-[25%] h-[500px]">
           {members && members.length > 0 && <GroupMembers members={members} />}
         </div>
-        <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-2/4 h-[95%]">
+        {/* For mobile, button for modal */}
+        <Modal isOpen={isModalOpen} onClose={handleModal}>
+          {members && members.length > 0 && <GroupMembers members={members} />}
+        </Modal>
+        <div className="flex flex-col items-end bg-[rgb(16,16,16)] p-2 rounded-lg w-full md:w-2/4 h-[90%] md:h-[95%]">
           <div
             className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
-            //   onClick={() => navigate(`/user/${targetId}`)}
+            onClick={handleModal}
           >
             <img
               className="rounded-full w-12 h-12 object-cover"
@@ -131,7 +138,7 @@ const DirectMessage = () => {
               if (message.sender._id === loggedInUserId) {
                 return <SendMsgBox key={message._id} message={message} />;
               }
-              return <ReceiverMsgBox key={message._id} message={message} />;
+              return <ReceiverMsgBox key={message._id} message={message} isGroup={true} />;
             })}
           </div>
           <form
@@ -148,7 +155,7 @@ const DirectMessage = () => {
               }}
               rows={1}
               onInput={handleInput}
-              className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] w-[90%]
+              className={`content-center bg-transparent px-3 py-2 border border-[#717171] rounded-[25px] md:w-[90%] w-[80%]
              min-h-[45px] overflow-hidden text-white leading-6 resize-none
              `}
               style={{
@@ -160,7 +167,7 @@ const DirectMessage = () => {
             <input
               type="submit"
               value="send"
-              className="bg-white px-4 py-2 rounded-full w-[10%] text-black"
+              className="bg-white px-4 py-2 rounded-full w-[20%] md:w-[10%] text-black"
             />
           </form>
         </div>
@@ -176,7 +183,7 @@ const getConversation = async (conversationId, setConversation, setMembers) => {
     );
     //console.log(response.data.data);
     setConversation(response.data.data.conversation);
-    setMembers(response.data.data.members)
+    setMembers(response.data.data.members);
   } catch (error) {
     console.error("Error fetching conversation data", error);
   }
@@ -185,9 +192,7 @@ const getConversation = async (conversationId, setConversation, setMembers) => {
 const getAllMessages = async (conversationId, setMessages) => {
   if (!conversationId) return;
   try {
-    const response = await api.get(
-      `/messages/all-messages/${conversationId}`
-    );
+    const response = await api.get(`/messages/all-messages/${conversationId}`);
     //console.log(response.data.data);
     setMessages(response.data.data);
   } catch (error) {

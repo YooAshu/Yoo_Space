@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Post from "../components/Post";
-import NavBar from "../components/NavBar";
+import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import api from "../utils/axios-api.js";
 
 const Home = () => {
@@ -27,8 +27,10 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <div className="flex justify-center mt-[70px] w-full h-fit text-white">
-        <div className="bg-neutral-900 mb-36 w-1/2">
+      <MobileNavBar />
+      <MobileLogoTop />
+      <div className="flex justify-center mt-[50px] md:mt-[70px] w-full h-fit text-white">
+        <div className="bg-neutral-900 mb-36 rounded-xl w-full md:w-1/2">
           {/* if posts length is 0 show now post follow someone */}
           {posts.length === 0 && (
             <div className="flex flex-col justify-center items-center h-96">

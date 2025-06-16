@@ -32,22 +32,22 @@ const UserCard = ({ user }) => {
 
   return (
     <div
-      className="flex items-center gap-[9%] bg-neutral-900 p-3 rounded-3xl w-full"
+      className="flex items-center gap-[9%] bg-neutral-900 p-2 md:p-3 rounded-3xl w-full"
       onClick={() => {
         if (isFollower == undefined) navigate("/profile");
         else navigate(`/user/${user._id}`);
       }}
     >
-      <div className="w-16">
+      <div className="w-12 md:w-16">
         <img
-          className="rounded-full aspect-square"
+          className="rounded-full object-cover aspect-square"
           src={
             user.profile_image ||
             `https://api.dicebear.com/9.x/big-smile/svg?seed=${user.userName}&backgroundColor=c0aede`
           }
         ></img>
       </div>
-      <div className="flex justify-center gap-5 w-2/4 overflow-hidden text-white text-xl">
+      <div className="flex md:flex-row flex-col justify-center gap-1 md:gap-5 w-2/4 overflow-hidden text-white text-sm md:text-xl">
         <span>{user.fullName}</span>
         <span>@{user.userName}</span>
       </div>
@@ -59,7 +59,7 @@ const UserCard = ({ user }) => {
               event.stopPropagation(); // Prevents event from propagating to parent elements
               handleFollow(user._id);
             }}
-            className="bg-white px-5 py-2 rounded-2xl w-full"
+            className="bg-white px-2 md:px-5 py-2 rounded-2xl w-full text-xs md:text-base"
           >
             {isFollower ? "Following" : "Follow"}
           </button>
