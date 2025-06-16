@@ -124,7 +124,7 @@ const Profile = () => {
               />
             )}
             <div
-              className="top-full right-2 absolute bg-white shadow-white mt-2 p-[6px] px-2 rounded-full font-medium text-black md:text-[20px] text-xs cursor-pointer"
+              className="top-full right-2 z-[2] absolute bg-white shadow-white mt-2 p-[6px] px-2 rounded-full font-medium text-black md:text-[20px] text-xs cursor-pointer"
               onClick={() => navigate("/profile/update")}
             >
               Update Profile

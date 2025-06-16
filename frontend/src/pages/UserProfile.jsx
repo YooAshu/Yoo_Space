@@ -202,7 +202,7 @@ const UserProfile = () => {
         />
 
         {posts.length > 0 && (
-          <div className="flex justify-center mt-10 md:mt-20 w-full h-fit">
+          <div className="flex justify-center my-10 md:my-20 w-full h-fit">
             <div className="bg-neutral-900 w-full md:w-1/2">
               {posts.map((post, index) => {
                 return <Post key={index} post={post} />;
