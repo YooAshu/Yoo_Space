@@ -104,10 +104,10 @@ const UpdateProfile = () => {
       <MobileNavBar />
       <MobileLogoTop />
       <ToastContainer autoClose={1500} theme="dark" />
-      <div className="relative flex flex-col gap-5 bg-[rgb(16,16,16)] rounded-lg w-[600px] min-h-[700px] overflow-hidden">
+      <div className="relative flex flex-col gap-5 bg-[rgb(16,16,16)] rounded-lg w-[95%] md:w-[600px] h-[70dvh] md:h-[700px] overflow-hidden">
         {/* cover image */}
         <div
-          className="relative w-full h-32"
+          className="relative w-full h-auto aspect-[4/1]"
           style={{ background: generateGradient(userData.userName) }}
         >
           {(coverPreview || userData.cover_image) && (
@@ -121,37 +121,37 @@ const UpdateProfile = () => {
           {/* button for cover*/}
           <label
             htmlFor="cover-upload"
-            className="right-3 bottom-3 absolute bg-white px-3 rounded-3xl text-base cursor-pointer"
+            className="top-3 right-3 md:bottom-3 absolute bg-white px-3 rounded-3xl text-sm md:text-base cursor-pointer"
           >
             Change Cover Image
           </label>
+          <div className="top-full left-[50%] absolute flex flex-col items-center gap-2 w-36 h-32 -translate-x-1/2 -translate-y-1/2 transform">
+            <img
+              className="rounded-full w-32 h-full object-cover aspect-square"
+              src={
+                profilePreview ||
+                userData.profile_image ||
+                `https://api.dicebear.com/9.x/big-smile/svg?seed=${userData.userName}&backgroundColor=c0aede`
+              }
+              alt="profile"
+            />
+
+            {/* button for profile*/}
+            <label
+              htmlFor="profile-upload"
+              className="px-3 border border-white rounded-3xl text-white text-sm cursor-pointer"
+            >
+              Change Profile Pic
+            </label>
+          </div>
         </div>
 
         {/* profile image */}
-        <div className="top-16 left-56 absolute flex flex-col items-center gap-2 w-36 h-32">
-          <img
-            className="rounded-full w-32 h-full object-cover aspect-square"
-            src={
-              profilePreview ||
-              userData.profile_image ||
-              `https://api.dicebear.com/9.x/big-smile/svg?seed=${userData.userName}&backgroundColor=c0aede`
-            }
-            alt="profile"
-          />
-
-          {/* button for profile*/}
-          <label
-            htmlFor="profile-upload"
-            className="px-3 border border-white rounded-3xl text-white text-sm cursor-pointer"
-          >
-            Change Profile Pic
-          </label>
-        </div>
 
         {/* form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bottom-14 absolute flex flex-col justify-center items-center gap-10 w-full"
+          className="bottom-14 absolute flex flex-col justify-center items-center gap-5 md:gap-10 w-full"
         >
           <div className="flex flex-col items-center gap-2 w-full">
             <label htmlFor="userName" className="mb-1 w-3/4 text-white">

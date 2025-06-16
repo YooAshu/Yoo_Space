@@ -159,7 +159,7 @@ const AddGroup = ({ handleModal = null, setConvoList }) => {
             <h2 className="text-white text-lg text-center">
               Add Your Followers
             </h2>
-            <div className="flex flex-wrap justify-start items-start gap-2 mt-5 w-full h-full">
+            <div className="flex flex-wrap justify-start items-start content-start gap-2 mt-5 w-full h-full">
               {followers.map((follower) => (
                 <div
                   key={follower._id}
