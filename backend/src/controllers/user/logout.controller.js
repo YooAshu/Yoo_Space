@@ -17,7 +17,8 @@ const logout = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "none" 
+        sameSite: "none",
+        maxAge: 10 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
     }
 
     return res.status(200)
