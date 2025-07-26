@@ -112,7 +112,7 @@ const UpdateProfile = () => {
         >
           {(coverPreview || userData.cover_image) && (
             <img
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover aspect-[4/1]"
               src={coverPreview || userData.cover_image}
               alt="cover image"
             />
@@ -121,7 +121,7 @@ const UpdateProfile = () => {
           {/* button for cover*/}
           <label
             htmlFor="cover-upload"
-            className="top-3 right-3 md:bottom-3 absolute bg-white px-3 rounded-3xl text-sm md:text-base cursor-pointer"
+            className="top-3 right-3 absolute bg-white px-3 rounded-3xl text-sm md:text-base cursor-pointer"
           >
             Change Cover Image
           </label>

@@ -11,7 +11,7 @@ api.interceptors.response.use(
     (response) => response, // Return response if successful
     async (error) => {
         if (error.response?.status === 401) {
-            //console.log("Token expired. Attempting to refresh...1");
+            console.log("Token expired. Attempting to refresh...1");
 
             try {
                 // Call refresh token API
