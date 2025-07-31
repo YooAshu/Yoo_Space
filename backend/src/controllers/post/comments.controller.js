@@ -72,6 +72,7 @@ const createComment = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(200,
             {
+                commented_by: comment.commented_by,
                 content: comment.content,
                 no_of_like: 0,
                 createdAt: comment.createdAt,
