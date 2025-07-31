@@ -8,8 +8,8 @@ import { createComment, getComment ,likeComment,unLikeComment,isCommentLiked} fr
 
 const router = Router();
 
-router.route('/user/:targetId').get(getUserPost)
-router.route('/comments/:postId').get(getComment)
+router.route('/user/:targetId').get(verifyJWT,getUserPost)
+router.route('/comments/:postId').get(verifyJWT,getComment)
 
 router.route('/create').post(verifyJWT, upload.fields([
     {

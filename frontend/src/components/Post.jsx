@@ -9,18 +9,18 @@ const Post = ({ post, modalOpen = undefined }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeNo, setLikeNo] = useState(post.no_of_like);
   const [imageIndex, setImageIndex] = useState(0);
 
-  const checkIsLiked = async (id) => {
-    const response = await api.get(`/posts/is-liked/${id}`);
-    setIsLiked(response.data?.liked);
-  };
+  // const checkIsLiked = async (id) => {
+  //   const response = await api.get(`/posts/is-liked/${id}`);
+  //   setIsLiked(response.data?.liked);
+  // };
 
-  useEffect(() => {
-    checkIsLiked(post._id);
-  }, []);
+  // useEffect(() => {
+  //   checkIsLiked(post._id);
+  // }, []);
 
   const handleLike = async (id) => {
     if (!isLiked) {

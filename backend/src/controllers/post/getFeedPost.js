@@ -33,6 +33,25 @@ const getFeedPost = asyncHandler(async (req, res) => {
             $unwind: "$creator"
         },
         {
+            $lookup: {
+                from: "likes",
+                let: { postId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$liked_on", "$$postId"] },
+                                    { $eq: ["$liked_by", req.userId] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "userLike"
+            }
+        },
+        {
             $project: {
                 content: 1,
                 media: 1,
@@ -41,7 +60,8 @@ const getFeedPost = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
-                "creator._id": 1
+                "creator._id": 1,
+                isLiked: { $gt: [{ $size: "$userLike" }, 0] }
             }
         }
     ])
@@ -74,6 +94,25 @@ const getCurrentUserPost = asyncHandler(async (req, res) => {
             $unwind: "$creator"
         },
         {
+            $lookup: {
+                from: "likes",
+                let: { postId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$liked_on", "$$postId"] },
+                                    { $eq: ["$liked_by", req.userId] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "userLike"
+            }
+        },
+        {
             $project: {
                 content: 1,
                 media: 1,
@@ -82,7 +121,8 @@ const getCurrentUserPost = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
-                "creator._id": 1
+                "creator._id": 1,
+                isLiked: { $gt: [{ $size: "$userLike" }, 0] }
             }
         }
     ])
@@ -115,6 +155,25 @@ const getUserPost = asyncHandler(async (req, res) => {
             $unwind: "$creator"
         },
         {
+            $lookup: {
+                from: "likes",
+                let: { postId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$liked_on", "$$postId"] },
+                                    { $eq: ["$liked_by", req.userId] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "userLike"
+            }
+        },
+        {
             $project: {
                 content: 1,
                 media: 1,
@@ -123,7 +182,8 @@ const getUserPost = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
-                "creator._id": 1
+                "creator._id": 1,
+                isLiked: { $gt: [{ $size: "$userLike" }, 0] }
             }
         }
     ])
@@ -158,6 +218,25 @@ const getPost = asyncHandler(async (req, res) => {
             $unwind: "$creator"
         },
         {
+            $lookup: {
+                from: "likes",
+                let: { postId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$liked_on", "$$postId"] },
+                                    { $eq: ["$liked_by", req.userId] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "userLike"
+            }
+        },
+        {
             $project: {
                 content: 1,
                 media: 1,
@@ -166,7 +245,8 @@ const getPost = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
-                "creator._id": 1
+                "creator._id": 1,
+                isLiked: { $gt: [{ $size: "$userLike" }, 0] }
             }
         }
     ])
@@ -202,9 +282,9 @@ const getLikedPost = asyncHandler(async (req, res) => {
         },
         {
             $lookup: {
-                from: "users", // Assuming the authors are stored in a "users" collection
+                from: "users", 
                 foreignField: "_id",
-                localField: "createdBy", // Assuming "user" in posts refers to a user _id
+                localField: "createdBy", 
                 as: "creator"
             }
         },
@@ -218,7 +298,8 @@ const getLikedPost = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
-                "creator._id": 1
+                "creator._id": 1,
+                isLiked: true
             }
         }
     ])
