@@ -282,13 +282,18 @@ const getLikedPost = asyncHandler(async (req, res) => {
         },
         {
             $lookup: {
-                from: "users", 
+                from: "users",
                 foreignField: "_id",
-                localField: "createdBy", 
+                localField: "createdBy",
                 as: "creator"
             }
         },
         { $unwind: "$creator" }, // Convert user array into an object
+        {
+            $addFields: {
+                isLiked: true
+            }
+        },
         {
             $project: {
                 content: 1,
@@ -299,7 +304,7 @@ const getLikedPost = asyncHandler(async (req, res) => {
                 "creator.userName": 1,
                 "creator.profile_image": 1,
                 "creator._id": 1,
-                isLiked: true
+                isLiked: 1
             }
         }
     ])
