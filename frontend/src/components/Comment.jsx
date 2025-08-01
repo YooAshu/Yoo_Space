@@ -6,19 +6,19 @@ import { AppContext } from "../context/AppContext";
 import api from "../utils/axios-api";
 
 const Comment = ({ comment }) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(comment.isLiked|| false);
   const [likeNo, setLikeNo] = useState(comment.no_of_like);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkIsLiked(comment._id);
-  }, []);
+  // useEffect(() => {
+  //   checkIsLiked(comment._id);
+  // }, []);
 
-  const checkIsLiked = async (id) => {
-    const response = await api.get(`/posts/comment/is-liked/${id}`);
-    setIsLiked(response.data?.liked);
-  };
+  // const checkIsLiked = async (id) => {
+  //   const response = await api.get(`/posts/comment/is-liked/${id}`);
+  //   setIsLiked(response.data?.liked);
+  // };
 
   const handleLike = async (id) => {
     if (!isLiked) {

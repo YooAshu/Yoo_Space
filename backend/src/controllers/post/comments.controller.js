@@ -27,6 +27,26 @@ const getComment = asyncHandler(async (req, res) => {
             $unwind: "$user"
         },
         {
+            $lookup: {
+                from: "commentlikes",
+                let: { commentId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$liked_by", req.userId] },
+                                    { $eq: ["$liked_on", "$$commentId"], }
+                                ]
+
+                            }
+                        }
+                    }
+                ],
+                as: "userLike"
+            }
+        },
+        {
             $project: {
                 commented_by: 1,
                 content: 1,
@@ -35,6 +55,9 @@ const getComment = asyncHandler(async (req, res) => {
                 "user._id": 1,
                 "user.userName": 1,
                 "user.profile_image": 1,
+                isLiked: {
+                    $gt: [{ $size: "$userLike" }, 0]
+                }
             }
         }
     ])
@@ -78,7 +101,6 @@ const createComment = asyncHandler(async (req, res) => {
                 createdAt: comment.createdAt,
                 _id: comment._id,
                 user
-
 
             }, "created comment successfully")
     )
