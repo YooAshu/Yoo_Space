@@ -39,9 +39,9 @@ const followUser = asyncHandler(async (req, res, next) => {
 const isFollower = asyncHandler(async (req, res) => {
     const { targetId } = req.params;
     const userId = req.userId;
-    if(targetId==userId){
+    if (targetId == userId) {
         return res.json({
-            "follows":undefined
+            "follows": undefined
         })
     }
 
@@ -118,16 +118,38 @@ const followerList = asyncHandler(async (req, res) => {
             $unwind: "$followerData" // Convert array to object
         },
         {
+            $lookup: {
+                from: "follows",
+                let: { followerId: "$followerData._id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    {$eq: ["$followed_to", "$$followerId"]},
+                                    {$eq: ["$followed_by", userID]}
+                                ]
+
+                            }
+                        }
+                    }
+                ],
+                as:"isFollowing"
+            }
+        },
+        {
             $project: {
                 _id: "$followerData._id",
                 userName: "$followerData.userName",
                 fullName: "$followerData.fullName",
-                profile_image: "$followerData.profile_image"
+                profile_image: "$followerData.profile_image",
+                isFollowing: { $gt: [{ $size: "$isFollowing" }, 0] }
+
             }
         }
     ]);
 
-    if (!followers ) {
+    if (!followers) {
         throw new ApiError(404, "No followers found");
     }
 
@@ -160,11 +182,18 @@ const followingList = asyncHandler(async (req, res) => {
                 $unwind: "$followingData"
             },
             {
+                $addFields:{
+                    isFollowing:true
+                },
+            },
+            {
                 $project: {
                     _id: "$followingData._id",
                     userName: "$followingData.userName",
                     fullName: "$followingData.fullName",
-                    profile_image: "$followingData.profile_image"
+                    profile_image: "$followingData.profile_image",
+                    isFollowing:1
+
                 }
             }
         ]

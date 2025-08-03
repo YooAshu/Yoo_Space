@@ -25,7 +25,7 @@ router.route('/user-likes').get(verifyJWT, getLikedPost)
 router.route('/like/:postId').patch(verifyJWT, likePost)
 router.route('/unlike/:postId').patch(verifyJWT, unLikePost)
 router.route('/is-liked/:postId').get(verifyJWT, isLiked)
-router.route('/likes-on/:postId').get(getWhoLiked)
+router.route('/likes-on/:postId').get(verifyJWT,getWhoLiked)
 
 router.route('/comment-on/:postId').post(verifyJWT,createComment)
 router.route('/comment/like/:commentId').patch(verifyJWT, likeComment)

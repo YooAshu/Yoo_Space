@@ -29,6 +29,7 @@ const getUser = asyncHandler(async (req, res) => {
 
 const getFollowers = asyncHandler(async (req, res) => {
     const { userId } = req.params
+    const loggedInUserId = req.userId;
     const followers = await Follow.aggregate([
         {
             $match: { followed_to:  new mongoose.Types.ObjectId(String(userId)) } // Convert to ObjectId
@@ -45,11 +46,32 @@ const getFollowers = asyncHandler(async (req, res) => {
             $unwind: "$followerData"
         },
         {
+            $lookup: {
+                from: "follows",
+                let: { followerId: "$followerData._id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    {$eq: ["$followed_to", "$$followerId"]},
+                                    {$eq: ["$followed_by", loggedInUserId]}
+                                ]
+
+                            }
+                        }
+                    }
+                ],
+                as:"isFollowing"
+            }
+        },
+        {
             $project: {
                 _id: "$followerData._id",
                 userName: "$followerData.userName",
                 fullName: "$followerData.fullName",
-                profile_image: "$followerData.profile_image"
+                profile_image: "$followerData.profile_image",
+                isFollowing: { $gt: [{ $size: "$isFollowing" }, 0] }
             }
         }
     ])
@@ -65,6 +87,7 @@ const getFollowers = asyncHandler(async (req, res) => {
 
 const getFollowings = asyncHandler(async (req, res) => {
     const { userId } = req.params;
+    const loggedInUserId = req.userId;
     // //console.log(userId);
 
     const following = await Follow.aggregate(
@@ -85,11 +108,32 @@ const getFollowings = asyncHandler(async (req, res) => {
                 $unwind: "$followingData"
             },
             {
+            $lookup: {
+                from: "follows",
+                let: { followingId: "$followingData._id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    {$eq: ["$followed_to", "$$followingId"]},
+                                    {$eq: ["$followed_by", loggedInUserId]}
+                                ]
+
+                            }
+                        }
+                    }
+                ],
+                as:"isFollowing"
+            }
+        },
+            {
                 $project: {
                     _id: "$followingData._id",
                     userName: "$followingData.userName",
                     fullName: "$followingData.fullName",
-                    profile_image: "$followingData.profile_image"
+                    profile_image: "$followingData.profile_image",
+                    isFollowing: { $gt: [{ $size: "$isFollowing" }, 0] }
                 }
             }
         ]
