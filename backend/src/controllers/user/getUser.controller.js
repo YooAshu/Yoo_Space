@@ -14,14 +14,21 @@ const getUser = asyncHandler(async (req, res) => {
     // //console.log(userId);
 
     const user = await User.findById(userId).select("-password -refreshToken")
-
-    if(!user) throw new ApiError(404,"user not found")
+    if (!user) throw new ApiError(404, "user not found")
+    const isFollowing = await Follow.findOne({
+        followed_by: req.userId,
+        followed_to: userId
+    })
+    const userWithFollowStatus = {
+        ...user.toObject(), // Convert mongoose document to plain object
+        isFollowing: !!isFollowing // Convert to boolean (true if document exists, false if null)
+    }
     return res
         .status(200)
         .json(
             new ApiResponse(
                 200,
-                user,
+                userWithFollowStatus,
                 "user fetched successfully"
             )
         )
@@ -32,7 +39,7 @@ const getFollowers = asyncHandler(async (req, res) => {
     const loggedInUserId = req.userId;
     const followers = await Follow.aggregate([
         {
-            $match: { followed_to:  new mongoose.Types.ObjectId(String(userId)) } // Convert to ObjectId
+            $match: { followed_to: new mongoose.Types.ObjectId(String(userId)) } // Convert to ObjectId
         },
         {
             $lookup: {
@@ -54,15 +61,15 @@ const getFollowers = asyncHandler(async (req, res) => {
                         $match: {
                             $expr: {
                                 $and: [
-                                    {$eq: ["$followed_to", "$$followerId"]},
-                                    {$eq: ["$followed_by", loggedInUserId]}
+                                    { $eq: ["$followed_to", "$$followerId"] },
+                                    { $eq: ["$followed_by", loggedInUserId] }
                                 ]
 
                             }
                         }
                     }
                 ],
-                as:"isFollowing"
+                as: "isFollowing"
             }
         },
         {
@@ -93,7 +100,7 @@ const getFollowings = asyncHandler(async (req, res) => {
     const following = await Follow.aggregate(
         [
             {
-                $match: { followed_by:  new mongoose.Types.ObjectId(String(userId)) } // Convert to ObjectId
+                $match: { followed_by: new mongoose.Types.ObjectId(String(userId)) } // Convert to ObjectId
             },
             {
                 $lookup: {
@@ -108,25 +115,25 @@ const getFollowings = asyncHandler(async (req, res) => {
                 $unwind: "$followingData"
             },
             {
-            $lookup: {
-                from: "follows",
-                let: { followingId: "$followingData._id" },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $and: [
-                                    {$eq: ["$followed_to", "$$followingId"]},
-                                    {$eq: ["$followed_by", loggedInUserId]}
-                                ]
+                $lookup: {
+                    from: "follows",
+                    let: { followingId: "$followingData._id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$followed_to", "$$followingId"] },
+                                        { $eq: ["$followed_by", loggedInUserId] }
+                                    ]
 
+                                }
                             }
                         }
-                    }
-                ],
-                as:"isFollowing"
-            }
-        },
+                    ],
+                    as: "isFollowing"
+                }
+            },
             {
                 $project: {
                     _id: "$followingData._id",
@@ -139,7 +146,7 @@ const getFollowings = asyncHandler(async (req, res) => {
         ]
     )
 
-    
+
 
     if (!following) {
         throw new ApiError(404, "No followings found");

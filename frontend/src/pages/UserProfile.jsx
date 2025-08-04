@@ -29,6 +29,7 @@ const UserProfile = () => {
       const response = await api.get(`/users/profile/${userId}`);
       const user = response.data.data;
       setUserData(user);
+      setIsFollower(user.isFollowing);
     } catch (error) {
       console.error("error fetching user data", error);
     }
@@ -85,7 +86,7 @@ const UserProfile = () => {
     getFollowers();
     getFollowings();
     getPosts();
-    checkIsFollower(userId);
+    // checkIsFollower(userId);
   }, [String(userId)]);
 
   if (!userData) {

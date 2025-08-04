@@ -8,6 +8,17 @@ const followUser = asyncHandler(async (req, res, next) => {
     const { targetId } = req.params
     const userId = req.userId
 
+    if (targetId == userId) {
+        return next(new ApiError(400, "You cannot follow yourself"));
+    }
+    const existingFollow = await Follow.findOne({
+        followed_by: userId,
+        followed_to: targetId
+    });
+    if (existingFollow) {
+        return next(new ApiError(400, "You are already following this user"));
+    }
+
     const follow = await Follow.create({
         followed_by: userId,
         followed_to: targetId
