@@ -16,14 +16,32 @@ const discoverUsers = asyncHandler(async (req, res) => {
     // Add the current user's ID to the exclusion list
     const excludeIds = [...followingIds, req.userId];
 
-    const users = await User.find(
+    const users = await User.aggregate([
         {
-            isAdmin: false,
-            _id: { $nin: excludeIds }, // Exclude current user
-
+            $match: {
+                isAdmin: false,
+                _id: { $nin: excludeIds }
+            }
         },
-        { _id: 1, fullName: 1, userName: 1, profile_image: 1 }
-    );
+        {
+            $addFields: {
+                isFollowing: false
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                fullName: 1,
+                userName: 1,
+                profile_image: 1,
+                isFollowing: 1
+            }
+        }
+    ]);
+
+    if (!users || users.length === 0) {
+        throw new ApiError(404, "failed to fetch users")
+    }
 
 
     if (!users) {
@@ -51,20 +69,47 @@ const searchUser = asyncHandler(async (req, res) => {
     if (!inputValue || inputValue.trim() === "") {
         throw new ApiError(400, "Input value is required");
     }
-    
-    const users = await User.find(
+    const users = await User.aggregate([
         {
-            isAdmin: false,
-            _id: { $nin: req.userId }, // Exclude current user
-            // user which have inputValue in ther userName or fullName
-            $or: [
-                { userName: { $regex: inputValue, $options: 'i' } },
-                { fullName: { $regex: inputValue, $options: 'i' } }
-            ]
+            $match: {
+                isAdmin: false,
+                _id: { $nin: [req.userId] }, // Exclude current user
+                $or: [
+                    { userName: { $regex: inputValue, $options: 'i' } },
+                    { fullName: { $regex: inputValue, $options: 'i' } }
+                ]
+            },
+            
         },
-
-        { _id: 1, fullName: 1, userName: 1, profile_image: 1 }
-    );
+        {
+            $lookup: {
+                from: "follows",
+                let: { userId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$followed_to", "$$userId"] },
+                                    { $eq: ["$followed_by", req.userId] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "followings"
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                fullName: 1,
+                userName: 1,
+                profile_image: 1,
+                isFollowing: { $gt: [{$size: "$followings"}, 0] }
+            }
+        }
+    ])
     if (!users) {
         throw new ApiError(404, "failed to fetch users")
     }

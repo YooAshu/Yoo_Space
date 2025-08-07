@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import api from "../utils/axios-api.js";
 
 const UserCard = ({ user }) => {
+  
   const navigate = useNavigate();
   const { followingNo, setFollowingNo } = useContext(AppContext);
   const [isFollower, setIsFollower] = useState(user.isFollowing);
+  
+  
 
   const checkIsFollower = async (id) => {
     const response = await api.get(`/users/is-follower/${id}`);

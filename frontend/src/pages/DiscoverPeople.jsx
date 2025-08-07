@@ -12,8 +12,13 @@ const DiscoverPeople = () => {
   const { showToast } = useContext(AppContext);
   const [users, setUsers] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const handleInput = (event) => {
     setInputValue(event.target.value);
+    if (event.target.value === "" && isSearching) {
+      // Auto-switch back to discover list when user clears search
+      getUsers();
+    }
   };
 
   const handleSearchClick = async () => {
@@ -25,7 +30,6 @@ const DiscoverPeople = () => {
       }
     );
 
-    //console.log(response.data.data);
     if (response.data.data.users.length === 0) {
       showToast({
         message: "404 no user found",
@@ -33,13 +37,14 @@ const DiscoverPeople = () => {
       });
     } else {
       setUsers(response.data.data.users);
+      setIsSearching(true);
     }
   };
   const getUsers = async () => {
     try {
       const response = await api.get("/users/discover");
       setUsers(response.data.data.users);
-      // //console.log(response.data.data.users);
+      setIsSearching(false);
     } catch (error) {
       console.error("error fetching users", error);
     }
@@ -71,7 +76,7 @@ const DiscoverPeople = () => {
           />
           <Search
             color="white"
-            size={window.innerWidth>=768 ? 32 : 24}
+            size={window.innerWidth >= 768 ? 32 : 24}
             onClick={() => handleSearchClick()}
             className="cursor-pointer"
           />
@@ -79,7 +84,7 @@ const DiscoverPeople = () => {
 
         {users &&
           users.map((user, index) => {
-            return <UserCard key={index} user={user} />;
+            return <UserCard key={user._id} user={user} />;
           })}
       </div>
     </div>
