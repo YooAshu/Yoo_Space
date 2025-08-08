@@ -54,7 +54,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     }
 
     // Update User in DB
-    const updatedUser = await User.findByIdAndUpdate(req.userId, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(req.userId, updates, { new: true }).select("-password -refreshToken");
 
     if (!updatedUser) {
         throw new ApiError(500, "Failed to update user");
