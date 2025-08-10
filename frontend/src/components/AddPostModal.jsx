@@ -66,7 +66,7 @@ const AddPostModal = ({ isOpen, onClose, user , setUserData }) => {
         formData.append("media", image); // Same key for all images
       });
     }
-    formData.append("aspectRatio", 1.0); // Default aspect ratio
+    formData.append("aspectRatio", String(1.0));// Default aspect ratio
   
     if (data.content == "" && data.images.length == 0) {
       toast.update(toastId, {

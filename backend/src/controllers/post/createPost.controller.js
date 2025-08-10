@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const createPost = asyncHandler(async (req, res) => {
-    const { content, aspectRatio } = req.body;
+    const { content } = req.body;
     const mediaFiles = req.files?.media;
     //console.log("body",req.body);
     //console.log("files",req.files);
@@ -17,6 +17,7 @@ const createPost = asyncHandler(async (req, res) => {
     }
 
     const userId = req.userId;
+    const aspectRatio = parseFloat(req.body.aspectRatio) || 1.0;
 
     const post = {
         content: content || "",
@@ -47,8 +48,8 @@ const createPost = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         userId,
         {
-            $inc:{
-                no_of_post:1
+            $inc: {
+                no_of_post: 1
             }
         }
     )
