@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const createPost = asyncHandler(async (req, res) => {
-    const { content } = req.body;
+    const { content, aspectRatio } = req.body;
     const mediaFiles = req.files?.media;
     //console.log("body",req.body);
     //console.log("files",req.files);
@@ -21,7 +21,8 @@ const createPost = asyncHandler(async (req, res) => {
     const post = {
         content: content || "",
         media: [],
-        createdBy: userId
+        createdBy: userId,
+        aspectRatio: aspectRatio || 1.0
     };
 
     if (mediaFiles?.length > 0) {
