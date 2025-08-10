@@ -17,13 +17,13 @@ const createPost = asyncHandler(async (req, res) => {
     }
 
     const userId = req.userId;
-    const aspectRatio = parseFloat(req.body.aspectRatio) || 1.0;
+    const aspectRatio = JSON.parse(req.body.aspectRatio);
 
     const post = {
         content: content || "",
         media: [],
         createdBy: userId,
-        aspectRatio: aspectRatio || 1.0
+        aspectRatio: aspectRatio
     };
 
     if (mediaFiles?.length > 0) {

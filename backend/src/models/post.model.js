@@ -22,9 +22,16 @@ const postSchema = new mongoose.Schema(
             default: 0
         },
         aspectRatio: {
-            type: Number,
-            required: true,
-            default: 1.0
+            x: {
+                type: Number,
+                required: true,
+                default: 1
+            },
+            y: {
+                type: Number,
+                required: true,
+                default: 1
+            }
         }
 
     },
