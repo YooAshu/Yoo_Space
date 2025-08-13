@@ -13,14 +13,7 @@ const Post = ({ post, modalOpen = undefined }) => {
   const [likeNo, setLikeNo] = useState(post.no_of_like);
   const [imageIndex, setImageIndex] = useState(0);
 
-  // const checkIsLiked = async (id) => {
-  //   const response = await api.get(`/posts/is-liked/${id}`);
-  //   setIsLiked(response.data?.liked);
-  // };
-
-  // useEffect(() => {
-  //   checkIsLiked(post._id);
-  // }, []);
+  const aspectRatio = post.aspectRatio || { x: 1, y: 1 };
 
   const handleLike = async (id) => {
     if (!isLiked) {
@@ -44,29 +37,6 @@ const Post = ({ post, modalOpen = undefined }) => {
   const { currentUserByToken } = useContext(AppContext);
   const loggedInUserId = currentUserByToken?.userId;
 
-  const carouselRef = useRef(null);
-  const firstImageRef = useRef(null);
-
-  // Set container height to first image height
-  useEffect(() => {
-    const img = firstImageRef?.current;
-    const carousel = carouselRef?.current;
-
-    const setHeight = () => {
-      if (img && carousel) {
-        carousel.style.height = `${img.offsetHeight}px`;
-      }
-    };
-
-    if (img && img.complete) {
-      setHeight();
-    } else if(img) {
-      img.onload = setHeight;
-    }
-
-    window.addEventListener("resize", setHeight);
-    return () => window.removeEventListener("resize", setHeight);
-  }, []);
 
   return (
     <div
@@ -96,7 +66,7 @@ const Post = ({ post, modalOpen = undefined }) => {
         <p className="text-white">@{post.creator.userName}</p>
       </div>
       <div className="text-white text-sm md:text-xl">{post.content}</div>
-      <div className="relative flex" ref={carouselRef} >
+      <div className="relative flex h-fit">
         {post.media.length > 0 && (
           <>
             {post.media.length > 1 && (
@@ -157,12 +127,11 @@ const Post = ({ post, modalOpen = undefined }) => {
               </>
             )}
 
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-fit" style={{ aspectRatio: `${aspectRatio.x} / ${aspectRatio.y}` }}>
               <img
                 src={post.media[imageIndex]}
                 alt={`preview`}
                 className="rounded-md w-full h-full object-cover"
-                ref={imageIndex === 0 ? firstImageRef : null}
               />
             </div>
           </>
