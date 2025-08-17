@@ -108,15 +108,30 @@ const getAllConversations = asyncHandler(async (req, res) => {
         },
         {
             $lookup: {
-                from: "users", // Replace with the actual collection name for participants
-                localField: "participants",
-                foreignField: "_id",
-                as: "participants",
-            },
+                from: "users",
+                let: { participantIds: "$participants" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $in: ["$_id", "$$participantIds"] }
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            userName:1,
+                            fullName:1,
+                            profile_image:1,
+
+                        }
+                    }
+                ],
+                as: "participants"
+            }
         },
         {
             $lookup: {
-                from: "messages", // Replace with the actual collection name for messages
+                from: "messages",
                 localField: "lastMessage",
                 foreignField: "_id",
                 as: "lastMessage",

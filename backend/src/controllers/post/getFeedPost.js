@@ -57,6 +57,7 @@ const getFeedPost = asyncHandler(async (req, res) => {
                 media: 1,
                 no_of_like: 1,
                 no_of_comment: 1,
+                aspectRatio:1,
                 createdAt: 1,
                 "creator.userName": 1,
                 "creator.profile_image": 1,
