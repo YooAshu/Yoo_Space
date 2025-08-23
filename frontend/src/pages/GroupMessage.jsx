@@ -25,12 +25,15 @@ const DirectMessage = () => {
   const [members, setMembers] = useState([]);
   const chatRef = useRef(null);
   const navigate = useNavigate();
-
+console.log("Current Messages:", messages);
   useEffect(() => {
     if (socket && conversation) {
       socket.emit("join_conversation", conversation?._id);
+      
 
       socket.on("receive_message", (message) => {
+        console.log("Received Message:", message);
+
         setMessages((prev) => [message, ...prev]);
         setMessagesAsRead(message._id);
         // Scroll to bottom after DOM updates
@@ -96,9 +99,10 @@ const DirectMessage = () => {
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  //   const sender = conversation?.participants.find(
-  //     (participant) => participant._id == targetId
-  //   );
+
+  const loggedUser = members?.find(
+    (participant) => participant.member._id == currentUserByToken.userId
+  );
 
   return (
     <div className="box-border relative flex flex-col items-center w-auto h-screen">
@@ -135,10 +139,28 @@ const DirectMessage = () => {
             {messages.map((message, index) => {
               //console.log(message.sender._id, loggedInUserId);
 
-              if (message.sender._id === loggedInUserId) {
-                return <SendMsgBox key={message._id} message={message} />;
+              if (message.sender == loggedInUserId) {
+                return (
+                  <SendMsgBox
+                    key={message._id}
+                    message={message}
+                    sender_details={loggedUser?.member}
+                  />
+                );
               }
-              return <ReceiverMsgBox key={message._id} message={message} isGroup={true} />;
+              const sender = members?.find(
+                (participant) => participant.member._id == message.sender
+              );
+              console.log("Sender Details in GroupMessage:", sender);
+
+              return (
+                <ReceiverMsgBox
+                  key={message._id}
+                  message={message}
+                  sender_details={sender?.member}
+                  isGroup={true}
+                />
+              );
             })}
           </div>
           <form

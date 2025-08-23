@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import NavBar, { MobileLogoTop, MobileNavBar } from "../components/NavBar";
 import { useForm } from "react-hook-form";
 import { useSocket } from "../context/SoketContext";
@@ -6,10 +6,11 @@ import api from "../utils/axios-api.js";
 import { useParams } from "react-router-dom";
 import { ReceiverMsgBox, SendMsgBox } from "../components/MessageBox.jsx";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext.jsx";
 
 const DirectMessage = () => {
   const [messages, setMessages] = useState([]);
-
+  const { currentUserByToken } = useContext(AppContext);
   const { socket } = useSocket();
   const { targetId } = useParams();
   const [conversation, setConversation] = useState(null);
@@ -54,13 +55,10 @@ const DirectMessage = () => {
   const onSubmit = async (data) => {
     //console.log(data);
     try {
-      const response = await api.post(
-        `/messages/send/${conversation?._id}`,
-        {
-          text: data.message,
-          receiver: [targetId],
-        }
-      );
+      const response = await api.post(`/messages/send/${conversation?._id}`, {
+        text: data.message,
+        receiver: [targetId],
+      });
       //console.log(response.data);
 
       reset();
@@ -85,6 +83,10 @@ const DirectMessage = () => {
   const sender = conversation?.participants.find(
     (participant) => participant._id == targetId
   );
+  const loggedUser = conversation?.participants.find(
+    (participant) => participant._id == currentUserByToken.userId
+  );
+
 
   return (
     <div className="box-border relative flex flex-col items-center bg-[rgb(16,16,16)] md:bg-transparent w-auto h-screen">
@@ -110,10 +112,12 @@ const DirectMessage = () => {
           ref={chatRef}
         >
           {messages.map((message, index) => {
-            if (message.sender._id === targetId) {
-              return <ReceiverMsgBox key={message._id} message={message} />;
+            console.log(message);
+            
+            if (message.sender === targetId) {
+              return <ReceiverMsgBox key={message._id} message={message} sender_details={sender} />;
             }
-            return <SendMsgBox key={message._id} message={message} />;
+            return <SendMsgBox key={message._id} message={message} sender_details={loggedUser} />;
           })}
         </div>
         <form
@@ -163,9 +167,7 @@ const getConversation = async (targetId, setConversation) => {
 const getAllMessages = async (conversationId, setMessages) => {
   if (!conversationId) return;
   try {
-    const response = await api.get(
-      `/messages/all-messages/${conversationId}`
-    );
+    const response = await api.get(`/messages/all-messages/${conversationId}`);
     //console.log(response.data.data);
     setMessages(response.data.data);
   } catch (error) {
@@ -180,6 +182,6 @@ const setMessagesAsRead = async (messageId) => {
   } catch (error) {
     console.error("Error setting messages as read", error);
   }
-}
+};
 
 export default DirectMessage;

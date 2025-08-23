@@ -33,16 +33,12 @@ const sendMessage = asyncHandler(async (req, res) => {
 
 
     // Populate sender and receiver fields
-    const populatedMessage = await newMessage.populate([
-        { path: "sender", select: "_id userName profile_image" },
-        { path: "receiver", select: "_id userName profile_image" }
-    ]);
 
     // Emit populated message
-    io.to(conversationId).emit("receive_message", populatedMessage);
+    io.to(conversationId).emit("receive_message", newMessage);
 
     res.status(201).json(
-        new ApiResponse(201, populatedMessage, "Message sent successfully")
+        new ApiResponse(201, newMessage, "Message sent successfully")
     );
 })
 
@@ -53,9 +49,7 @@ const getAllMessages = asyncHandler(async (req, res) => {
         throw new ApiError(404, "conversation not found")
     }
     const userId = req.userId;
-    const messages = await Message.find({ conversationId: conversationId })
-        .populate("sender", "_id userName profile_image")
-        .populate("receiver", "_id userName profile_image")
+    const messages = await Message.find({ conversationId: conversationId })       
         .sort({ createdAt: -1 });
 
     if (!messages) {
