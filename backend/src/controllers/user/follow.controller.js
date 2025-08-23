@@ -12,10 +12,12 @@ const followUser = asyncHandler(async (req, res, next) => {
     if (targetId == userId) {
         return next(new ApiError(400, "You cannot follow yourself"));
     }
+    
     const existingFollow = await Follow.findOne({
         followed_by: userId,
         followed_to: targetId
     });
+    
     if (existingFollow) {
         return next(new ApiError(400, "You are already following this user"));
     }
@@ -27,30 +29,34 @@ const followUser = asyncHandler(async (req, res, next) => {
 
     await User.findByIdAndUpdate(
         userId,
-        {
-            $inc: {
-                no_of_following: 1
-            }
-        }
+        { $inc: { no_of_following: 1 } }
     )
     await User.findByIdAndUpdate(
         targetId,
-        {
-            $inc: {
-                no_of_follower: 1
-            }
-        }
+        { $inc: { no_of_follower: 1 } }
     )
-    io.to(targetId).emit("send_notification", {
+    
+    // ✅ Enhanced notification with detailed logging
+    const notificationRoom = `notif:${targetId}`;
+    const notificationData = {
         toUserId: targetId,
         type: "follow",
         message: `User ${userId} started following you`,
         from: userId,
-        profile_image: req.user.profile_image,
+        profile_image: req.user_profile_image,
         createdAt: new Date(),
-    });
-
-
+    };
+    
+    console.log('🔔 SENDING FOLLOW NOTIFICATION:');
+    console.log('   Target room:', notificationRoom);
+    console.log('   Notification data:', JSON.stringify(notificationData, null, 2));
+    console.log('   Connected sockets count:', io.engine.clientsCount);
+    console.log('   Sockets in target room:', io.sockets.adapter.rooms.get(notificationRoom)?.size || 0);
+    
+    // Send the notification
+    const emitResult = io.to(notificationRoom).emit("receive_notification", notificationData);
+    console.log('   Notification emitted successfully');
+    
     return res.status(200).json(
         new ApiResponse(200, follow, "followed successfully")
     )

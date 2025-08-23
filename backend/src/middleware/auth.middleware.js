@@ -18,7 +18,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
             throw new ApiError(401, "invalid access token")
         }
         req.userId = user._id
-        req.user.profile_image = user.profile_image
+        req.user_profile_image = user.profile_image
         next()
 
     } catch (error) {

@@ -38,15 +38,15 @@ const setupSocket = (httpServer) => {
     socket.join(`notif:${userId}`);
 
     // ✅ Example: send notification to a user
-    socket.on('send_notification', ({ toUserId, type, message, from, profile_image }) => {
-      io.to(`notif:${toUserId}`).emit('receive_notification', {
-        type,
-        message,
-        from,
-        profile_image,
-        createdAt: new Date(),
-      });
-    });
+    // socket.on('send_notification', ({ toUserId, type, message, from, profile_image }) => {
+    //   io.to(`notif:${toUserId}`).emit('receive_notification', {
+    //     type,
+    //     message,
+    //     from,
+    //     profile_image,
+    //     createdAt: new Date(),
+    //   });
+    // });
 
     // join a conversation
     socket.on('join_conversation', (conversationId) => {
