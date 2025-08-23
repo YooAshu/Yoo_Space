@@ -3,6 +3,7 @@ import { Follow } from "../../models/follow.model.js"
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { User } from "../../models/user.model.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { io } from "../../../socket.js";
 
 const followUser = asyncHandler(async (req, res, next) => {
     const { targetId } = req.params
@@ -40,6 +41,14 @@ const followUser = asyncHandler(async (req, res, next) => {
             }
         }
     )
+    io.to(targetId).emit("send_notification", {
+        toUserId: targetId,
+        type: "follow",
+        message: `User ${userId} started following you`,
+        from: userId,
+        profile_image: req.user.profile_image,
+        createdAt: new Date(),
+    });
 
 
     return res.status(200).json(
@@ -137,15 +146,15 @@ const followerList = asyncHandler(async (req, res) => {
                         $match: {
                             $expr: {
                                 $and: [
-                                    {$eq: ["$followed_to", "$$followerId"]},
-                                    {$eq: ["$followed_by", userID]}
+                                    { $eq: ["$followed_to", "$$followerId"] },
+                                    { $eq: ["$followed_by", userID] }
                                 ]
 
                             }
                         }
                     }
                 ],
-                as:"isFollowing"
+                as: "isFollowing"
             }
         },
         {
@@ -193,8 +202,8 @@ const followingList = asyncHandler(async (req, res) => {
                 $unwind: "$followingData"
             },
             {
-                $addFields:{
-                    isFollowing:true
+                $addFields: {
+                    isFollowing: true
                 },
             },
             {
@@ -203,7 +212,7 @@ const followingList = asyncHandler(async (req, res) => {
                     userName: "$followingData.userName",
                     fullName: "$followingData.fullName",
                     profile_image: "$followingData.profile_image",
-                    isFollowing:1
+                    isFollowing: 1
 
                 }
             }

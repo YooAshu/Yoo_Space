@@ -32,7 +32,21 @@ const setupSocket = (httpServer) => {
   });
 
   io.on('connection', (socket) => {
-    //console.log('Socket connected:', socket.id, '| User ID:', socket.user._id);
+    const userId = socket.user._id.toString();
+
+    // join user's personal notification room
+    socket.join(`notif:${userId}`);
+
+    // ✅ Example: send notification to a user
+    socket.on('send_notification', ({ toUserId, type, message, from, profile_image }) => {
+      io.to(`notif:${toUserId}`).emit('receive_notification', {
+        type,
+        message,
+        from,
+        profile_image,
+        createdAt: new Date(),
+      });
+    });
 
     // join a conversation
     socket.on('join_conversation', (conversationId) => {
