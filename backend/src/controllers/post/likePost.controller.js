@@ -49,7 +49,7 @@ const likePost = asyncHandler(async (req, res) => {
         postId: post._id,
         image: req.user_profile_image,
     });
-    console.log(notification);
+    // console.log(notification);
     
     io.to(notificationRoom).emit("receive_notification", notification);
     return res.status(200).json(

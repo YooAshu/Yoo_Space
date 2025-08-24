@@ -263,7 +263,7 @@ const createGroup = asyncHandler(async (req, res) => {
             groupId: newConversation._id,
             Image: avatarUpload ? avatarUpload.secure_url : "", // Use group avatar or default image
         }));
-        console.log(notifications);
+        // console.log(notifications);
         
         // Create notifications in bulk
         const createdNotifications = await Notification.insertMany(notifications, { ordered: false });

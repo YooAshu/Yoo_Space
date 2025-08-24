@@ -13,6 +13,7 @@ import { followUser, isFollower, unfollowUser, followerList, followingList } fro
 import { updateProfile } from "../controllers/user/updateProfile.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { getUser ,getFollowers,getFollowings } from "../controllers/user/getUser.controller.js";
+import { getAllNotifications } from "../controllers/user/notification.controller.js";
 
 const router = Router();
 
@@ -49,5 +50,6 @@ router.route('/update-profile').patch(
 router.route('/profile/:userId').get(verifyJWT, getUser)
 router.route('/followers/:userId').get(verifyJWT, getFollowers)
 router.route('/followings/:userId').get(verifyJWT, getFollowings)
+router.route('/notifications').get(verifyJWT, getAllNotifications)
 
 export default router

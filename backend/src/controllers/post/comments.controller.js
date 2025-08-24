@@ -104,7 +104,7 @@ const createComment = asyncHandler(async (req, res) => {
         image: user.profile_image,
     });
 
-    console.log(notification);
+    // console.log(notification);
 
     io.to(notificationRoom).emit("receive_notification", notification);
     return res.status(200).json(

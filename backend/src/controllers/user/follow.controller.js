@@ -46,7 +46,7 @@ const followUser = asyncHandler(async (req, res, next) => {
         userId: userId,
         image: user_which_follows.profile_image,
     });
-    console.log(notification);
+    // console.log(notification);
     
 
     io.to(notificationRoom).emit("receive_notification", notification);
