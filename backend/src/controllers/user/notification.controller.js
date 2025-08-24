@@ -1,6 +1,6 @@
-import { ApiError } from "../../utils/ApiError";
-import { ApiResponse } from "../../utils/ApiResponse";
-import { asyncHandler } from "../../utils/asyncHandler";
+import { ApiError } from "../../utils/ApiError.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
 
 export const getAllNotifications = asyncHandler(async(req,res,next)=>{
     const notifications = await Notification.find({ toUserId: req.userId })
