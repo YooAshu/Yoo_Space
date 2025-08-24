@@ -36,9 +36,8 @@ const setupSocket = (httpServer) => {
 
     // join user's personal notification room
     socket.on("joinNotifications", (userId) => {
-      socket.join(`notif:${userId}`);
-      console.log(`User ${userId} joined notif room`);
-    });
+    socket.join(`notif:${userId}`);
+    console.log(`User ${userId} joined notif room`);
   });
 
 
@@ -68,6 +67,7 @@ const setupSocket = (httpServer) => {
 
     socket.on('disconnect', () => {
       //console.log('Socket disconnected:', socket.id);
+    });
   });
 };
 
