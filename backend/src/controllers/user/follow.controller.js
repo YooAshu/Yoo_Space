@@ -4,6 +4,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { User } from "../../models/user.model.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { io } from "../../../socket.js";
+import { Notification } from "../../models/notifications.model.js";
 
 const followUser = asyncHandler(async (req, res, next) => {
     const { targetId } = req.params

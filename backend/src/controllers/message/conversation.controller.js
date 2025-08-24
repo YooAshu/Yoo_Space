@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { User } from "../../models/user.model.js";
 import { GroupMember } from "../../models/groupMember.model.js";
 import { io } from "../../../socket.js";
+import { Notification } from "../../models/notifications.model.js";
 
 const getConversation = asyncHandler(async (req, res) => {
     const { targetId } = req.params;

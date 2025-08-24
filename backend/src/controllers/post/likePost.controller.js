@@ -5,6 +5,7 @@ import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import mongoose from "mongoose";
 import { io } from "../../../socket.js";
+import { Notification } from "../../models/notifications.model.js";
 
 const likePost = asyncHandler(async (req, res) => {
 
