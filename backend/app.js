@@ -38,6 +38,5 @@ app.use((err, req, res, next) => {
     res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);
     next(err);
   });
-// app.use(errorHandler);
 
 export {app}

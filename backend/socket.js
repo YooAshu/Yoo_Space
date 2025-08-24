@@ -35,18 +35,12 @@ const setupSocket = (httpServer) => {
     const userId = socket.user._id.toString();
 
     // join user's personal notification room
-    socket.join(`notif:${userId}`);
+    socket.on("joinNotifications", (userId) => {
+      socket.join(`notif:${userId}`);
+      console.log(`User ${userId} joined notif room`);
+    });
+  });
 
-    // ✅ Example: send notification to a user
-    // socket.on('send_notification', ({ toUserId, type, message, from, profile_image }) => {
-    //   io.to(`notif:${toUserId}`).emit('receive_notification', {
-    //     type,
-    //     message,
-    //     from,
-    //     profile_image,
-    //     createdAt: new Date(),
-    //   });
-    // });
 
     // join a conversation
     socket.on('join_conversation', (conversationId) => {

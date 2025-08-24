@@ -38,25 +38,16 @@ const followUser = asyncHandler(async (req, res, next) => {
     
     // ✅ Enhanced notification with detailed logging
     const notificationRoom = `notif:${targetId}`;
-    const notificationData = {
+    const notification = await Notification.create({
         toUserId: targetId,
         type: "follow",
         message: `User ${userId} started following you`,
-        from: userId,
-        profile_image: req.user_profile_image,
-        createdAt: new Date(),
-    };
-    
-    console.log('🔔 SENDING FOLLOW NOTIFICATION:');
-    console.log('   Target room:', notificationRoom);
-    console.log('   Notification data:', JSON.stringify(notificationData, null, 2));
-    console.log('   Connected sockets count:', io.engine.clientsCount);
-    console.log('   Sockets in target room:', io.sockets.adapter.rooms.get(notificationRoom)?.size || 0);
-    
-    // Send the notification
-    const emitResult = io.to(notificationRoom).emit("receive_notification", notificationData);
-    console.log('   Notification emitted successfully');
-    
+        userId: userId,
+        image: req.user_profile_image,
+    });
+
+    io.to(notificationRoom).emit("receive_notification", notification);
+
     return res.status(200).json(
         new ApiResponse(200, follow, "followed successfully")
     )

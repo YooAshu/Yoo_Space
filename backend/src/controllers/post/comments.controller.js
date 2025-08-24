@@ -5,6 +5,7 @@ import { User } from "../../models/user.model.js"
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import mongoose from "mongoose";
+import { io } from "../../../socket.js";
 
 const getComment = asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -81,7 +82,7 @@ const createComment = asyncHandler(async (req, res) => {
         content
     })
     const user = await User.findById(userId, { _id: 1, userName: 1, profile_image: 1 })
-    await Post.findByIdAndUpdate(
+    const post = await Post.findByIdAndUpdate(
         postId,
         {
             $inc: {
@@ -92,6 +93,17 @@ const createComment = asyncHandler(async (req, res) => {
 
 
     if (!comment) throw new ApiError(500, "failed to create comment")
+
+    const notificationRoom = `notif:${post.createdBy}`;
+    const notification = await Notification.create({
+        toUserId: post.createdBy,
+        type: "comment",
+        message: `User ${userId} commented on your post`,
+        postId: post._id,
+        image: req.user_profile_image,
+    });
+
+    io.to(notificationRoom).emit("receive_notification", notification);
     return res.status(200).json(
         new ApiResponse(200,
             {
@@ -111,6 +123,15 @@ const likeComment = asyncHandler(async (req, res) => {
 
     const userId = req.userId;
     const { commentId } = req.params
+
+    const existingLike = await CommentLike.findOne({
+        liked_by: userId,
+        liked_on: commentId
+    });
+
+    if (existingLike) {
+        throw new ApiError(500, "like already exists")
+    }
 
     const like = await CommentLike.create({
         liked_by: userId,

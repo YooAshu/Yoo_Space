@@ -5,6 +5,7 @@ import { ApiError } from "../../utils/ApiError.js";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { User } from "../../models/user.model.js";
 import { GroupMember } from "../../models/groupMember.model.js";
+import { io } from "../../../socket.js";
 
 const getConversation = asyncHandler(async (req, res) => {
     const { targetId } = req.params;
@@ -249,14 +250,43 @@ const createGroup = asyncHandler(async (req, res) => {
         role: "member",
     }));
     if (invitedMembers.length > 0) {
-        await GroupMember.insertMany(invitedMembers, { ordered: false })
-            .then(() => {
-                //console.log("Invited members added successfully");
-            })
-            .catch((error) => {
-                console.error("Error adding invited members:", error);
+    try {
+        const insertedMembers = await GroupMember.insertMany(invitedMembers, { ordered: false });
+        // console.log("Invited members added successfully");
+        
+        // Create notifications for each invited member
+        const notifications = insertedMembers.map((member) => ({
+            toUserId: member.member,
+            type: "group_invite",
+            message: `${userId} invited you to join the group "${groupName}"`,
+            groupId: newConversation._id,
+            Image: avatarUpload ? avatarUpload.secure_url : "", // Use group avatar or default image
+        }));
+
+        // Create notifications in bulk
+        const createdNotifications = await Notification.insertMany(notifications, { ordered: false });
+        // console.log("Group invite notifications created successfully");
+
+        // Send socket notifications to each invited member
+        createdNotifications.forEach((notification) => {
+            // Emit socket event for real-time notification
+            io.to(`notif_${notification.recipient}`).emit('new_notification', {
+                type: 'group_invite',
+                message: `You have been invited to join the group "${groupName}"`,
+                data: {
+                    groupId: newConversation._id,
+                    groupName: groupName,
+                    notificationId: notification._id,
+                    invitedBy: userId
+                }
             });
+        });
+
+    } catch (error) {
+        console.error("Error in group member or notification creation:", error);
+        // You can decide whether to throw this error or just log it
     }
+}
 
     res.status(201).json(
         new ApiResponse(201, newConversation, "created group successfully")
