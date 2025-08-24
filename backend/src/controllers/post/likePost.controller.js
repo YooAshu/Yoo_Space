@@ -48,6 +48,7 @@ const likePost = asyncHandler(async (req, res) => {
         message: `${req.userName} liked your post`,
         postId: post._id,
         image: req.user_profile_image,
+        userId: userId,
     });
     // console.log(notification);
     

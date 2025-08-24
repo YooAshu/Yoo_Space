@@ -102,6 +102,7 @@ const createComment = asyncHandler(async (req, res) => {
         message: `${user.userName} commented on your post`,
         postId: post._id,
         image: user.profile_image,
+        userId: userId,
     });
 
     // console.log(notification);
