@@ -45,11 +45,12 @@ const likePost = asyncHandler(async (req, res) => {
     const notification = await Notification.create({
         toUserId: post.createdBy,
         type: "reaction",
-        message: `User ${userId} liked your post`,
+        message: `${req.userName} liked your post`,
         postId: post._id,
         image: req.user_profile_image,
     });
-
+    console.log(notification);
+    
     io.to(notificationRoom).emit("receive_notification", notification);
     return res.status(200).json(
         new ApiResponse(200, like, "liked post successfully")

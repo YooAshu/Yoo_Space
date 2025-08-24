@@ -19,6 +19,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
         }
         req.userId = user._id
         req.user_profile_image = user.profile_image
+        req.userName = user.userName
         next()
 
     } catch (error) {

@@ -28,7 +28,7 @@ const followUser = asyncHandler(async (req, res, next) => {
         followed_to: targetId
     })
 
-    await User.findByIdAndUpdate(
+    const user_which_follows = await User.findByIdAndUpdate(
         userId,
         { $inc: { no_of_following: 1 } }
     )
@@ -42,11 +42,12 @@ const followUser = asyncHandler(async (req, res, next) => {
     const notification = await Notification.create({
         toUserId: targetId,
         type: "follow",
-        message: `User ${userId} started following you`,
+        message: `${user_which_follows.userName} started following you`,
         userId: userId,
-        image: req.user_profile_image,
+        image: user_which_follows.profile_image,
     });
-    console.log(`Notification sent: ${notification}`);
+    console.log(notification);
+    
 
     io.to(notificationRoom).emit("receive_notification", notification);
 

@@ -99,10 +99,12 @@ const createComment = asyncHandler(async (req, res) => {
     const notification = await Notification.create({
         toUserId: post.createdBy,
         type: "comment",
-        message: `User ${userId} commented on your post`,
+        message: `${user.userName} commented on your post`,
         postId: post._id,
-        image: req.user_profile_image,
+        image: user.profile_image,
     });
+
+    console.log(notification);
 
     io.to(notificationRoom).emit("receive_notification", notification);
     return res.status(200).json(

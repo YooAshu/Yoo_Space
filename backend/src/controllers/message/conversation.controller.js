@@ -259,11 +259,12 @@ const createGroup = asyncHandler(async (req, res) => {
         const notifications = insertedMembers.map((member) => ({
             toUserId: member.member,
             type: "group_invite",
-            message: `${userId} invited you to join the group "${groupName}"`,
+            message: `${req.userName} invited you to join the group "${groupName}"`,
             groupId: newConversation._id,
             Image: avatarUpload ? avatarUpload.secure_url : "", // Use group avatar or default image
         }));
-
+        console.log(notifications);
+        
         // Create notifications in bulk
         const createdNotifications = await Notification.insertMany(notifications, { ordered: false });
         // console.log("Group invite notifications created successfully");
