@@ -68,7 +68,6 @@ const setupSocket = (httpServer) => {
 
     socket.on('disconnect', () => {
       //console.log('Socket disconnected:', socket.id);
-    });
   });
 };
 
