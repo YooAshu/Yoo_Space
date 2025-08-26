@@ -95,7 +95,7 @@ const createComment = asyncHandler(async (req, res) => {
 
     if (!comment) throw new ApiError(500, "failed to create comment")
 
-    if (post.createdBy != userId) {
+    if (post.createdBy.toString() != userId.toString()) {
         const notificationRoom = `notif:${post.createdBy}`;
         const notification = await Notification.create({
             toUserId: post.createdBy,
