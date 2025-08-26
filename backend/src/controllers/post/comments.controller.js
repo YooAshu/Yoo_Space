@@ -95,19 +95,21 @@ const createComment = asyncHandler(async (req, res) => {
 
     if (!comment) throw new ApiError(500, "failed to create comment")
 
-    const notificationRoom = `notif:${post.createdBy}`;
-    const notification = await Notification.create({
-        toUserId: post.createdBy,
-        type: "comment",
-        message: `${user.userName} commented on your post`,
-        postId: post._id,
-        image: user.profile_image,
-        userId: userId,
-    });
+    if (post.createdBy != userId) {
+        const notificationRoom = `notif:${post.createdBy}`;
+        const notification = await Notification.create({
+            toUserId: post.createdBy,
+            type: "comment",
+            message: `${user.userName} commented on your post`,
+            postId: post._id,
+            image: user.profile_image,
+            userId: userId,
+        });
 
-    // console.log(notification);
+        // console.log(notification);
 
-    io.to(notificationRoom).emit("receive_notification", notification);
+        io.to(notificationRoom).emit("receive_notification", notification);
+    }
     return res.status(200).json(
         new ApiResponse(200,
             {

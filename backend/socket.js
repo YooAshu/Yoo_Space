@@ -37,7 +37,6 @@ const setupSocket = (httpServer) => {
     // join user's personal notification room
     socket.on("joinNotifications", (userId) => {
     socket.join(`notif:${userId}`);
-    console.log(`User ${userId} joined notif room`);
   });
 
 

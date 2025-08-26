@@ -11,6 +11,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     if (!incomingRefreshToken)
         throw new ApiError(401, "unnautorized request")
     try {
+        console.log("Incoming refresh token:", incomingRefreshToken);
 
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
 
@@ -46,7 +47,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 
     } catch (error) {
-        throw new ApiError(401, error?.message || "refresh token is invalid")
+        throw new ApiError(401, `${error?.message} "refresh token is invalid"`)
     }
 })
 

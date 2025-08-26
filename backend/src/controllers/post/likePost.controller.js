@@ -14,7 +14,7 @@ const likePost = asyncHandler(async (req, res) => {
     const { postId } = req.params
     const post = await Post.findById(postId);
     if (!post) {
-       throw new ApiError(500, "failed to like post")
+        throw new ApiError(500, "failed to like post")
     }
     const existingLike = await Like.findOne({
         liked_by: userId,
@@ -41,18 +41,22 @@ const likePost = asyncHandler(async (req, res) => {
             }
         }
     )
-    const notificationRoom = `notif:${post.createdBy}`;
-    const notification = await Notification.create({
-        toUserId: post.createdBy,
-        type: "reaction",
-        message: `${req.userName} liked your post`,
-        postId: post._id,
-        image: req.user_profile_image,
-        userId: userId,
-    });
-    // console.log(notification);
     
-    io.to(notificationRoom).emit("receive_notification", notification);
+    if (post.createdBy != userId) {
+        const notificationRoom = `notif:${post.createdBy}`;
+        const notification = await Notification.create({
+            toUserId: post.createdBy,
+            type: "reaction",
+            message: `${req.userName} liked your post`,
+            postId: post._id,
+            image: req.user_profile_image,
+            userId: userId,
+        });
+        // console.log(notification);
+
+        io.to(notificationRoom).emit("receive_notification", notification);
+    }
+
     return res.status(200).json(
         new ApiResponse(200, like, "liked post successfully")
     )
