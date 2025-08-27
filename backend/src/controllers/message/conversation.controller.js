@@ -28,8 +28,13 @@ const getConversation = asyncHandler(async (req, res) => {
         const newConversation = await Conversation.create({
             participants: [userId, targetId],
         });
+
+        // populate participants
+        const populatedConversation = await Conversation.findById(newConversation._id)
+            .populate("participants", "_id userName fullName profile_image");
+
         return res.status(201).json(
-            new ApiResponse(201, newConversation, "created conversation successfully")
+            new ApiResponse(201, populatedConversation, "created conversation successfully")
         );
     }
     res.status(200).json(
@@ -121,9 +126,9 @@ const getAllConversations = asyncHandler(async (req, res) => {
                     {
                         $project: {
                             _id: 1,
-                            userName:1,
-                            fullName:1,
-                            profile_image:1,
+                            userName: 1,
+                            fullName: 1,
+                            profile_image: 1,
 
                         }
                     }
@@ -251,44 +256,44 @@ const createGroup = asyncHandler(async (req, res) => {
         role: "member",
     }));
     if (invitedMembers.length > 0) {
-    try {
-        const insertedMembers = await GroupMember.insertMany(invitedMembers, { ordered: false });
-        // console.log("Invited members added successfully");
-        
-        // Create notifications for each invited member
-        const notifications = insertedMembers.map((member) => ({
-            toUserId: member.member,
-            type: "group_invite",
-            message: `${req.userName} invited you to join the group "${groupName}"`,
-            groupId: newConversation._id,
-            Image: avatarUpload ? avatarUpload.secure_url : "", // Use group avatar or default image
-        }));
-        // console.log(notifications);
-        
-        // Create notifications in bulk
-        const createdNotifications = await Notification.insertMany(notifications, { ordered: false });
-        // console.log("Group invite notifications created successfully");
+        try {
+            const insertedMembers = await GroupMember.insertMany(invitedMembers, { ordered: false });
+            // console.log("Invited members added successfully");
 
-        // Send socket notifications to each invited member
-        createdNotifications.forEach((notification) => {
-            // Emit socket event for real-time notification
-            io.to(`notif_${notification.recipient}`).emit('new_notification', {
-                type: 'group_invite',
-                message: `You have been invited to join the group "${groupName}"`,
-                data: {
-                    groupId: newConversation._id,
-                    groupName: groupName,
-                    notificationId: notification._id,
-                    invitedBy: userId
-                }
+            // Create notifications for each invited member
+            const notifications = insertedMembers.map((member) => ({
+                toUserId: member.member,
+                type: "group_invite",
+                message: `${req.userName} invited you to join the group "${groupName}"`,
+                groupId: newConversation._id,
+                Image: avatarUpload ? avatarUpload.secure_url : "", // Use group avatar or default image
+            }));
+            // console.log(notifications);
+
+            // Create notifications in bulk
+            const createdNotifications = await Notification.insertMany(notifications, { ordered: false });
+            // console.log("Group invite notifications created successfully");
+
+            // Send socket notifications to each invited member
+            createdNotifications.forEach((notification) => {
+                // Emit socket event for real-time notification
+                io.to(`notif_${notification.recipient}`).emit('new_notification', {
+                    type: 'group_invite',
+                    message: `You have been invited to join the group "${groupName}"`,
+                    data: {
+                        groupId: newConversation._id,
+                        groupName: groupName,
+                        notificationId: notification._id,
+                        invitedBy: userId
+                    }
+                });
             });
-        });
 
-    } catch (error) {
-        console.error("Error in group member or notification creation:", error);
-        // You can decide whether to throw this error or just log it
+        } catch (error) {
+            console.error("Error in group member or notification creation:", error);
+            // You can decide whether to throw this error or just log it
+        }
     }
-}
 
     res.status(201).json(
         new ApiResponse(201, newConversation, "created group successfully")
