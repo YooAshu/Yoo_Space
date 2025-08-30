@@ -6,7 +6,11 @@ import { ApiError } from "../../utils/ApiError.js";
 import generateAccessAndRefreshToken from "./generateTokens.js";
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+    const incomingRefreshToken =
+    req.cookies.refreshToken ||
+    req.body.refreshToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
+
 
     if (!incomingRefreshToken)
         throw new ApiError(401, "unnautorized request")
