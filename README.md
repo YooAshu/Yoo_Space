@@ -1,23 +1,27 @@
-# YooSpace
+# 🚀 YooSpace 
+<img width="400" height="400" alt="yoospace3" src="https://github.com/user-attachments/assets/9a3f809a-89a2-4a89-b3e1-8df3ee273d9d" />
 
 
-A social media app inspired by Instagram, designed to connect users, share moments
-## Features
+*A social media platform inspired by Instagram and Twitter — built to connect users, share moments, chat, and create groups.*  
+
+---
 
 ### Profile Page
 
-![Profile Page Screenshot](https://github.com/user-attachments/assets/4976f3fd-a0b0-4ae4-82d4-d744d8a53c83)
+<img width="3199" height="1753" alt="Screenshot 2025-08-30 161408" src="https://github.com/user-attachments/assets/47b53fe2-0492-457a-aed1-cd26b4e551ac" />
+
 
 ---
 
 ### chat with friends
+<img width="3199" height="1758" alt="Screenshot 2025-08-30 165128" src="https://github.com/user-attachments/assets/1e33fcec-5c50-4285-aaea-b622fd937ea8" />
 
-![image](https://github.com/user-attachments/assets/d8a5d896-7d23-4755-9239-35f527fc8214)
 
 ---
 
 ### list of all groups and chats , create group and join group
-![image](https://github.com/user-attachments/assets/6946d7e8-2911-4c8b-a6e4-13954d9dcfcb)
+<img width="3199" height="1713" alt="Screenshot 2025-08-30 165215" src="https://github.com/user-attachments/assets/2da57102-6159-4ffd-ac34-6db1666ccbd5" />
+
 
 
 ---
@@ -50,8 +54,8 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 
 ### Discover People
+<img width="3199" height="1748" alt="Screenshot 2025-08-30 165729" src="https://github.com/user-attachments/assets/52bfcd52-f79b-49b6-aa5a-f1db0b1c39d6" />
 
-![Discover People Screenshot](https://github.com/user-attachments/assets/f1e7e7e4-02d6-4bee-9f5d-91a9264bd958)
 
 ---
 
@@ -73,12 +77,24 @@ A social media app inspired by Instagram, designed to connect users, share momen
 
 ---
 
-## Technologies
+## 🛠️ Tech Stack
 
-- **Frontend:** React with Tailwind CSS for styling.
-- **Backend:** Node.js, Express, and MongoDB.
-- **Database:** Mongoose with schema features like `trim: true`.
-- **Cloud Storage:** Cloudinary for efficient image management.
+This project is built with a modern, full-stack JavaScript architecture.
+
+- **Frontend:**
+  - ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+  - ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+- **Backend:**
+  - ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+  - ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+
+- **Database:**
+  - ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+  - **Mongoose**: Elegant MongoDB object modeling for Node.js.
+
+- **Cloud Services:**
+  - ![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white) for image and video management.
 
 ---
 
