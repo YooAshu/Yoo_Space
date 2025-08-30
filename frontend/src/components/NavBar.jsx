@@ -1,6 +1,6 @@
 import LogOut from "./LogOut";
 import { useNavigate, useLocation } from "react-router-dom";
-import YooSpace from "../assets/yoospace.png";
+import YooSpace from "../assets/yoospace3.png";
 import {
   House,
   MessageSquareDot,
@@ -16,9 +16,9 @@ const NavBar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="hidden top-[10px] md:flex justify-end bg-black pr-3 w-[50%] h-[50px] text-[16px] navbar-glass">
-      <div className="flex items-center ml-4 w-[20%] h-full">
-        <img src={YooSpace} alt="yoohub" onClick={() => navigate("/")} />
+    <div className="hidden top-[10px] md:flex justify-between bg-black pr-3 w-[50%] h-[50px] text-[16px] navbar-glass">
+      <div className="flex items-center ml-4 w-auto h-50px">
+        <img src={YooSpace} alt="yoohub" onClick={() => navigate("/")} className="h-[50px]"/>
       </div>
       <div className="flex justify-end items-center gap-[3%] w-[80%] h-full">
         <button
@@ -121,8 +121,8 @@ const MobileLogoTop = () => {
   const navigate = useNavigate();
   return (
     <div className="md:hidden top-0 left-1/2 absolute flex justify-between items-center bg-black px-[5%] w-full h-[50px] text-[8px] -translate-x-1/2 transform">
-      <div className="left-4 flex items-center w-[30%] h-[50px]">
-        <img src={YooSpace} alt="yoohub" onClick={() => navigate("/")} />
+      <div className="left-4 flex items-center w-auto h-[50px]">
+        <img src={YooSpace} alt="yoohub" onClick={() => navigate("/")} className="h-[50px]"/>
       </div>
       <LogOut />
     </div>

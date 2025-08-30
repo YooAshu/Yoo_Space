@@ -41,7 +41,7 @@ const UserCard = ({ user }) => {
         else navigate(`/user/${user._id}`);
       }}
     >
-      <div className="w-12 md:w-16">
+      <div className="w-12 md:w-14">
         <img
           className="rounded-full object-cover aspect-square"
           src={
@@ -50,9 +50,9 @@ const UserCard = ({ user }) => {
           }
         ></img>
       </div>
-      <div className="flex md:flex-row flex-col justify-center gap-1 md:gap-5 w-2/4 overflow-hidden text-white text-sm md:text-xl">
-        <span>{user.fullName}</span>
-        <span>@{user.userName}</span>
+      <div className="flex flex-col md:flex-col justify-start gap-1 md:gap-0 w-2/4 overflow-hidden text-white text-sm md:text-lg">
+        <span className="truncate">{user.fullName}</span>
+        <span className="truncate">@{user.userName}</span>
       </div>
       <div className="w-1/5">
         {isFollower != undefined && (

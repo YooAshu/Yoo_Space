@@ -93,7 +93,7 @@ const DirectMessage = () => {
       <NavBar />
       <MobileNavBar />
       <MobileLogoTop />
-      <div className="flex flex-col items-end bg-[rgb(16,16,16)] mt-[50px] md:mt-[70px] p-2 rounded-lg w-full md:w-2/4 h-[85%] md:h-[95%]">
+      <div className="flex flex-col items-end bg-[rgb(16,16,16)] mt-[50px] md:mt-[70px] p-2 rounded-lg w-full md:w-2/4 h-[85%] md:h-[90%]">
         <div
           className="box-border flex items-center gap-4 py-1 border-gray-400/50 border-b w-full cursor-pointer"
           onClick={() => navigate(`/user/${targetId}`)}

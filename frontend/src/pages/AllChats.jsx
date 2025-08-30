@@ -13,7 +13,6 @@ const AllChats = () => {
   const [convoList, setConvoList] = useState([]);
   const [isInvitesModalOpen, setIsInvitesModalOpen] = useState(false);
   const [isAddGroupModalOpen, setIsAddGroupModalOpen] = useState(false);
-  // const loggedInUserId = localStorage.getItem("userId");
   const { currentUserByToken } = useContext(AppContext);
   const loggedInUserId = currentUserByToken?.userId;
   const navigate = useNavigate();
@@ -56,16 +55,22 @@ const AllChats = () => {
           >
             Create Group
             <Modal isOpen={isAddGroupModalOpen} onClose={handleAddGroupModal}>
-              {<AddGroup handleModal={handleAddGroupModal} setConvoList={setConvoList}/>}
+              {
+                <AddGroup
+                  handleModal={handleAddGroupModal}
+                  setConvoList={setConvoList}
+                />
+              }
             </Modal>
           </div>
         </div>
 
-        <div className="flex flex-col bg-[rgb(16,16,16)] px-2 py-5 rounded-lg w-full md:w-2/4 h-full overflow-y-auto your-container">
+        <div className="flex flex-col bg-[rgb(16,16,16)] px-2 py-5 rounded-lg w-full md:w-2/4 h-[90vh] overflow-y-auto your-container">
           {convoList.map((convo) => {
             const isLastMessageSeen =
               convo.lastMessage?.seenBy.includes(loggedInUserId);
-            // Check if the conversation is a group or not
+
+            // Direct conversation
             if (!convo.isGroup) {
               const otherParticipant = convo.participants.find(
                 (participant) => participant._id !== loggedInUserId
@@ -74,22 +79,24 @@ const AllChats = () => {
               return (
                 <div
                   key={convo._id}
-                  className="flex justify-start items-center gap-5 bg-neutral-900 mx-2 my-1 p-2 rounded-lg w-[97%] h-[10%] overflow-hidden cursor-pointer max-h[15%]"
+                  className="flex justify-start items-center gap-5 bg-neutral-900 mx-2 my-1 p-2 rounded-lg w-[97%] h-[100px] cursor-pointer"
                   onClick={() => {
                     navigate(`/direct/${otherParticipant._id}`);
                   }}
                 >
                   <img
-                    className="rounded-full h-full object-cover aspect-square"
+                    className="rounded-full h-[50px] object-cover aspect-square"
                     src={
                       otherParticipant.profile_image ||
                       `https://api.dicebear.com/9.x/big-smile/svg?seed=${otherParticipant.userName}&backgroundColor=c0aede`
                     }
                   />
-                  <div className="flex flex-col justify-start w-[90%] h-full">
-                    <h1 className="text-white">{otherParticipant.userName}</h1>
+                  <div className="flex flex-col justify-center w-[90%] h-full overflow-hidden">
+                    <h1 className="text-white truncate">
+                      {otherParticipant.userName}
+                    </h1>
                     <p
-                      className={`${
+                      className={`truncate ${
                         isLastMessageSeen
                           ? "text-gray-400"
                           : "text-white font-b"
@@ -98,48 +105,53 @@ const AllChats = () => {
                       {convo.lastMessage.text}
                     </p>
                   </div>
-                  {(convo.unseenCount!== undefined && convo.unseenCount!== null  && convo.unseenCount != 0) && (
-                    <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
-                      {convo.unseenCount}
-                    </span>
-                  )}
+                  {convo.unseenCount !== undefined &&
+                    convo.unseenCount !== null &&
+                    convo.unseenCount !== 0 && (
+                      <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
+                        {convo.unseenCount}
+                      </span>
+                    )}
                 </div>
               );
             }
-            // If it's a group conversation
+
+            // Group conversation
             return (
               <div
                 key={convo._id}
-                className="flex justify-start items-center gap-5 bg-neutral-900 mx-2 my-1 p-2 rounded-lg w-[97%] h-[10%] overflow-hidden cursor-pointer max-h[15%]"
+                className="flex justify-start items-center gap-5 bg-neutral-900 mx-2 my-1 p-2 rounded-lg w-[97%] h-[100px] cursor-pointer"
                 onClick={() => {
                   navigate(`/group/${convo._id}`);
                 }}
               >
                 <img
-                  className="rounded-full h-full object-cover aspect-square"
+                  className="rounded-full h-[50px] object-cover aspect-square"
                   src={convo.avatar || Group}
                 />
-                <div className="flex flex-col justify-start w-[90%] h-full">
-                  <h1 className="text-white">{convo.groupName}</h1>
+                <div className="flex flex-col justify-center w-[90%] h-full overflow-hidden">
+                  <h1 className="text-white truncate">{convo.groupName}</h1>
                   <p
-                    className={`${
+                    className={`truncate ${
                       isLastMessageSeen ? "text-gray-400" : "text-white font-b"
                     }`}
                   >
                     {convo.lastMessage?.text}
                   </p>
                 </div>
-                {(convo.unseenCount!== undefined && convo.unseenCount!== null && convo.unseenCount != 0) && (
-                  <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
-                    {convo.unseenCount}
-                  </span>
-                )}
+                {convo.unseenCount !== undefined &&
+                  convo.unseenCount !== null &&
+                  convo.unseenCount !== 0 && (
+                    <span className="flex justify-center items-center bg-white rounded-full w-[25px] h-[25px] aspect-square font-bold text-black">
+                      {convo.unseenCount}
+                    </span>
+                  )}
               </div>
             );
           })}
         </div>
         <div className="hidden md:block w-[25%] h-full overflow-hidden">
-          {<AddGroup setConvoList={setConvoList}/>}
+          {<AddGroup setConvoList={setConvoList} />}
         </div>
       </div>
     </div>
@@ -150,7 +162,6 @@ const getAllConversations = async (setConvoList) => {
   try {
     const response = await api.get("/messages/all-conversation");
     setConvoList(response.data.data);
-    // console.log("Conversations:", response.data.data);
   } catch (error) {
     console.error("Error fetching conversations:", error);
   }

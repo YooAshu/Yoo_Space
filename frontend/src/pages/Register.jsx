@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import YooSpace from "../assets/yoospace.png"
+import YooSpace from "../assets/yoospace3.png";
 import api from "../utils/axios-api";
 
 const Register = () => {
@@ -32,9 +32,9 @@ const Register = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
       <ToastContainer autoClose={1500} theme="dark" />
-      <div className="w-1/2 md:w-1/4">
-              <img src={YooSpace} alt="yoohub" />
-            </div>
+      <div className="h-[100px] md:h-[200px]">
+        <img src={YooSpace} alt="yoohub" className="w-auto h-full" />
+      </div>
       <div className="bg-zinc-800 rounded-2xl w-[80%] md:w-96 h-[60%] md:h-[500px]">
         <form
           onSubmit={handleSubmit(onSubmit)}

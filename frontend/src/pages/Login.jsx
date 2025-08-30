@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import YooSpace from "../assets/yoospace.png";
+import YooSpace from "../assets/yoospace3.png";
 import { useSocket } from "../context/SoketContext.jsx";
 import { AppContext } from "../context/AppContext.jsx";
 import api from "../utils/axios-api.js";
@@ -67,8 +67,8 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-9 w-screen h-screen">
       {/* <ToastContainer autoClose={1500} theme="dark" /> */}
-      <div className="w-1/2 md:w-1/4">
-        <img src={YooSpace} alt="yoohub" />
+      <div className="h-[100px] md:h-[200px]">
+        <img src={YooSpace} alt="yoohub" className="w-auto h-full"/>
       </div>
       <div className="bg-zinc-800 rounded-2xl w-[80%] md:w-80 h-[40%] md:h-96">
         <form
