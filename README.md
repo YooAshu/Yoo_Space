@@ -5,6 +5,9 @@
 *A social media platform inspired by Instagram and Twitter — built to connect users, share moments, chat, and create groups.*  
 
 ---
+<img width="2549" height="1428" alt="image" src="https://github.com/user-attachments/assets/8c875ac6-a981-4fcf-a2ee-5759943fb716" />
+
+---
 
 ### Profile Page
 
