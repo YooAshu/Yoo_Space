@@ -7,52 +7,59 @@ import generateAccessAndRefreshToken from "./generateTokens.js";
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken =
-    req.cookies.refreshToken ||
-    req.body.refreshToken ||
-    req.header("Authorization")?.replace("Bearer ", "");
+        req.cookies.refreshToken ||
+        req.body.refreshToken ||
+        req.header("Authorization")?.replace("Bearer ", "");
 
+    console.log("=== REFRESH TOKEN REQUEST ===");
+    console.log("Has refresh token:", !!incomingRefreshToken);
 
     if (!incomingRefreshToken)
-        throw new ApiError(401, "unnautorized request")
+        throw new ApiError(401, "Unauthorized request - No refresh token")
+    
     try {
-        console.log("Incoming refresh token:", incomingRefreshToken);
-
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+        console.log("✅ Refresh token verified, user ID:", decodedToken._id);
 
         const user = await User.findById(decodedToken._id)
 
-        if (!user)
-            throw new ApiError(400, "invalid refresh token")
+        if (!user) {
+            console.log("❌ User not found");
+            throw new ApiError(400, "Invalid refresh token")
+        }
 
-        if (user?.refreshToken !== incomingRefreshToken)
-            throw new ApiError(401, "refresh token is outdated")
+        console.log("DB token matches:", user.refreshToken === incomingRefreshToken);
 
-        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+        if (user?.refreshToken !== incomingRefreshToken) {
+            console.log("❌ Token mismatch");
+            throw new ApiError(401, "Refresh token is outdated")
+        }
+
+        const accessToken = await user.generateAccessToken()
+        console.log("✅ New access token generated");
 
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 10 * 24 * 60 * 60 * 1000 // 10 days in milliseconds 
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            path: "/",
+            maxAge: 1 * 24 * 60 * 60 * 1000
         }
 
         return res
             .status(200)
             .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", refreshToken, options)
             .json(
-                new ApiResponse(200,
-                    {
-                        accessToken,
-                        refreshToken: refreshToken
-                    },
-                    "access token refreshed")
+                new ApiResponse(200, { accessToken }, "Access token refreshed")
             )
 
-
     } catch (error) {
-        throw new ApiError(401, `${error?.message} "refresh token is invalid"`)
+        console.error("❌ Refresh error:", error.message);
+        if (error.name === 'TokenExpiredError') {
+            throw new ApiError(401, "Refresh token expired")
+        }
+        throw new ApiError(401, error?.message || "Refresh token is invalid")
     }
 })
 
-export {refreshAccessToken}
+export { refreshAccessToken }

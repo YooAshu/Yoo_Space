@@ -14,17 +14,25 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
         const user = await User.findById(decodedToken._id).select("-password -refreshToken")
+        
         if (!user) {
-            throw new ApiError(401, "invalid access token")
+            throw new ApiError(401, "Invalid access token")
         }
+        
         req.userId = user._id
         req.user_profile_image = user.profile_image
         req.userName = user.userName
         next()
 
     } catch (error) {
-        throw new ApiError(401, `${error?.message} "Invalid access token"`)
-
+        // Handle JWT specific errors
+        if (error.name === 'TokenExpiredError') {
+            throw new ApiError(401, "Access token expired")
+        } else if (error.name === 'JsonWebTokenError') {
+            throw new ApiError(401, "Invalid access token")
+        } else {
+            throw new ApiError(401, error?.message || "Authentication failed")
+        }
     }
 })
 
